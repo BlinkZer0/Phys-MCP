@@ -53,6 +53,12 @@ except ImportError:
     qutip = None  # type: ignore
     _HAS_QUTIP = False
 
+# Phase 4 modules
+from . import data_io
+from . import signal_processing
+from . import external_apis
+from . import export_utils
+
 # Safety configuration
 EXECUTION_TIMEOUT = 10.0  # seconds
 MAX_ARRAY_SIZE = 100000
@@ -1370,6 +1376,46 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
         return handle_quantum_visualize(params)
     elif method == "statmech_partition":
         return handle_statmech_partition(params)
+    
+    # Phase 4 methods - Data I/O
+    elif method == "data_import_hdf5":
+        return data_io.data_import_hdf5(**params)
+    elif method == "data_import_fits":
+        return data_io.data_import_fits(**params)
+    elif method == "data_import_root":
+        return data_io.data_import_root(**params)
+    elif method == "data_export_hdf5":
+        return data_io.data_export_hdf5(**params)
+    
+    # Phase 4 methods - Signal Processing
+    elif method == "data_fft":
+        return signal_processing.data_fft(**params)
+    elif method == "data_filter":
+        return signal_processing.data_filter(**params)
+    elif method == "data_spectrogram":
+        return signal_processing.data_spectrogram(**params)
+    elif method == "data_wavelet":
+        return signal_processing.data_wavelet(**params)
+    
+    # Phase 4 methods - External APIs
+    elif method == "api_arxiv":
+        return external_apis.api_arxiv(**params)
+    elif method == "api_cern":
+        return external_apis.api_cern(**params)
+    elif method == "api_nasa":
+        return external_apis.api_nasa(**params)
+    elif method == "api_nist":
+        return external_apis.api_nist(**params)
+    
+    # Phase 4 methods - Export
+    elif method == "export_overleaf":
+        return export_utils.export_overleaf(**params)
+    elif method == "export_github":
+        return export_utils.export_github(**params)
+    elif method == "export_zenodo":
+        return export_utils.export_zenodo(**params)
+    elif method == "export_jupyter":
+        return export_utils.export_jupyter(**params)
     
     else:
         raise ValueError(f"Unknown method: {method}")

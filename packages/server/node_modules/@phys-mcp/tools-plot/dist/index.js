@@ -3,6 +3,12 @@
  */
 import { getWorkerClient } from "../../tools-cas/dist/worker-client.js";
 import { function2DSchema, parametric2DSchema, field2DSchema, phasePortraitSchema, surface3DSchema, contour2DSchema, } from "./schema.js";
+// Minimal schema for accel_caps
+const accelCapsSchema = {
+    type: "object",
+    properties: {},
+    additionalProperties: false,
+};
 /**
  * Build plotting tools for the MCP server
  */
@@ -38,6 +44,11 @@ export function buildPlotTools() {
             description: "Plot 2D contour lines of a function f(x,y)",
             inputSchema: contour2DSchema,
         },
+        {
+            name: "accel_caps",
+            description: "Report device acceleration capabilities and mode (ACCEL_MODE/ACCEL_DEVICE)",
+            inputSchema: accelCapsSchema,
+        },
     ];
 }
 /**
@@ -58,6 +69,8 @@ export async function handlePlotTool(name, arguments_) {
             return await worker.call("plot_surface_3d", arguments_);
         case "plot_contour_2d":
             return await worker.call("plot_contour_2d", arguments_);
+        case "accel_caps":
+            return await worker.call("accel_caps", {});
         default:
             throw new Error(`Unknown plot tool: ${name}`);
     }

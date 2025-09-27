@@ -49,7 +49,9 @@ phys-mcp/
 - Node.js 20+
 - Python 3.11+
 - pnpm 8+
-- LM Studio (for NLI features)
+
+Optional (recommended for faster NLI):
+- LM Studio or any OpenAI-compatible local LM server
 
 ### Installation
 
@@ -76,6 +78,24 @@ pnpm dev
 - Add the server to your MCP client configuration
 
 See docs/Configuration for details.
+
+### Optional: Faster NLI with LM Studio
+
+LM Studio is not required. All CAS/plot/tensor/quantum/stat-mech calculations run in TypeScript/Python workers and work out of the box. Configuring a local LM endpoint such as LM Studio only accelerates the Natural Language Interface (NLI) that turns plain English into structured tool calls.
+
+Why it helps
+- Lower latency: local inference avoids network round-trips and rate limits.
+- GPU utilization: LM Studio can use your GPU to speed up prompt parsing.
+- Better parsing on complex requests: higher-quality intent extraction reduces retries before calculations begin.
+- Privacy & cost: keep tokens local; no external API keys required.
+
+How it speeds up “calculations” end-to-end
+- The math is computed by our Python/TS backends; the LM is used to decide “what to compute.” Faster parsing → fewer back-and-forths → quicker CAS/plot calls → faster overall results.
+
+How to enable
+- Install and run LM Studio (or any OpenAI-compatible local server).
+- Set `LM_BASE_URL` (e.g., `http://localhost:1234/v1`) and `DEFAULT_MODEL`.
+- Optionally set `LM_API_KEY` if your local server requires it.
 
 ### Example Usage
 
@@ -137,11 +157,18 @@ pnpm run test:install
 
 ## Documentation
 
-- docs/Architecture
-- docs/Configuration
-- docs/Tools/CAS
-- docs/Tools/Plot
-- docs/Tools/NLI
+- Docs index: `docs/README.md`
+- Architecture: `docs/Architecture.md`
+- Configuration: `docs/Configuration.md`
+- Tools:
+  - CAS: `docs/Tools/CAS.md`
+  - Plot: `docs/Tools/Plot.md`
+  - NLI: `docs/Tools/NLI.md`
+  - Report: `docs/Tools/Report.md`
+  - Tensor: `docs/Tools/Tensor.md`
+  - Quantum: `docs/Tools/Quantum.md`
+  - StatMech: `docs/Tools/StatMech.md`
+- Examples: `examples/requests/`
 
 Side note: We conserve clarity and momentum—any dispersion is purely numerical.
 

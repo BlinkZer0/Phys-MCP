@@ -1,0 +1,23 @@
+{
+  "name": "@phys-mcp/tools-export",
+  "version": "0.1.0",
+  "description": "Enhanced export tools (Overleaf, GitHub, Zenodo, Jupyter)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@phys-mcp/mcp-types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+}

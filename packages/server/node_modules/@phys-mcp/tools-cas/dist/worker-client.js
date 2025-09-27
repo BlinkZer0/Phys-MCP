@@ -19,7 +19,7 @@ class PythonWorkerClient {
         if (this.proc)
             return;
         // Find the Python worker script
-        const workerPath = path.resolve(__dirname, "../../../python-worker/worker.py");
+        const workerPath = path.resolve(__dirname, "../../python-worker/worker.py");
         // Resolve Python executable by probing candidates
         const pythonFromEnv = process.env.PYTHON_PATH?.trim();
         const username = process.env.USERNAME || process.env.USER || '';
@@ -31,7 +31,7 @@ class PythonWorkerClient {
         ].filter(Boolean);
         const candidates = [
             ...(pythonFromEnv ? [pythonFromEnv] : []),
-            ...(process.platform === 'win32' ? ['py', 'python', 'python3', ...winCandidatesAbs] : ['python', 'python3'])
+            ...(process.platform === 'win32' ? [...winCandidatesAbs, 'py', 'python', 'python3'] : ['python', 'python3'])
         ];
         let pythonCmd = null;
         for (const cmd of candidates) {
@@ -52,21 +52,10 @@ class PythonWorkerClient {
             throw new Error("No suitable Python interpreter found. Set PYTHON_PATH or install Python.");
         }
         console.log(`Starting Python worker: ${workerPath} (cmd: ${pythonCmd})`);
-        const isWin = process.platform === 'win32';
-        if (isWin) {
-            const cmdString = `"${pythonCmd}" "${workerPath}"`;
-            this.proc = spawn(cmdString, {
-                stdio: ["pipe", "pipe", "inherit"],
-                cwd: path.dirname(workerPath),
-                shell: true,
-            });
-        }
-        else {
-            this.proc = spawn(pythonCmd, [workerPath], {
-                stdio: ["pipe", "pipe", "inherit"],
-                cwd: path.dirname(workerPath)
-            });
-        }
+        this.proc = spawn(pythonCmd, [workerPath], {
+            stdio: ["pipe", "pipe", "inherit"],
+            cwd: path.dirname(workerPath)
+        });
         this.proc.stdout?.on("data", (data) => {
             this.buffer += data.toString();
             this.processBuffer();

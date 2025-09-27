@@ -6,10 +6,12 @@
 export interface JSONSchema {
     type?: string;
     properties?: Record<string, JSONSchema>;
-    required?: string[];
+    required?: string[] | readonly string[];
     items?: JSONSchema;
     description?: string;
-    enum?: any[];
+    enum?: any[] | readonly any[];
+    additionalProperties?: JSONSchema | boolean;
+    default?: any;
     [key: string]: any;
 }
 export interface Tool {

@@ -19,6 +19,8 @@
   - StatMech: `docs/Tools/StatMech.md`
 - Examples: see `examples/requests/`
 
+Note on NLI: LM Studio (or any OpenAI-compatible local LM) is optional and only accelerates natural-language parsing; all calculations run locally regardless.
+
 Quick Links
 - Server entry: `packages/server/src/index.ts`
 - Python worker: `packages/python-worker/worker.py`

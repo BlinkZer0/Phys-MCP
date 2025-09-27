@@ -28,6 +28,15 @@ let buildQuantumTools;
 let handleQuantumTool;
 let buildStatmechTools;
 let handleStatmechTool;
+// Phase 4 tool handlers
+let buildDataIOTools;
+let handleDataIOTool;
+let buildSignalTools;
+let handleSignalTool;
+let buildExternalTools;
+let handleExternalTool;
+let buildExportTools;
+let handleExportTool;
 async function initializeDependencies() {
     try {
         // Use our local MCP types implementation
@@ -119,6 +128,43 @@ async function initializeDependencies() {
     catch (error) {
         console.warn("StatMech tools not available:", error);
     }
+    // Phase 4 tool packages
+    try {
+        const dataIOPath = "../../tools-data-io/dist/index.js";
+        const dataIOModule = await import(dataIOPath);
+        buildDataIOTools = dataIOModule.buildDataIOTools;
+        handleDataIOTool = dataIOModule.handleDataIOTool;
+    }
+    catch (error) {
+        console.warn("Data I/O tools not available:", error);
+    }
+    try {
+        const signalPath = "../../tools-signal/dist/index.js";
+        const signalModule = await import(signalPath);
+        buildSignalTools = signalModule.buildSignalTools;
+        handleSignalTool = signalModule.handleSignalTool;
+    }
+    catch (error) {
+        console.warn("Signal tools not available:", error);
+    }
+    try {
+        const externalPath = "../../tools-external/dist/index.js";
+        const externalModule = await import(externalPath);
+        buildExternalTools = externalModule.buildExternalTools;
+        handleExternalTool = externalModule.handleExternalTool;
+    }
+    catch (error) {
+        console.warn("External API tools not available:", error);
+    }
+    try {
+        const exportPath = "../../tools-export/dist/index.js";
+        const exportModule = await import(exportPath);
+        buildExportTools = exportModule.buildExportTools;
+        handleExportTool = exportModule.handleExportTool;
+    }
+    catch (error) {
+        console.warn("Export tools not available:", error);
+    }
     // Persistence manager
     try {
         const persistModule = await import("./persist.js");
@@ -155,6 +201,15 @@ class PhysicsMCPServer {
             this.tools.push(...buildQuantumTools());
         if (buildStatmechTools)
             this.tools.push(...buildStatmechTools());
+        // Phase 4 tools
+        if (buildDataIOTools)
+            this.tools.push(...buildDataIOTools());
+        if (buildSignalTools)
+            this.tools.push(...buildSignalTools());
+        if (buildExternalTools)
+            this.tools.push(...buildExternalTools());
+        if (buildExportTools)
+            this.tools.push(...buildExportTools());
         this.setupHandlers();
     }
     setupHandlers() {
@@ -201,6 +256,21 @@ class PhysicsMCPServer {
                 }
                 else if (name.startsWith("statmech_") && handleStatmechTool) {
                     result = await handleStatmechTool(name, args);
+                }
+                else if (name.startsWith("data_") && (handleDataIOTool || handleSignalTool)) {
+                    // Route data tools to appropriate handler
+                    if (name.startsWith("data_import") || name.startsWith("data_export")) {
+                        result = await handleDataIOTool(name, args);
+                    }
+                    else {
+                        result = await handleSignalTool(name, args);
+                    }
+                }
+                else if (name.startsWith("api_") && handleExternalTool) {
+                    result = await handleExternalTool(name, args);
+                }
+                else if (name.startsWith("export_") && handleExportTool) {
+                    result = await handleExportTool(name, args);
                 }
                 else {
                     throw new Error(`Unknown tool: ${name}`);

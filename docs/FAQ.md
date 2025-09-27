@@ -10,7 +10,12 @@
   - Some viewers (and Git hosting) sanitize animations. Open the file locally or view in an environment that supports inline SVG animation.
 
 - Do I need internet for NLI?
-  - No. NLI targets a local LM endpoint (e.g., LM Studio). Set `LM_BASE_URL` to your local server.
+  - No, if you configure a local LM endpoint (e.g., LM Studio). Set `LM_BASE_URL` to your local server.
+  - If you don’t configure any LM, NLI still works via a rule-based fallback (no internet required).
+
+- Is LM Studio required?
+  - No. It’s optional. Core calculations (CAS, Plot, Tensor, Quantum, StatMech) run in Python/TS workers.
+  - LM Studio—or any OpenAI-compatible local server—can speed up and improve NLI parsing by running locally (often on GPU), reducing latency and retries.
 
 - Where are the tool schemas?
   - CAS: `packages/tools-cas/src/schema.ts`

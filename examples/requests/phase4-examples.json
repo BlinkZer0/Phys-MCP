@@ -1,0 +1,251 @@
+{
+  "data_fft_example": {
+    "description": "GPU-accelerated FFT analysis of a test signal",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "fft_test",
+      "method": "tools/call",
+      "params": {
+        "name": "data_fft",
+        "arguments": {
+          "signal_data": [0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707, 0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707],
+          "sample_rate": 8,
+          "window": "hann",
+          "emit_plots": true,
+          "emit_csv": true
+        }
+      }
+    }
+  },
+  
+  "data_filter_example": {
+    "description": "Digital filtering with response analysis",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "filter_test",
+      "method": "tools/call",
+      "params": {
+        "name": "data_filter",
+        "arguments": {
+          "signal_data": [1, 2, 3, 4, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -4, -3, -2, -1, 0],
+          "sample_rate": 10,
+          "filter_type": "lowpass",
+          "cutoff_freq": 2,
+          "filter_order": 4,
+          "emit_plots": true
+        }
+      }
+    }
+  },
+  
+  "data_spectrogram_example": {
+    "description": "Time-frequency analysis with spectrogram",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "spectrogram_test",
+      "method": "tools/call",
+      "params": {
+        "name": "data_spectrogram",
+        "arguments": {
+          "signal_data": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0],
+          "sample_rate": 20,
+          "window_size": 8,
+          "overlap": 0.5,
+          "emit_plots": true
+        }
+      }
+    }
+  },
+  
+  "api_arxiv_example": {
+    "description": "Search arXiv for physics papers",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "arxiv_test",
+      "method": "tools/call",
+      "params": {
+        "name": "api_arxiv",
+        "arguments": {
+          "query": "quantum mechanics",
+          "category": "quant-ph",
+          "max_results": 5,
+          "sort_by": "relevance",
+          "download_pdfs": false
+        }
+      }
+    }
+  },
+  
+  "api_nist_example": {
+    "description": "Access NIST physical constants",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "nist_test",
+      "method": "tools/call",
+      "params": {
+        "name": "api_nist",
+        "arguments": {
+          "data_type": "constants",
+          "property": "speed_of_light",
+          "format": "json"
+        }
+      }
+    }
+  },
+  
+  "export_jupyter_example": {
+    "description": "Generate Jupyter notebook from session data",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "jupyter_test",
+      "method": "tools/call",
+      "params": {
+        "name": "export_jupyter",
+        "arguments": {
+          "notebook_name": "physics_analysis",
+          "title": "Physics MCP Analysis",
+          "description": "Automated analysis using Physics MCP Server",
+          "session_data": {
+            "events": [
+              {
+                "type": "tool_call",
+                "tool_name": "cas_evaluate",
+                "params": {"expr": "sin(x)", "vars": {"x": 3.14159}},
+                "result": {"latex": "\\sin(\\pi)", "evalf": 0.0}
+              }
+            ]
+          },
+          "include_outputs": true,
+          "kernel": "python3"
+        }
+      }
+    }
+  },
+  
+  "export_github_example": {
+    "description": "Create GitHub repository structure",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "github_test",
+      "method": "tools/call",
+      "params": {
+        "name": "export_github",
+        "arguments": {
+          "repository_name": "physics-mcp-analysis",
+          "description": "Physics analysis using MCP server",
+          "private": false,
+          "include_artifacts": true,
+          "license": "MIT",
+          "topics": ["physics", "computational-science", "mcp"]
+        }
+      }
+    }
+  },
+  
+  "data_import_hdf5_example": {
+    "description": "Import HDF5 scientific dataset (requires sample file)",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "hdf5_test",
+      "method": "tools/call",
+      "params": {
+        "name": "data_import_hdf5",
+        "arguments": {
+          "file_path": "./examples/data/sample.h5",
+          "dataset_path": "/experiment/data",
+          "emit_plots": true
+        }
+      }
+    }
+  },
+  
+  "export_overleaf_example": {
+    "description": "Create Overleaf LaTeX project",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "overleaf_test",
+      "method": "tools/call",
+      "params": {
+        "name": "export_overleaf",
+        "arguments": {
+          "project_name": "physics_report",
+          "template": "article",
+          "title": "Physics Analysis Report",
+          "authors": ["Physics MCP User"],
+          "abstract": "This report presents analysis results from the Physics MCP Server.",
+          "artifacts": [
+            {
+              "type": "figure",
+              "content": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+              "caption": "Sample figure",
+              "label": "fig:sample"
+            }
+          ]
+        }
+      }
+    }
+  },
+  
+  "comprehensive_workflow_example": {
+    "description": "Complete Phase 4 workflow: signal processing → analysis → export",
+    "workflow": [
+      {
+        "step": 1,
+        "description": "Generate and analyze signal with FFT",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": "workflow_step1",
+          "method": "tools/call",
+          "params": {
+            "name": "data_fft",
+            "arguments": {
+              "signal_data": [0, 0.309, 0.588, 0.809, 0.951, 1, 0.951, 0.809, 0.588, 0.309, 0, -0.309, -0.588, -0.809, -0.951, -1, -0.951, -0.809, -0.588, -0.309],
+              "sample_rate": 20,
+              "window": "hann",
+              "emit_plots": true,
+              "emit_csv": true
+            }
+          }
+        }
+      },
+      {
+        "step": 2,
+        "description": "Apply filtering to the signal",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": "workflow_step2",
+          "method": "tools/call",
+          "params": {
+            "name": "data_filter",
+            "arguments": {
+              "signal_data": [0, 0.309, 0.588, 0.809, 0.951, 1, 0.951, 0.809, 0.588, 0.309, 0, -0.309, -0.588, -0.809, -0.951, -1, -0.951, -0.809, -0.588, -0.309],
+              "sample_rate": 20,
+              "filter_type": "lowpass",
+              "cutoff_freq": 5,
+              "filter_order": 4,
+              "emit_plots": true
+            }
+          }
+        }
+      },
+      {
+        "step": 3,
+        "description": "Export results to GitHub repository",
+        "request": {
+          "jsonrpc": "2.0",
+          "id": "workflow_step3",
+          "method": "tools/call",
+          "params": {
+            "name": "export_github",
+            "arguments": {
+              "repository_name": "signal-analysis-workflow",
+              "description": "Signal processing workflow using Physics MCP",
+              "include_artifacts": true,
+              "topics": ["signal-processing", "fft", "filtering"]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

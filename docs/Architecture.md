@@ -9,13 +9,13 @@
 - Server: TypeScript MCP server orchestrates CAS, Plot, and NLI tools.
 - Transport: JSON-RPC over stdio compatible with MCP clients.
 - Python worker: Performs CAS and plotting, returns results to server.
-- NLI: Uses a local LM API (LM Studio) when available, falls back to rules.
+- NLI: Optionally uses a local LM API (e.g., LM Studio) when configured; otherwise falls back to a rule-based parser.
 
 Flow
 - MCP client sends `tools/list` and `tools/call`.
 - Server registers tool metadata from tool packages and routes calls by prefix (`cas.*`, `plot.*`, `nli.*`).
 - CAS/Plot calls are proxied to the Python worker via a lightweight JSON-RPC protocol over stdin/stdout.
-- NLI calls go to a local LM REST API (`/chat/completions`) when configured, else rule-based parsing.
+- NLI calls go to a local LM REST API (`/chat/completions`) when configured; otherwise a rule-based parser is used.
 
 Key Files
 - Server entry: `packages/server/src/index.ts`
