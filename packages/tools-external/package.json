@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json.schemastore.org/package",
   "name": "@phys-mcp/tools-external",
   "version": "0.1.0",
   "description": "External API integration tools (arXiv, CERN, NASA, NIST)",

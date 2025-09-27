@@ -232,7 +232,26 @@ class PhysicsMCPServer {
                 if (name === "report_generate") {
                     result = await handleReportGenerate(args, pm, sessionId);
                 }
-                // Route to appropriate tool handler
+                // Route to appropriate tool handler - consolidated tools
+                else if (name === "cas" && handleCASTool) {
+                    result = await handleCASTool(name, args);
+                }
+                else if (name === "plot" && handlePlotTool) {
+                    result = await handlePlotTool(name, args);
+                }
+                else if (name === "data" && handleDataIOTool) {
+                    result = await handleDataIOTool(name, args);
+                }
+                else if (name === "api_tools" && handleExternalTool) {
+                    result = await handleExternalTool(name, args);
+                }
+                else if (name === "export_tool" && handleExportTool) {
+                    result = await handleExportTool(name, args);
+                }
+                else if (name === "quantum" && handleQuantumTool) {
+                    result = await handleQuantumTool(name, args);
+                }
+                // Legacy support for individual tool names
                 else if (name.startsWith("cas_") && handleCASTool) {
                     result = await handleCASTool(name, args);
                 }
@@ -257,14 +276,9 @@ class PhysicsMCPServer {
                 else if (name.startsWith("statmech_") && handleStatmechTool) {
                     result = await handleStatmechTool(name, args);
                 }
-                else if (name.startsWith("data_") && (handleDataIOTool || handleSignalTool)) {
-                    // Route data tools to appropriate handler
-                    if (name.startsWith("data_import") || name.startsWith("data_export")) {
-                        result = await handleDataIOTool(name, args);
-                    }
-                    else {
-                        result = await handleSignalTool(name, args);
-                    }
+                else if (name.startsWith("data_") && handleDataIOTool) {
+                    // Route all data tools to consolidated data handler
+                    result = await handleDataIOTool(name, args);
                 }
                 else if (name.startsWith("api_") && handleExternalTool) {
                     result = await handleExternalTool(name, args);

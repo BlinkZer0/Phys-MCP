@@ -25,3 +25,9 @@ export const exportJupyterHandler = async (params) => {
         params
     };
 };
+export const exportVRHandler = async (params) => {
+    return {
+        method: 'plot_vr_export',
+        params
+    };
+};

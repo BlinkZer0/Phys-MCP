@@ -220,3 +220,72 @@ export declare const exportJupyterSchema: {
     readonly required: readonly ["notebook_name", "session_data"];
     readonly additionalProperties: false;
 };
+export declare const exportVRSchema: {
+    readonly type: "object";
+    readonly properties: {
+        readonly geometry: {
+            readonly type: "object";
+            readonly properties: {
+                readonly vertices: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                        readonly minItems: 3;
+                        readonly maxItems: 3;
+                    };
+                    readonly description: "Array of [x,y,z] coordinates";
+                };
+                readonly faces: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "integer";
+                            readonly minimum: 0;
+                        };
+                    };
+                    readonly description: "Array of vertex indices";
+                };
+                readonly normals: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                    };
+                    readonly nullable: true;
+                    readonly description: "Optional normals";
+                };
+                readonly colors: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                    };
+                    readonly nullable: true;
+                    readonly description: "Optional colors";
+                };
+            };
+            readonly required: readonly ["vertices", "faces"];
+            readonly description: "3D geometry data";
+        };
+        readonly format: {
+            readonly type: "string";
+            readonly enum: readonly ["glb", "ply"];
+            readonly default: "glb";
+            readonly description: "Export format";
+        };
+        readonly extras: {
+            readonly type: "object";
+            readonly description: "Additional metadata";
+        };
+    };
+    readonly required: readonly ["geometry"];
+    readonly additionalProperties: false;
+};

@@ -171,3 +171,22 @@ def accel_eval_vector_2d(fx_expr: sp.Expr, fy_expr: sp.Expr, x_min: float, x_max
         return _to_numpy(X), _to_numpy(Y), _to_numpy(FX), _to_numpy(FY)
     except Exception as e:
         raise RuntimeError(f"ACCEL torch lambdify failed: {e}")
+
+
+@_oom_wrap
+def accel_eval_scalar_3d(f_expr: sp.Expr, x_min: float, x_max: float, y_min: float, y_max: float, z_min: float, z_max: float, samples: int):
+    dev = _torch_device()
+    if dev is None:
+        raise RuntimeError("ACCEL device not available")
+    x = torch.linspace(float(x_min), float(x_max), int(samples), device=dev, dtype=torch.float32)
+    y = torch.linspace(float(y_min), float(y_max), int(samples), device=dev, dtype=torch.float32)
+    z = torch.linspace(float(z_min), float(z_max), int(samples), device=dev, dtype=torch.float32)
+    # indexing='ij' to match numpy semantics for 3D
+    X, Y, Z = torch.meshgrid(x, y, z, indexing='ij')  # type: ignore[arg-type]
+    x_sym, y_sym, z_sym = sp.symbols('x y z')
+    try:
+        f = sp.lambdify((x_sym, y_sym, z_sym), f_expr, "torch")
+        F = f(X, Y, Z)
+        return _to_numpy(X), _to_numpy(Y), _to_numpy(Z), _to_numpy(F)
+    except Exception as e:
+        raise RuntimeError(f"ACCEL torch lambdify failed: {e}")

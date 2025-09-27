@@ -32,3 +32,10 @@ export const exportJupyterHandler: ToolHandler = async (params) => {
     params
   };
 };
+
+export const exportVRHandler: ToolHandler = async (params) => {
+  return {
+    method: 'plot_vr_export',
+    params
+  };
+};

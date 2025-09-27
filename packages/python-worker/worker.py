@@ -29,6 +29,23 @@ import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.animation as animation
+from matplotlib.animation import FFMpegWriter, PillowWriter
+
+# Phase 5: Advanced visualization imports
+try:
+    import trimesh
+    import trimesh.exchange.gltf
+    import trimesh.exchange.ply
+    _TRIMESH_AVAILABLE = True
+except ImportError:
+    _TRIMESH_AVAILABLE = False
+
+try:
+    import cv2
+    _OPENCV_AVAILABLE = True
+except ImportError:
+    _OPENCV_AVAILABLE = False
 
 # Optional device-aware acceleration
 try:
@@ -38,6 +55,7 @@ try:
         accel_eval_parametric_1d,
         accel_eval_scalar_2d,
         accel_eval_vector_2d,
+        accel_eval_scalar_3d,
     )
     _ACCEL_INFO = accel_init()
 except Exception:
@@ -481,6 +499,565 @@ def handle_cas_propagate_uncertainty(params: Dict[str, Any]) -> Dict[str, Any]:
         "partial_contributions": partial_contributions,
         "latex": sp.latex(expr)
     }
+
+
+# Phase 5: Advanced Visualization Functions
+
+def handle_plot_volume_3d(params: Dict[str, Any]) -> Dict[str, Any]:
+    """GPU-accelerated numeric sampling of scalar volumes with slices/isosurfaces."""
+    f_str = params["f"]
+    x_range = params["x"]
+    y_range = params["y"] 
+    z_range = params["z"]
+    mode = params.get("mode", "slices")
+    iso_level = params.get("iso_level", 0.0)
+    emit_animation = params.get("emit_animation", False)
+    animate_axis = params.get("animate_axis", "z")
+    fps = params.get("fps", 24)
+    format_type = params.get("format", "mp4")
+    samples_cap = params.get("samples_cap", 160)
+    allow_large = params.get("allow_large", False)
+    
+    # Parse ranges [min, max] or [min, max, steps]
+    def parse_range(r, default_steps=50):
+        if len(r) == 2:
+            return r[0], r[1], default_steps
+        elif len(r) == 3:
+            return r[0], r[1], int(r[2])
+        else:
+            raise ValueError("Range must be [min, max] or [min, max, steps]")
+    
+    x_min, x_max, x_steps = parse_range(x_range)
+    y_min, y_max, y_steps = parse_range(y_range)
+    z_min, z_max, z_steps = parse_range(z_range)
+    
+    # Enforce caps
+    if not allow_large:
+        x_steps = min(x_steps, samples_cap)
+        y_steps = min(y_steps, samples_cap)
+        z_steps = min(z_steps, samples_cap)
+    
+    # Create coordinate grids
+    x = np.linspace(x_min, x_max, x_steps)
+    y = np.linspace(y_min, y_max, y_steps)
+    z = np.linspace(z_min, z_max, z_steps)
+    
+    start_time = time.time()
+    device_used = "cpu"
+    fallback = False
+    
+    # Try GPU acceleration first
+    try:
+        if _ACCEL_INFO["active"]:
+            # Use acceleration layer for 3D scalar evaluation
+            from accel import accel_eval_scalar_3d
+            X, Y, Z, F = accel_eval_scalar_3d(sp.sympify(f_str), x_min, x_max, y_min, y_max, z_min, z_max, min(x_steps, y_steps, z_steps))
+            device_used = _ACCEL_INFO["device"]
+        else:
+            raise RuntimeError("Acceleration not available")
+    except Exception:
+        # Fallback to CPU
+        fallback = True
+        X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
+        f_expr = sp.sympify(f_str)
+        x_sym, y_sym, z_sym = sp.symbols('x y z')
+        f_func = sp.lambdify((x_sym, y_sym, z_sym), f_expr, "numpy")
+        F = f_func(X, Y, Z)
+        device_used = "cpu"
+    
+    duration_ms = int((time.time() - start_time) * 1000)
+    
+    # Generate contact sheet (slices or isosurface previews)
+    fig = plt.figure(figsize=(12, 9), dpi=100)
+    
+    if mode == "slices":
+        # Show orthogonal slices
+        mid_x, mid_y, mid_z = x_steps//2, y_steps//2, z_steps//2
+        
+        # XY slice (constant Z)
+        plt.subplot(2, 2, 1)
+        plt.imshow(F[:, :, mid_z].T, extent=[x_min, x_max, y_min, y_max], origin='lower', cmap='viridis')
+        plt.title(f'XY slice (z={z[mid_z]:.2f})')
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.colorbar()
+        
+        # XZ slice (constant Y)
+        plt.subplot(2, 2, 2)
+        plt.imshow(F[:, mid_y, :].T, extent=[x_min, x_max, z_min, z_max], origin='lower', cmap='viridis')
+        plt.title(f'XZ slice (y={y[mid_y]:.2f})')
+        plt.xlabel('x')
+        plt.ylabel('z')
+        plt.colorbar()
+        
+        # YZ slice (constant X)
+        plt.subplot(2, 2, 3)
+        plt.imshow(F[mid_x, :, :].T, extent=[y_min, y_max, z_min, z_max], origin='lower', cmap='viridis')
+        plt.title(f'YZ slice (x={x[mid_x]:.2f})')
+        plt.xlabel('y')
+        plt.ylabel('z')
+        plt.colorbar()
+        
+        # 3D isosurface preview
+        ax = fig.add_subplot(2, 2, 4, projection='3d')
+        # Sample a few isosurface levels
+        levels = np.linspace(F.min(), F.max(), 3)[1:-1]  # Skip min/max
+        for level in levels:
+            try:
+                # Simple isosurface approximation using contour
+                for k in range(0, z_steps, max(1, z_steps//5)):
+                    cs = plt.contour(X[:, :, k], Y[:, :, k], F[:, :, k], levels=[level])
+                    if cs.collections:
+                        for collection in cs.collections:
+                            for path in collection.get_paths():
+                                vertices = path.vertices
+                                ax.plot(vertices[:, 0], vertices[:, 1], z[k], alpha=0.6)
+            except:
+                pass
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_zlabel('z')
+        ax.set_title('3D Isosurfaces')
+        
+    elif mode == "isosurface":
+        # Show isosurface at specified level
+        ax = fig.add_subplot(1, 1, 1, projection='3d')
+        
+        # Create isosurface using marching cubes approximation
+        try:
+            # Simple isosurface visualization
+            for k in range(0, z_steps, max(1, z_steps//10)):
+                cs = plt.contour(X[:, :, k], Y[:, :, k], F[:, :, k], levels=[iso_level])
+                if cs.collections:
+                    for collection in cs.collections:
+                        for path in collection.get_paths():
+                            vertices = path.vertices
+                            ax.plot(vertices[:, 0], vertices[:, 1], z[k], alpha=0.8, color='blue')
+            
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+            ax.set_title(f'Isosurface at level {iso_level}')
+        except Exception as e:
+            plt.text(0.5, 0.5, f'Isosurface generation failed: {str(e)}', 
+                    transform=ax.transAxes, ha='center', va='center')
+    
+    plt.tight_layout()
+    
+    # Save contact sheet
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', dpi=100, bbox_inches='tight')
+    buffer.seek(0)
+    png_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+    
+    # Generate CSV data
+    csv_lines = ["x,y,z,f"]
+    for i in range(0, x_steps, max(1, x_steps//100)):  # Sample for CSV
+        for j in range(0, y_steps, max(1, y_steps//100)):
+            for k in range(0, z_steps, max(1, z_steps//100)):
+                csv_lines.append(f"{X[i,j,k]},{Y[i,j,k]},{Z[i,j,k]},{F[i,j,k]}")
+    csv_data = "\n".join(csv_lines)
+    
+    result = {
+        "png_contact_sheet_b64": png_b64,
+        "csv_data": csv_data,
+        "meta": {
+            "device": device_used,
+            "fallback": fallback,
+            "mesh": [x_steps, y_steps, z_steps],
+            "cached": False,
+            "duration_ms": duration_ms,
+            "mode": mode
+        }
+    }
+    
+    # Generate animation if requested
+    if emit_animation:
+        try:
+            animation_path = f"volume_animation_{int(time.time())}.{format_type}"
+            # Simple animation sweeping through one axis
+            fig, ax = plt.subplots(figsize=(8, 6))
+            
+            if animate_axis == "z":
+                frames = range(0, z_steps, max(1, z_steps//30))
+                def animate(frame):
+                    ax.clear()
+                    ax.imshow(F[:, :, frame].T, extent=[x_min, x_max, y_min, y_max], 
+                             origin='lower', cmap='viridis')
+                    ax.set_title(f'XY slice at z={z[frame]:.2f}')
+                    ax.set_xlabel('x')
+                    ax.set_ylabel('y')
+            elif animate_axis == "y":
+                frames = range(0, y_steps, max(1, y_steps//30))
+                def animate(frame):
+                    ax.clear()
+                    ax.imshow(F[:, frame, :].T, extent=[x_min, x_max, z_min, z_max], 
+                             origin='lower', cmap='viridis')
+                    ax.set_title(f'XZ slice at y={y[frame]:.2f}')
+                    ax.set_xlabel('x')
+                    ax.set_ylabel('z')
+            else:  # x
+                frames = range(0, x_steps, max(1, x_steps//30))
+                def animate(frame):
+                    ax.clear()
+                    ax.imshow(F[frame, :, :].T, extent=[y_min, y_max, z_min, z_max], 
+                             origin='lower', cmap='viridis')
+                    ax.set_title(f'YZ slice at x={x[frame]:.2f}')
+                    ax.set_xlabel('y')
+                    ax.set_ylabel('z')
+            
+            anim = animation.FuncAnimation(fig, animate, frames=frames, interval=1000//fps)
+            
+            # Save animation
+            if format_type == "mp4":
+                writer = FFMpegWriter(fps=fps, codec='libx264')
+                anim.save(animation_path, writer=writer)
+            elif format_type == "gif":
+                writer = PillowWriter(fps=fps)
+                anim.save(animation_path, writer=writer)
+            else:
+                writer = FFMpegWriter(fps=fps, codec='libvpx-vp9')
+                anim.save(animation_path, writer=writer)
+            
+            plt.close()
+            result["animation_path"] = animation_path
+            
+        except Exception as e:
+            result["animation_error"] = str(e)
+    
+    return result
+
+
+def handle_plot_animation(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Time evolution renderer for 2D functions."""
+    frame_expr = params["frame_expr"]
+    x_range = params.get("x_range", [-5, 5, 100])
+    t_range = params["t_range"]
+    renderer = params.get("renderer", "imshow")
+    fps = params.get("fps", 24)
+    format_type = params.get("format", "mp4")
+    dpi = params.get("dpi", 120)
+    emit_frames = params.get("emit_frames", False)
+    emit_csv = params.get("emit_csv", False)
+    frames_cap = params.get("frames_cap", 300)
+    allow_large = params.get("allow_large", False)
+    
+    # Parse ranges
+    def parse_range(r, default_steps=100):
+        if len(r) == 2:
+            return r[0], r[1], default_steps
+        elif len(r) == 3:
+            return r[0], r[1], int(r[2])
+        else:
+            raise ValueError("Range must be [min, max] or [min, max, steps]")
+    
+    if x_range:
+        x_min, x_max, x_steps = parse_range(x_range)
+    t_min, t_max, t_steps = parse_range(t_range)
+    
+    # Enforce frame cap
+    if not allow_large:
+        t_steps = min(t_steps, frames_cap)
+    
+    start_time = time.time()
+    device_used = "cpu"
+    fallback = False
+    
+    # Create coordinate arrays
+    if x_range:
+        x = np.linspace(x_min, x_max, x_steps)
+    t = np.linspace(t_min, t_max, t_steps)
+    
+    # Parse expression
+    expr = sp.sympify(frame_expr)
+    
+    # Prepare animation
+    fig, ax = plt.subplots(figsize=(10, 6), dpi=dpi)
+    
+    frames_data = []
+    csv_lines = []
+    
+    if renderer == "line":
+        # 1D line plot animation
+        x_sym, t_sym = sp.symbols('x t')
+        func = sp.lambdify((x_sym, t_sym), expr, "numpy")
+        
+        if emit_csv:
+            csv_lines.append("t,x,f")
+        
+        def animate(frame_idx):
+            ax.clear()
+            t_val = t[frame_idx]
+            y_vals = func(x, t_val)
+            ax.plot(x, y_vals, 'b-', linewidth=2)
+            ax.set_xlim(x_min, x_max)
+            ax.set_ylim(np.min(y_vals) - 0.1, np.max(y_vals) + 0.1)
+            ax.set_xlabel('x')
+            ax.set_ylabel('f(x,t)')
+            ax.set_title(f'Frame at t = {t_val:.3f}')
+            ax.grid(True, alpha=0.3)
+            
+            if emit_csv:
+                for xi, yi in zip(x, y_vals):
+                    csv_lines.append(f"{t_val},{xi},{yi}")
+            
+            if emit_frames:
+                frames_data.append({"t": t_val, "x": x.tolist(), "y": y_vals.tolist()})
+    
+    elif renderer == "imshow":
+        # 2D heatmap animation
+        if not x_range:
+            raise ValueError("x_range required for imshow renderer")
+        
+        x_sym, t_sym = sp.symbols('x t')
+        func = sp.lambdify((x_sym, t_sym), expr, "numpy")
+        
+        # Pre-compute all frames for consistent color scale
+        all_frames = []
+        for t_val in t:
+            frame_data = func(x, t_val)
+            all_frames.append(frame_data)
+        
+        vmin, vmax = np.min(all_frames), np.max(all_frames)
+        
+        if emit_csv:
+            csv_lines.append("t,x,f")
+        
+        def animate(frame_idx):
+            ax.clear()
+            t_val = t[frame_idx]
+            frame_data = all_frames[frame_idx]
+            
+            im = ax.imshow(frame_data.reshape(1, -1), extent=[x_min, x_max, -0.5, 0.5], 
+                          aspect='auto', cmap='viridis', vmin=vmin, vmax=vmax)
+            ax.set_xlabel('x')
+            ax.set_title(f'Frame at t = {t_val:.3f}')
+            
+            if emit_csv:
+                for xi, fi in zip(x, frame_data):
+                    csv_lines.append(f"{t_val},{xi},{fi}")
+    
+    else:
+        raise ValueError(f"Unknown renderer: {renderer}")
+    
+    # Create animation
+    anim = animation.FuncAnimation(fig, animate, frames=len(t), interval=1000//fps, repeat=False)
+    
+    # Save animation
+    animation_path = f"animation_{int(time.time())}.{format_type}"
+    
+    try:
+        if format_type == "mp4":
+            writer = FFMpegWriter(fps=fps, codec='libx264', bitrate=1800)
+            anim.save(animation_path, writer=writer)
+        elif format_type == "gif":
+            writer = PillowWriter(fps=fps)
+            anim.save(animation_path, writer=writer)
+        elif format_type == "webm":
+            writer = FFMpegWriter(fps=fps, codec='libvpx-vp9')
+            anim.save(animation_path, writer=writer)
+        else:
+            raise ValueError(f"Unsupported format: {format_type}")
+    except Exception as e:
+        plt.close()
+        return {"error": f"Animation encoding failed: {str(e)}"}
+    
+    plt.close()
+    
+    duration_ms = int((time.time() - start_time) * 1000)
+    
+    result = {
+        "animation_path": animation_path,
+        "meta": {
+            "device": device_used,
+            "fallback": fallback,
+            "frames": len(t),
+            "duration_ms": duration_ms,
+            "renderer": renderer,
+            "format": format_type
+        }
+    }
+    
+    if emit_csv and csv_lines:
+        result["csv_data"] = "\n".join(csv_lines)
+    
+    if emit_frames:
+        result["frames_data"] = frames_data
+    
+    return result
+
+
+def handle_plot_interactive(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate parameter sweep with UI spec for interactive controls."""
+    expr_str = params["expr"]
+    x_range = params.get("x_range", [-5, 5, 100])
+    controls = params["controls"]
+    renderer = params.get("renderer", "line")
+    grid_limit = params.get("grid_limit", 24)
+    
+    # Parse x range
+    def parse_range(r, default_steps=100):
+        if len(r) == 2:
+            return r[0], r[1], default_steps
+        elif len(r) == 3:
+            return r[0], r[1], int(r[2])
+        else:
+            raise ValueError("Range must be [min, max] or [min, max, steps]")
+    
+    x_min, x_max, x_steps = parse_range(x_range)
+    x = np.linspace(x_min, x_max, x_steps)
+    
+    # Parse expression
+    expr = sp.sympify(expr_str)
+    x_sym = sp.symbols('x')
+    
+    # Extract parameter symbols
+    param_symbols = {}
+    for control in controls:
+        param_symbols[control["name"]] = sp.symbols(control["name"])
+    
+    # Create lambdified function
+    all_symbols = [x_sym] + list(param_symbols.values())
+    func = sp.lambdify(all_symbols, expr, "numpy")
+    
+    # Generate sparse grid of thumbnails
+    thumbnails = []
+    param_combinations = []
+    
+    # Create parameter grid (limited by grid_limit)
+    import itertools
+    
+    # For each control, create a small set of values
+    param_grids = []
+    for control in controls:
+        n_vals = min(3, grid_limit // len(controls))  # Distribute grid points
+        vals = np.linspace(control["min"], control["max"], n_vals)
+        param_grids.append([(control["name"], val) for val in vals])
+    
+    # Generate combinations
+    for combination in itertools.product(*param_grids):
+        if len(param_combinations) >= grid_limit:
+            break
+        
+        param_dict = dict(combination)
+        param_combinations.append(param_dict)
+        
+        # Evaluate function with these parameters
+        param_values = [param_dict[name] for name in param_symbols.keys()]
+        y_vals = func(x, *param_values)
+        
+        # Create thumbnail plot
+        fig, ax = plt.subplots(figsize=(3, 2), dpi=80)
+        
+        if renderer == "line":
+            ax.plot(x, y_vals, 'b-', linewidth=1.5)
+            ax.set_xlim(x_min, x_max)
+        elif renderer == "contour":
+            # For contour, we'd need 2D data - simplified to line for now
+            ax.plot(x, y_vals, 'b-', linewidth=1.5)
+            ax.set_xlim(x_min, x_max)
+        
+        ax.set_xlabel('x', fontsize=8)
+        ax.set_ylabel('f', fontsize=8)
+        ax.tick_params(labelsize=6)
+        
+        # Add parameter values as title
+        title_parts = [f"{k}={v:.2f}" for k, v in param_dict.items()]
+        ax.set_title(", ".join(title_parts), fontsize=8)
+        
+        plt.tight_layout()
+        
+        # Save thumbnail
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png', dpi=80, bbox_inches='tight')
+        buffer.seek(0)
+        png_b64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        plt.close()
+        
+        thumbnails.append({
+            "control_values": param_dict,
+            "png_b64": png_b64
+        })
+    
+    # Create UI spec
+    ui_spec = {
+        "type": "sliders",
+        "controls": controls
+    }
+    
+    result = {
+        "thumbnails": thumbnails,
+        "ui_spec": ui_spec,
+        "meta": {
+            "device": "cpu",
+            "cached": False,
+            "grid_size": len(thumbnails),
+            "renderer": renderer
+        }
+    }
+    
+    return result
+
+
+def handle_plot_vr_export(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Export 3D meshes/point fields to glTF 2.0 (GLB) and PLY formats."""
+    if not _TRIMESH_AVAILABLE:
+        return {"error": "trimesh library not available. Install with: pip install trimesh"}
+    
+    geometry = params["geometry"]
+    format_type = params.get("format", "glb")
+    extras = params.get("extras", {})
+    
+    vertices = np.array(geometry["vertices"])
+    faces = np.array(geometry["faces"])
+    normals = np.array(geometry.get("normals", [])) if geometry.get("normals") else None
+    colors = np.array(geometry.get("colors", [])) if geometry.get("colors") else None
+    
+    try:
+        # Create trimesh object
+        mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+        
+        # Add normals if provided
+        if normals is not None and len(normals) == len(vertices):
+            mesh.vertex_normals = normals
+        
+        # Add colors if provided
+        if colors is not None and len(colors) == len(vertices):
+            mesh.visual.vertex_colors = colors
+        
+        # Generate filename
+        timestamp = int(time.time())
+        if format_type == "glb":
+            filename = f"mesh_{timestamp}.glb"
+            # Export as GLB (binary glTF)
+            mesh.export(filename)
+        elif format_type == "ply":
+            filename = f"mesh_{timestamp}.ply"
+            # Export as PLY
+            mesh.export(filename)
+        else:
+            return {"error": f"Unsupported format: {format_type}"}
+        
+        result = {
+            "path": filename,
+            "meta": {
+                "vertices": len(vertices),
+                "faces": len(faces),
+                "format": format_type,
+                "has_normals": normals is not None,
+                "has_colors": colors is not None
+            }
+        }
+        
+        # Add extras to metadata
+        if extras:
+            result["meta"]["extras"] = extras
+        
+        return result
+        
+    except Exception as e:
+        return {"error": f"3D export failed: {str(e)}"}
 
 
 def handle_units_convert(params: Dict[str, Any]) -> Dict[str, Any]:
@@ -1364,6 +1941,16 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
         return handle_plot_contour_2d(params)
     elif method == "accel_caps":
         return accel_caps()
+    
+    # Phase 5: Advanced Visualization Methods
+    elif method == "plot_volume_3d":
+        return handle_plot_volume_3d(params)
+    elif method == "plot_animation":
+        return handle_plot_animation(params)
+    elif method == "plot_interactive":
+        return handle_plot_interactive(params)
+    elif method == "plot_vr_export":
+        return handle_plot_vr_export(params)
     
     # Phase 3 methods
     elif method == "tensor_algebra":

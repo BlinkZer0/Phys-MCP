@@ -96,8 +96,9 @@ function parseWithRules(text) {
         const varMatch = text.match(/(?:with respect to|wrt|d\/d)\s*([a-z])/i);
         if (exprMatch && varMatch) {
             return {
-                intent: "cas_diff",
+                intent: "cas",
                 args: {
+                    action: "diff",
                     expr: exprMatch[1].replace(/\^/g, "**"),
                     symbol: varMatch[1]
                 }
@@ -111,13 +112,14 @@ function parseWithRules(text) {
         const boundsMatch = text.match(/from\s+(-?\d+(?:\.\d+)?)\s+to\s+(-?\d+(?:\.\d+)?)/i);
         if (exprMatch && varMatch) {
             const args = {
+                action: "integrate",
                 expr: exprMatch[1].replace(/\^/g, "**"),
                 symbol: varMatch[1]
             };
             if (boundsMatch) {
                 args.bounds = [parseFloat(boundsMatch[1]), parseFloat(boundsMatch[2])];
             }
-            return { intent: "cas_integrate", args };
+            return { intent: "cas", args };
         }
     }
     // Plotting
@@ -127,6 +129,7 @@ function parseWithRules(text) {
         const rangeMatch = text.match(/from\s+(-?\d+(?:\.\d+)?)\s+to\s+(-?\d+(?:\.\d+)?)/i);
         if (funcMatch) {
             const args = {
+                plot_type: "function_2d",
                 f: funcMatch[1].replace(/\^/g, "**"),
                 x_min: -10,
                 x_max: 10
@@ -135,8 +138,31 @@ function parseWithRules(text) {
                 args.x_min = parseFloat(rangeMatch[1]);
                 args.x_max = parseFloat(rangeMatch[2]);
             }
-            return { intent: "plot_function_2d", args };
+            return { intent: "plot", args };
         }
+    }
+    // API searches
+    if (lowerText.includes("arxiv") || lowerText.includes("search papers")) {
+        const queryMatch = text.match(/(?:search|find|look for)\s+(?:papers?\s+(?:on|about)\s+)?(.+?)(?:\s+(?:on|in)\s+arxiv)?$/i);
+        return {
+            intent: "api_tools",
+            args: {
+                api: "arxiv",
+                query: queryMatch ? queryMatch[1] : text
+            }
+        };
+    }
+    // Data processing
+    if (lowerText.includes("fft") || lowerText.includes("fourier")) {
+        return {
+            intent: "data",
+            args: {
+                action: "fft",
+                signal_data: [],
+                sample_rate: 1000
+            },
+            explanation: "FFT operation detected. Please provide signal_data and sample_rate parameters."
+        };
     }
     // Default fallback
     return {

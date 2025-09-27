@@ -1,0 +1,20 @@
+{
+  "accel": {
+    "mode": "auto",
+    "device_preference": ["cuda", "hip", "mps", "xpu", "cpu"]
+  },
+  "viz_caps": {
+    "mesh": [160, 160],
+    "field": [64, 64],
+    "frames_max": 300
+  },
+  "encoders": {
+    "mp4": "libx264",
+    "webm": "libvpx-vp9"
+  },
+  "thumbnails": {
+    "width": 384,
+    "rows": 3,
+    "cols": 4
+  }
+}

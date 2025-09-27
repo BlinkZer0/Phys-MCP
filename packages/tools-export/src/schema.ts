@@ -195,3 +195,64 @@ export const exportJupyterSchema = {
   required: ["notebook_name", "session_data"],
   additionalProperties: false
 } as const;
+
+export const exportVRSchema = {
+  type: "object",
+  properties: {
+    geometry: {
+      type: "object",
+      properties: {
+        vertices: { 
+          type: "array", 
+          items: { 
+            type: "array", 
+            items: { type: "number" }, 
+            minItems: 3, 
+            maxItems: 3 
+          },
+          description: "Array of [x,y,z] coordinates"
+        },
+        faces: { 
+          type: "array", 
+          items: { 
+            type: "array", 
+            items: { type: "integer", minimum: 0 } 
+          },
+          description: "Array of vertex indices"
+        },
+        normals: { 
+          type: "array", 
+          items: { 
+            type: "array", 
+            items: { type: "number" } 
+          }, 
+          nullable: true,
+          description: "Optional normals"
+        },
+        colors: { 
+          type: "array", 
+          items: { 
+            type: "array", 
+            items: { type: "number" } 
+          }, 
+          nullable: true,
+          description: "Optional colors"
+        }
+      },
+      required: ["vertices", "faces"],
+      description: "3D geometry data"
+    },
+    format: { 
+      type: "string", 
+      enum: ["glb", "ply"], 
+      default: "glb",
+      description: "Export format"
+    },
+    extras: { 
+      type: "object",
+      description: "Additional metadata"
+    }
+  },
+  required: ["geometry"],
+  additionalProperties: false
+} as const;

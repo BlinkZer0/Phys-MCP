@@ -117,3 +117,80 @@ export const contour2DSchema = {
     },
     required: ["f", "x_min", "x_max", "y_min", "y_max"]
 };
+export const volume3DSchema = {
+    type: "object",
+    properties: {
+        f: { type: "string", description: "SymPy-like expression in x,y,z; numeric eval is vectorized" },
+        x: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3, description: "[min,max,steps?]" },
+        y: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3 },
+        z: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3 },
+        mode: { type: "string", enum: ["slices", "isosurface"], default: "slices" },
+        iso_level: { type: "number", description: "Used when mode='isosurface'" },
+        emit_animation: { type: "boolean", default: false },
+        animate_axis: { type: "string", enum: ["x", "y", "z"], default: "z" },
+        fps: { type: "integer", default: 24 },
+        format: { type: "string", enum: ["mp4", "webm", "gif"], default: "mp4" },
+        samples_cap: { type: "integer", default: 160 },
+        allow_large: { type: "boolean", default: false }
+    },
+    required: ["f", "x", "y", "z"]
+};
+export const animationSchema = {
+    type: "object",
+    properties: {
+        frame_expr: { type: "string", description: "Expression producing frame array or 2D function value at (x,t)" },
+        x_range: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3 },
+        t_range: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3 },
+        renderer: { type: "string", enum: ["imshow", "contour", "line"], default: "imshow" },
+        fps: { type: "integer", default: 24 },
+        format: { type: "string", enum: ["mp4", "webm", "gif"], default: "mp4" },
+        dpi: { type: "integer", default: 120 },
+        emit_frames: { type: "boolean", default: false },
+        emit_csv: { type: "boolean", default: false },
+        frames_cap: { type: "integer", default: 300 },
+        allow_large: { type: "boolean", default: false }
+    },
+    required: ["frame_expr", "t_range"]
+};
+export const interactiveSchema = {
+    type: "object",
+    properties: {
+        expr: { type: "string" },
+        x_range: { type: "array", items: { type: "number" }, minItems: 2, maxItems: 3 },
+        controls: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    name: { type: "string" },
+                    min: { type: "number" },
+                    max: { type: "number" },
+                    step: { type: "number" },
+                    default: { type: "number" }
+                },
+                required: ["name", "min", "max", "step", "default"]
+            }
+        },
+        renderer: { type: "string", enum: ["line", "contour", "surface"], default: "line" },
+        grid_limit: { type: "integer", default: 24 } // produce at most N precomputed thumbnails
+    },
+    required: ["expr", "controls"]
+};
+export const vrExportSchema = {
+    type: "object",
+    properties: {
+        geometry: {
+            type: "object",
+            properties: {
+                vertices: { type: "array", items: { type: "array", items: { type: "number" }, minItems: 3, maxItems: 3 } },
+                faces: { type: "array", items: { type: "array", items: { type: "integer", minimum: 0 } } },
+                normals: { type: "array", items: { type: "array", items: { type: "number" } }, nullable: true },
+                colors: { type: "array", items: { type: "array", items: { type: "number" } }, nullable: true }
+            },
+            required: ["vertices", "faces"]
+        },
+        format: { type: "string", enum: ["glb", "ply"], default: "glb" },
+        extras: { type: "object" }
+    },
+    required: ["geometry"]
+};

@@ -481,3 +481,294 @@ export declare const contour2DSchema: {
     };
     readonly required: readonly ["f", "x_min", "x_max", "y_min", "y_max"];
 };
+export interface Volume3DParams {
+    f: string;
+    x: [number, number] | [number, number, number];
+    y: [number, number] | [number, number, number];
+    z: [number, number] | [number, number, number];
+    mode?: "slices" | "isosurface";
+    iso_level?: number;
+    emit_animation?: boolean;
+    animate_axis?: "x" | "y" | "z";
+    fps?: number;
+    format?: "mp4" | "webm" | "gif";
+    samples_cap?: number;
+    allow_large?: boolean;
+}
+export interface AnimationParams {
+    frame_expr: string;
+    x_range?: [number, number] | [number, number, number];
+    t_range: [number, number] | [number, number, number];
+    renderer?: "imshow" | "contour" | "line";
+    fps?: number;
+    format?: "mp4" | "webm" | "gif";
+    dpi?: number;
+    emit_frames?: boolean;
+    emit_csv?: boolean;
+    frames_cap?: number;
+    allow_large?: boolean;
+}
+export interface InteractiveParams {
+    expr: string;
+    x_range?: [number, number] | [number, number, number];
+    controls: Array<{
+        name: string;
+        min: number;
+        max: number;
+        step: number;
+        default: number;
+    }>;
+    renderer?: "line" | "contour" | "surface";
+    grid_limit?: number;
+}
+export interface VRExportParams {
+    geometry: {
+        vertices: number[][];
+        faces: number[][];
+        normals?: number[][];
+        colors?: number[][];
+    };
+    format?: "glb" | "ply";
+    extras?: Record<string, any>;
+}
+export declare const volume3DSchema: {
+    readonly type: "object";
+    readonly properties: {
+        readonly f: {
+            readonly type: "string";
+            readonly description: "SymPy-like expression in x,y,z; numeric eval is vectorized";
+        };
+        readonly x: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+            readonly description: "[min,max,steps?]";
+        };
+        readonly y: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+        };
+        readonly z: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+        };
+        readonly mode: {
+            readonly type: "string";
+            readonly enum: readonly ["slices", "isosurface"];
+            readonly default: "slices";
+        };
+        readonly iso_level: {
+            readonly type: "number";
+            readonly description: "Used when mode='isosurface'";
+        };
+        readonly emit_animation: {
+            readonly type: "boolean";
+            readonly default: false;
+        };
+        readonly animate_axis: {
+            readonly type: "string";
+            readonly enum: readonly ["x", "y", "z"];
+            readonly default: "z";
+        };
+        readonly fps: {
+            readonly type: "integer";
+            readonly default: 24;
+        };
+        readonly format: {
+            readonly type: "string";
+            readonly enum: readonly ["mp4", "webm", "gif"];
+            readonly default: "mp4";
+        };
+        readonly samples_cap: {
+            readonly type: "integer";
+            readonly default: 160;
+        };
+        readonly allow_large: {
+            readonly type: "boolean";
+            readonly default: false;
+        };
+    };
+    readonly required: readonly ["f", "x", "y", "z"];
+};
+export declare const animationSchema: {
+    readonly type: "object";
+    readonly properties: {
+        readonly frame_expr: {
+            readonly type: "string";
+            readonly description: "Expression producing frame array or 2D function value at (x,t)";
+        };
+        readonly x_range: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+        };
+        readonly t_range: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+        };
+        readonly renderer: {
+            readonly type: "string";
+            readonly enum: readonly ["imshow", "contour", "line"];
+            readonly default: "imshow";
+        };
+        readonly fps: {
+            readonly type: "integer";
+            readonly default: 24;
+        };
+        readonly format: {
+            readonly type: "string";
+            readonly enum: readonly ["mp4", "webm", "gif"];
+            readonly default: "mp4";
+        };
+        readonly dpi: {
+            readonly type: "integer";
+            readonly default: 120;
+        };
+        readonly emit_frames: {
+            readonly type: "boolean";
+            readonly default: false;
+        };
+        readonly emit_csv: {
+            readonly type: "boolean";
+            readonly default: false;
+        };
+        readonly frames_cap: {
+            readonly type: "integer";
+            readonly default: 300;
+        };
+        readonly allow_large: {
+            readonly type: "boolean";
+            readonly default: false;
+        };
+    };
+    readonly required: readonly ["frame_expr", "t_range"];
+};
+export declare const interactiveSchema: {
+    readonly type: "object";
+    readonly properties: {
+        readonly expr: {
+            readonly type: "string";
+        };
+        readonly x_range: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "number";
+            };
+            readonly minItems: 2;
+            readonly maxItems: 3;
+        };
+        readonly controls: {
+            readonly type: "array";
+            readonly items: {
+                readonly type: "object";
+                readonly properties: {
+                    readonly name: {
+                        readonly type: "string";
+                    };
+                    readonly min: {
+                        readonly type: "number";
+                    };
+                    readonly max: {
+                        readonly type: "number";
+                    };
+                    readonly step: {
+                        readonly type: "number";
+                    };
+                    readonly default: {
+                        readonly type: "number";
+                    };
+                };
+                readonly required: readonly ["name", "min", "max", "step", "default"];
+            };
+        };
+        readonly renderer: {
+            readonly type: "string";
+            readonly enum: readonly ["line", "contour", "surface"];
+            readonly default: "line";
+        };
+        readonly grid_limit: {
+            readonly type: "integer";
+            readonly default: 24;
+        };
+    };
+    readonly required: readonly ["expr", "controls"];
+};
+export declare const vrExportSchema: {
+    readonly type: "object";
+    readonly properties: {
+        readonly geometry: {
+            readonly type: "object";
+            readonly properties: {
+                readonly vertices: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                        readonly minItems: 3;
+                        readonly maxItems: 3;
+                    };
+                };
+                readonly faces: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "integer";
+                            readonly minimum: 0;
+                        };
+                    };
+                };
+                readonly normals: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                    };
+                    readonly nullable: true;
+                };
+                readonly colors: {
+                    readonly type: "array";
+                    readonly items: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly type: "number";
+                        };
+                    };
+                    readonly nullable: true;
+                };
+            };
+            readonly required: readonly ["vertices", "faces"];
+        };
+        readonly format: {
+            readonly type: "string";
+            readonly enum: readonly ["glb", "ply"];
+            readonly default: "glb";
+        };
+        readonly extras: {
+            readonly type: "object";
+        };
+    };
+    readonly required: readonly ["geometry"];
+};
