@@ -1,0 +1,24 @@
+{
+  "name": "@phys-mcp/tools-plot",
+  "version": "0.1.0",
+  "description": "Plotting tools for Physics MCP",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@phys-mcp/mcp-types": "workspace:*",
+    "@phys-mcp/tools-cas": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
