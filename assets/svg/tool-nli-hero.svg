@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-label="Natural Language I/O banner">
+<style>
+svg { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+.title { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+.subtitle { font-size: 18px; font-weight: 500; opacity: 0.92; }
+.grid-lines { stroke-width: 1; stroke-dasharray: 2 10; }
+.wave-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 16 18; }
+.wave-line-secondary { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 12 16; opacity: 0.6; }
+.math-curve { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 18 24; }
+.math-marker { stroke-width: 3; stroke-linecap: round; opacity: 0.7; }
+.math-spark { fill: none; stroke-width: 3; stroke-linecap: round; }
+.matrix-cell { rx: 4; }
+.axes-line { stroke-width: 2; stroke-linecap: round; opacity: 0.6; }
+.axes-plot { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 14 16; }
+.plot-dot { r: 6; }
+.plot-dot-secondary { r: 4; opacity: 0.6; }
+.network-link { stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; opacity: 0.6; }
+.network-node { r: 7; }
+.document-page { rx: 16; }
+.document-page-secondary { rx: 16; opacity: 0.72; }
+.document-line { rx: 3; height: 6; opacity: 0.7; }
+.document-line.accent { opacity: 0.95; }
+.document-bullet { opacity: 0.75; }
+.pipeline-bar { height: 18; rx: 9; opacity: 0.35; }
+.pipeline-highlight { height: 18; rx: 9; opacity: 0.65; }
+.orbit-path { fill: none; stroke-width: 2; stroke-dasharray: 6 10; opacity: 0.5; }
+.orbit-core { r: 10; }
+.orbit-dot { r: 6; }
+.dialog-bubble, .dialog-bubble-secondary { rx: 22; }
+.dialog-tail, .dialog-tail-secondary { stroke-width: 0; }
+.dialog-dot { opacity: 0.8; }
+.dialog-line { height: 6; rx: 3; opacity: 0.7; }
+.dag-node { rx: 12; height: 50; }
+.dag-node.secondary { opacity: 0.7; }
+.dag-node.accent { opacity: 0.85; }
+.dag-connector { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 12; opacity: 0.6; }
+.particle { opacity: 0.7; }
+.dial-ring { fill: none; stroke-width: 2; opacity: 0.6; stroke-dasharray: 4 8; }
+.dial-tick { stroke-width: 2; opacity: 0.35; }
+.dial-needle { stroke-width: 3; stroke-linecap: round; }
+.dial-center { r: 6; }
+.heatmap-cell { rx: 6; }
+.tensor-line { stroke-width: 1.5; opacity: 0.35; }
+.tensor-curve { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; }
+.conversion-bar { height: 4; rx: 2; opacity: 0.4; }
+.conversion-arrow { opacity: 0.75; }
+.conversion-node { opacity: 0.8; }
+.conversion-node.secondary { opacity: 0.6; }
+.sparkline-track { fill: none; stroke-width: 1; opacity: 0.25; }
+.sparkline-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 12 16; }
+.sparkline-dot { opacity: 0.9; }
+.icon-tile { rx: 18; opacity: 0.24; }
+.icon-tile.secondary { opacity: 0.26; }
+.icon-tile.tertiary { opacity: 0.22; }
+.icon-math { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 8 12; }
+.icon-math-point { opacity: 0.8; }
+.icon-plot { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 14; }
+.icon-plot-dot { opacity: 0.8; }
+.icon-network { stroke-width: 4; stroke-linecap: round; stroke-dasharray: 8 12; opacity: 0.6; }
+.icon-network-node { opacity: 0.85; }
+.animate-dash { stroke-dashoffset: 0; }
+.animate-pulse { transform-origin: center; }
+.animate-float { transform-origin: center; }
+.animate-orbit { transform-origin: center; }
+.animate-slide { transform-origin: center; }
+.animate-twinkle { transform-origin: center; }
+@media (prefers-reduced-motion: reduce) {
+svg * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+.title { fill: #f7faff; }
+.subtitle { fill: #c9dcff; }
+.grid-lines { stroke: #556a89; }
+.wave-line { stroke: #60a5fa; }
+.wave-line-secondary { stroke: #f472b6; }
+.math-curve { stroke: #60a5fa; }
+.math-marker { stroke: #f472b6; }
+.math-spark { stroke: #22d3ee; }
+.matrix-cell { fill: #f472b6; }
+.axes-line { stroke: #556a89; }
+.axes-plot { stroke: #60a5fa; }
+.plot-dot { fill: #f472b6; }
+.plot-dot-secondary { fill: #22d3ee; }
+.network-link { stroke: #f472b6; }
+.network-node { fill: #60a5fa; }
+.document-page { fill: #60a5fa33; stroke: #60a5fa33; }
+.document-page-secondary { fill: #f472b633; }
+.document-line { fill: #c9dcff; }
+.document-line.accent { fill: #f472b6; }
+.document-bullet { fill: #60a5fa; }
+.pipeline-bar { fill: #60a5fa33; }
+.pipeline-highlight { fill: #f472b666; }
+.orbit-path { stroke: #f472b6; }
+.orbit-core { fill: #22d3ee; }
+.orbit-dot { fill: #60a5fa; }
+.dialog-bubble { fill: #60a5fa30; }
+.dialog-bubble-secondary { fill: #f472b626; }
+.dialog-tail { fill: #60a5fa30; }
+.dialog-tail-secondary { fill: #f472b626; }
+.dialog-dot { fill: #60a5fa; }
+.dag-node { fill: #60a5fa24; }
+.dag-node.secondary { fill: #f472b624; }
+.dag-node.accent { fill: #22d3ee33; }
+.dag-connector { stroke: #f472b6; }
+.particle { fill: #22d3ee; }
+.dial-ring { stroke: #f472b6; }
+.dial-tick { stroke: #c9dcff; }
+.dial-needle { stroke: #60a5fa; }
+.dial-center { fill: #22d3ee; }
+.heatmap-cell { fill: #f472b6; }
+.tensor-line { stroke: #c9dcff; }
+.tensor-curve { stroke: #60a5fa; }
+.conversion-bar { fill: #c9dcff; }
+.conversion-arrow { fill: #f472b6; }
+.conversion-node { fill: #60a5fa; }
+.conversion-node.secondary { fill: #22d3ee; }
+.sparkline-track { stroke: #556a89; }
+.sparkline-path { stroke: #f472b6; }
+.sparkline-dot { fill: #22d3ee; }
+.icon-tile { fill: #60a5fa33; }
+.icon-tile.secondary { fill: #f472b633; }
+.icon-tile.tertiary { fill: #22d3ee29; }
+.icon-math { stroke: #f472b6; }
+.icon-math-point { fill: #22d3ee; }
+.icon-plot { stroke: #60a5fa; }
+.icon-plot-dot { fill: #22d3ee; }
+.icon-network { stroke: #f472b6; }
+.icon-network-node { fill: #60a5fa; }
+.orbit-group { transform-origin: center; }
+svg.is-playing .animate-dash { animation: dash var(--duration, 7s) linear infinite; }
+svg.is-playing .animate-pulse { animation: pulse var(--duration, 6s) ease-in-out infinite; }
+svg.is-playing .animate-float { animation: float var(--duration, 8s) ease-in-out infinite; }
+svg.is-playing .animate-orbit { animation: orbit var(--duration, 10s) linear infinite; }
+svg.is-playing .animate-slide { animation: slide var(--duration, 7s) ease-in-out infinite alternate; }
+svg.is-playing .animate-twinkle { animation: twinkle var(--duration, 6s) ease-in-out infinite alternate; }
+@keyframes dash { to { stroke-dashoffset: -240; } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes slide { 0% { transform: translateX(0); opacity: 0.6; } 50% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0.6; } }
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+</style>
+<defs>
+<linearGradient id="tool-nli-hero-bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#061021"/>
+<stop offset="100%" stop-color="#11213a"/>
+</linearGradient>
+<filter id="tool-nli-hero-glow">
+<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+<feMerge>
+<feMergeNode in="blur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<rect width="960" height="220" fill="url(#tool-nli-hero-bg)" rx="24"/>
+<g transform="translate(60,92)">
+<text class="title" x="0" y="0">Natural Language I/O</text>
+<text class="subtitle" x="2" y="34">Free-form prompts to tool calls</text>
+</g>
+<g class="grid-lines">
+<path d="M360 40 H 900"/>
+<path d="M360 90 H 900"/>
+<path d="M360 140 H 900"/>
+<path d="M360 190 H 900"/>
+<path d="M420 20 V 210"/>
+<path d="M520 20 V 210"/>
+<path d="M640 20 V 210"/>
+<path d="M760 20 V 210"/>
+<path d="M880 20 V 210"/>
+</g>
+<g transform="translate(600,64)">
+<rect class="dialog-bubble animate-float" style="--duration:6s" x="0" y="0" width="150" height="72" rx="22"/>
+<path class="dialog-tail" d="M40 72 L60 94 L72 72"/>
+<rect class="dialog-bubble-secondary animate-float" style="--duration:7s" x="76" y="54" width="150" height="70" rx="22"/>
+<path class="dialog-tail-secondary" d="M180 124 L164 146 L152 120"/>
+<circle class="dialog-dot accent animate-pulse" style="--duration:4s" cx="38" cy="32" r="6"/>
+<circle class="dialog-dot animate-pulse" style="--duration:5s" cx="60" cy="32" r="6"/>
+<circle class="dialog-dot animate-pulse" style="--duration:6s" cx="82" cy="32" r="6"/>
+<rect class="dialog-line" x="110" y="30" width="68" height="6" rx="3"/>
+<rect class="dialog-line" x="110" y="46" width="74" height="6" rx="3"/>
+</g>
+<g transform="translate(600,170)">
+<path class="sparkline-track" d="M0 18 H220"/>
+<path class="sparkline-path animate-dash" style="--duration:7s" d="M0 20 L40 12 L80 26 L120 8 L160 14 L200 4"/>
+<circle class="sparkline-dot animate-float" style="--duration:4.5s" cx="200" cy="4" r="5"/>
+</g>
+<g transform="translate(360,150)">
+<path class="wave-line animate-dash" style="--duration:8s" d="M0 25 C 50 -5, 110 55, 170 25 S 290 55, 350 25 S 470 -5, 530 25 S 650 55, 710 25 S 830 -5, 890 25"/>
+<path class="wave-line-secondary animate-dash" style="--duration:10s" d="M0 45 C 60 15, 120 65, 180 45 S 300 65, 360 45 S 480 15, 540 45 S 660 65, 720 45 S 840 15, 900 45"/>
+</g>
+</svg>

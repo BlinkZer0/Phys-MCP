@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/numerics-solvers.svg" alt="Experiment Orchestrator — Phys-MCP" width="100%">
-</p>
+---
+title: Experiment Orchestrator
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-orchestrator-hero.svg"
+  static: "/assets/svg/tool-orchestrator-hero-static.svg"
+  title: "Experiment Orchestrator"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Experiment Orchestrator
 

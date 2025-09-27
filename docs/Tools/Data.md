@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/data-io.svg" alt="Data & I/O — Phys-MCP" width="100%">
-</p>
+---
+title: Data Processing & Signal Analysis Tool
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-data-hero.svg"
+  static: "/assets/svg/tool-data-hero-static.svg"
+  title: "Data Processing & Signal Analysis Tool"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Data Processing & Signal Analysis Tool
 

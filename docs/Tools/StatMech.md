@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/numerics-solvers.svg" alt="Statistical Mechanics — Phys-MCP" width="100%">
-</p>
+---
+title: Statistical Mechanics Tool
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-statmech-hero.svg"
+  static: "/assets/svg/tool-statmech-hero-static.svg"
+  title: "Statistical Mechanics Tool"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Statistical Mechanics Tool
 
@@ -80,5 +91,3 @@
 - Uses CODATA 2018 Boltzmann constant: k_B = 1.380649×10⁻²³ J/K
 - Automatically shifts energies to avoid numerical overflow
 - Returns most populated energy level index
-
-

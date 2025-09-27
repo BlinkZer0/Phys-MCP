@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-label="Statistical Mechanics banner">
+<style>
+svg { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+.title { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+.subtitle { font-size: 18px; font-weight: 500; opacity: 0.92; }
+.grid-lines { stroke-width: 1; stroke-dasharray: 2 10; }
+.wave-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 16 18; }
+.wave-line-secondary { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 12 16; opacity: 0.6; }
+.math-curve { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 18 24; }
+.math-marker { stroke-width: 3; stroke-linecap: round; opacity: 0.7; }
+.math-spark { fill: none; stroke-width: 3; stroke-linecap: round; }
+.matrix-cell { rx: 4; }
+.axes-line { stroke-width: 2; stroke-linecap: round; opacity: 0.6; }
+.axes-plot { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 14 16; }
+.plot-dot { r: 6; }
+.plot-dot-secondary { r: 4; opacity: 0.6; }
+.network-link { stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; opacity: 0.6; }
+.network-node { r: 7; }
+.document-page { rx: 16; }
+.document-page-secondary { rx: 16; opacity: 0.72; }
+.document-line { rx: 3; height: 6; opacity: 0.7; }
+.document-line.accent { opacity: 0.95; }
+.document-bullet { opacity: 0.75; }
+.pipeline-bar { height: 18; rx: 9; opacity: 0.35; }
+.pipeline-highlight { height: 18; rx: 9; opacity: 0.65; }
+.orbit-path { fill: none; stroke-width: 2; stroke-dasharray: 6 10; opacity: 0.5; }
+.orbit-core { r: 10; }
+.orbit-dot { r: 6; }
+.dialog-bubble, .dialog-bubble-secondary { rx: 22; }
+.dialog-tail, .dialog-tail-secondary { stroke-width: 0; }
+.dialog-dot { opacity: 0.8; }
+.dialog-line { height: 6; rx: 3; opacity: 0.7; }
+.dag-node { rx: 12; height: 50; }
+.dag-node.secondary { opacity: 0.7; }
+.dag-node.accent { opacity: 0.85; }
+.dag-connector { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 12; opacity: 0.6; }
+.particle { opacity: 0.7; }
+.dial-ring { fill: none; stroke-width: 2; opacity: 0.6; stroke-dasharray: 4 8; }
+.dial-tick { stroke-width: 2; opacity: 0.35; }
+.dial-needle { stroke-width: 3; stroke-linecap: round; }
+.dial-center { r: 6; }
+.heatmap-cell { rx: 6; }
+.tensor-line { stroke-width: 1.5; opacity: 0.35; }
+.tensor-curve { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; }
+.conversion-bar { height: 4; rx: 2; opacity: 0.4; }
+.conversion-arrow { opacity: 0.75; }
+.conversion-node { opacity: 0.8; }
+.conversion-node.secondary { opacity: 0.6; }
+.sparkline-track { fill: none; stroke-width: 1; opacity: 0.25; }
+.sparkline-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 12 16; }
+.sparkline-dot { opacity: 0.9; }
+.icon-tile { rx: 18; opacity: 0.24; }
+.icon-tile.secondary { opacity: 0.26; }
+.icon-tile.tertiary { opacity: 0.22; }
+.icon-math { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 8 12; }
+.icon-math-point { opacity: 0.8; }
+.icon-plot { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 14; }
+.icon-plot-dot { opacity: 0.8; }
+.icon-network { stroke-width: 4; stroke-linecap: round; stroke-dasharray: 8 12; opacity: 0.6; }
+.icon-network-node { opacity: 0.85; }
+.animate-dash { stroke-dashoffset: 0; }
+.animate-pulse { transform-origin: center; }
+.animate-float { transform-origin: center; }
+.animate-orbit { transform-origin: center; }
+.animate-slide { transform-origin: center; }
+.animate-twinkle { transform-origin: center; }
+@media (prefers-reduced-motion: reduce) {
+svg * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+.title { fill: #fafcff; }
+.subtitle { fill: #dfe7ff; }
+.grid-lines { stroke: #5c6f99; }
+.wave-line { stroke: #facc15; }
+.wave-line-secondary { stroke: #38bdf8; }
+.math-curve { stroke: #facc15; }
+.math-marker { stroke: #38bdf8; }
+.math-spark { stroke: #f97316; }
+.matrix-cell { fill: #38bdf8; }
+.axes-line { stroke: #5c6f99; }
+.axes-plot { stroke: #facc15; }
+.plot-dot { fill: #38bdf8; }
+.plot-dot-secondary { fill: #f97316; }
+.network-link { stroke: #38bdf8; }
+.network-node { fill: #facc15; }
+.document-page { fill: #facc1533; stroke: #facc1533; }
+.document-page-secondary { fill: #38bdf833; }
+.document-line { fill: #dfe7ff; }
+.document-line.accent { fill: #38bdf8; }
+.document-bullet { fill: #facc15; }
+.pipeline-bar { fill: #facc1533; }
+.pipeline-highlight { fill: #38bdf866; }
+.orbit-path { stroke: #38bdf8; }
+.orbit-core { fill: #f97316; }
+.orbit-dot { fill: #facc15; }
+.dialog-bubble { fill: #facc1530; }
+.dialog-bubble-secondary { fill: #38bdf826; }
+.dialog-tail { fill: #facc1530; }
+.dialog-tail-secondary { fill: #38bdf826; }
+.dialog-dot { fill: #facc15; }
+.dag-node { fill: #facc1524; }
+.dag-node.secondary { fill: #38bdf824; }
+.dag-node.accent { fill: #f9731633; }
+.dag-connector { stroke: #38bdf8; }
+.particle { fill: #f97316; }
+.dial-ring { stroke: #38bdf8; }
+.dial-tick { stroke: #dfe7ff; }
+.dial-needle { stroke: #facc15; }
+.dial-center { fill: #f97316; }
+.heatmap-cell { fill: #38bdf8; }
+.tensor-line { stroke: #dfe7ff; }
+.tensor-curve { stroke: #facc15; }
+.conversion-bar { fill: #dfe7ff; }
+.conversion-arrow { fill: #38bdf8; }
+.conversion-node { fill: #facc15; }
+.conversion-node.secondary { fill: #f97316; }
+.sparkline-track { stroke: #5c6f99; }
+.sparkline-path { stroke: #38bdf8; }
+.sparkline-dot { fill: #f97316; }
+.icon-tile { fill: #facc1533; }
+.icon-tile.secondary { fill: #38bdf833; }
+.icon-tile.tertiary { fill: #f9731629; }
+.icon-math { stroke: #38bdf8; }
+.icon-math-point { fill: #f97316; }
+.icon-plot { stroke: #facc15; }
+.icon-plot-dot { fill: #f97316; }
+.icon-network { stroke: #38bdf8; }
+.icon-network-node { fill: #facc15; }
+.orbit-group { transform-origin: center; }
+svg.is-playing .animate-dash { animation: dash var(--duration, 7s) linear infinite; }
+svg.is-playing .animate-pulse { animation: pulse var(--duration, 6s) ease-in-out infinite; }
+svg.is-playing .animate-float { animation: float var(--duration, 8s) ease-in-out infinite; }
+svg.is-playing .animate-orbit { animation: orbit var(--duration, 10s) linear infinite; }
+svg.is-playing .animate-slide { animation: slide var(--duration, 7s) ease-in-out infinite alternate; }
+svg.is-playing .animate-twinkle { animation: twinkle var(--duration, 6s) ease-in-out infinite alternate; }
+@keyframes dash { to { stroke-dashoffset: -240; } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes slide { 0% { transform: translateX(0); opacity: 0.6; } 50% { opacity: 1; } 100% { transform: translateX(40px); opacity: 0.6; } }
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+</style>
+<defs>
+<linearGradient id="tool-statmech-hero-bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#060f21"/>
+<stop offset="100%" stop-color="#15223f"/>
+</linearGradient>
+<filter id="tool-statmech-hero-glow">
+<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+<feMerge>
+<feMergeNode in="blur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<rect width="960" height="220" fill="url(#tool-statmech-hero-bg)" rx="24"/>
+<g transform="translate(60,92)">
+<text class="title" x="0" y="0">Statistical Mechanics</text>
+<text class="subtitle" x="2" y="34">Ensembles & partition functions</text>
+</g>
+<g class="grid-lines">
+<path d="M360 40 H 900"/>
+<path d="M360 90 H 900"/>
+<path d="M360 140 H 900"/>
+<path d="M360 190 H 900"/>
+<path d="M420 20 V 210"/>
+<path d="M520 20 V 210"/>
+<path d="M640 20 V 210"/>
+<path d="M760 20 V 210"/>
+<path d="M880 20 V 210"/>
+</g>
+<circle class="particle animate-twinkle" style="--duration:4s" cx="620" cy="60" r="4"/>
+<circle class="particle animate-twinkle" style="--duration:5s" cx="660" cy="90" r="3"/>
+<circle class="particle animate-twinkle" style="--duration:6s" cx="700" cy="70" r="5"/>
+<circle class="particle animate-twinkle" style="--duration:7s" cx="750" cy="110" r="3"/>
+<circle class="particle animate-twinkle" style="--duration:4s" cx="790" cy="80" r="4"/>
+<circle class="particle animate-twinkle" style="--duration:5s" cx="830" cy="120" r="6"/>
+<circle class="particle animate-twinkle" style="--duration:6s" cx="860" cy="70" r="3"/>
+<circle class="particle animate-twinkle" style="--duration:7s" cx="890" cy="100" r="4"/>
+<circle class="particle animate-twinkle" style="--duration:4s" cx="820" cy="150" r="3"/>
+<circle class="particle animate-twinkle" style="--duration:5s" cx="760" cy="150" r="5"/>
+<g transform="translate(700,60)">
+<rect class="heatmap-cell animate-pulse" style="opacity:0.3; --duration:4s" x="0" y="0" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.5; --duration:5s" x="22" y="0" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.8; --duration:6s" x="44" y="0" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.6; --duration:7s" x="66" y="0" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.7; --duration:8s" x="0" y="22" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.4; --duration:4s" x="22" y="22" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.9; --duration:5s" x="44" y="22" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.5; --duration:6s" x="66" y="22" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.6; --duration:7s" x="0" y="44" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.3; --duration:8s" x="22" y="44" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.7; --duration:4s" x="44" y="44" width="18" height="18" rx="6"/>
+<rect class="heatmap-cell animate-pulse" style="opacity:0.8; --duration:5s" x="66" y="44" width="18" height="18" rx="6"/>
+</g>
+<g transform="translate(360,150)">
+<path class="wave-line animate-dash" style="--duration:8s" d="M0 25 C 50 -5, 110 55, 170 25 S 290 55, 350 25 S 470 -5, 530 25 S 650 55, 710 25 S 830 -5, 890 25"/>
+<path class="wave-line-secondary animate-dash" style="--duration:10s" d="M0 45 C 60 15, 120 65, 180 45 S 300 65, 360 45 S 480 15, 540 45 S 660 65, 720 45 S 840 15, 900 45"/>
+</g>
+</svg>

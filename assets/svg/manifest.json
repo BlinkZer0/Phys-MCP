@@ -1,52 +1,190 @@
 {
-  "updatedAt": "2025-09-26T23:27:49.9474690-05:00",
+  "updatedAt": "2025-09-27T16:32:56",
   "assets": [
     {
-      "name": "physics-mcp-hero",
+      "name": "cas-lab-hero",
       "usage": [
-        "docs/README.md",
-        "docs/FAQ.md",
-        "docs/contrib/authoring.md",
-        "docs/Tools/NLI.md",
-        "docs/Tools/Quantum.md"
+        "docs/Configuration.md",
+        "docs/phase5_examples.md",
+        "docs/templates/reference.md"
       ],
-      "static": "/assets/svg/physics-mcp-hero-static.svg",
-      "animated": "/assets/svg/physics-mcp-hero.svg"
+      "animated": "/assets/svg/cas-lab-hero.svg",
+      "static": "/assets/svg/cas-lab-hero-static.svg"
     },
     {
       "name": "distributed-collaboration-hero",
       "usage": [
         "docs/Architecture.md",
         "docs/phases_7_8_implementation.md",
-        "docs/Tools/Tensor.md",
-        "docs/guides/educators.md"
+        "docs/templates/explanation.md"
       ],
-      "static": "/assets/svg/distributed-collaboration-hero-static.svg",
-      "animated": "/assets/svg/distributed-collaboration-hero.svg"
-    },
-    {
-      "name": "cas-lab-hero",
-      "usage": [
-        "docs/Configuration.md",
-        "docs/phase5_examples.md",
-        "docs/Tools/CAS.md",
-        "docs/Tools/StatMech.md"
-      ],
-      "static": "/assets/svg/cas-lab-hero-static.svg",
-      "animated": "/assets/svg/cas-lab-hero.svg"
+      "animated": "/assets/svg/distributed-collaboration-hero.svg",
+      "static": "/assets/svg/distributed-collaboration-hero-static.svg"
     },
     {
       "name": "experiment-orchestrator-hero",
       "usage": [
         "docs/Phase2-Implementation.md",
-        "docs/examples/mermaid-and-math.md",
-        "docs/Tools/Plot.md",
-        "docs/Tools/Report.md",
+        "docs/examples/mermaid-and-math.md"
+      ],
+      "animated": "/assets/svg/experiment-orchestrator-hero.svg",
+      "static": "/assets/svg/experiment-orchestrator-hero-static.svg"
+    },
+    {
+      "name": "physics-mcp-hero",
+      "usage": [
+        "docs/FAQ.md",
+        "docs/README.md",
+        "docs/contrib/authoring.md",
+        "docs/templates/howto.md",
+        "docs/templates/tutorial.md"
+      ],
+      "animated": "/assets/svg/physics-mcp-hero.svg",
+      "static": "/assets/svg/physics-mcp-hero-static.svg"
+    },
+    {
+      "name": "tool-all-hero",
+      "usage": [
+        "docs/Tools/AllTools.md"
+      ],
+      "animated": "/assets/svg/tool-all-hero.svg",
+      "static": "/assets/svg/tool-all-hero-static.svg"
+    },
+    {
+      "name": "tool-cas-hero",
+      "usage": [
+        "docs/Tools/CAS.md"
+      ],
+      "animated": "/assets/svg/tool-cas-hero.svg",
+      "static": "/assets/svg/tool-cas-hero-static.svg"
+    },
+    {
+      "name": "tool-constants-hero",
+      "usage": [
+        "docs/Tools/Constants.md"
+      ],
+      "animated": "/assets/svg/tool-constants-hero.svg",
+      "static": "/assets/svg/tool-constants-hero-static.svg"
+    },
+    {
+      "name": "tool-data-hero",
+      "usage": [
+        "docs/Tools/Data.md"
+      ],
+      "animated": "/assets/svg/tool-data-hero.svg",
+      "static": "/assets/svg/tool-data-hero-static.svg"
+    },
+    {
+      "name": "tool-distributed-hero",
+      "usage": [
+        "docs/Tools/Distributed.md"
+      ],
+      "animated": "/assets/svg/tool-distributed-hero.svg",
+      "static": "/assets/svg/tool-distributed-hero-static.svg"
+    },
+    {
+      "name": "tool-educators-hero",
+      "usage": [
+        "docs/guides/educators.md"
+      ],
+      "animated": "/assets/svg/tool-educators-hero.svg",
+      "static": "/assets/svg/tool-educators-hero-static.svg"
+    },
+    {
+      "name": "tool-export-hero",
+      "usage": [
+        "docs/Tools/Export.md"
+      ],
+      "animated": "/assets/svg/tool-export-hero.svg",
+      "static": "/assets/svg/tool-export-hero-static.svg"
+    },
+    {
+      "name": "tool-external-hero",
+      "usage": [
+        "docs/Tools/ExternalAPIs.md"
+      ],
+      "animated": "/assets/svg/tool-external-hero.svg",
+      "static": "/assets/svg/tool-external-hero-static.svg"
+    },
+    {
+      "name": "tool-graphing-hero",
+      "usage": [
         "docs/Tools/GraphingCalculator.md"
       ],
-      "static": "/assets/svg/experiment-orchestrator-hero-static.svg",
-      "animated": "/assets/svg/experiment-orchestrator-hero.svg"
+      "animated": "/assets/svg/tool-graphing-hero.svg",
+      "static": "/assets/svg/tool-graphing-hero-static.svg"
+    },
+    {
+      "name": "tool-ml-hero",
+      "usage": [
+        "docs/Tools/ML.md"
+      ],
+      "animated": "/assets/svg/tool-ml-hero.svg",
+      "static": "/assets/svg/tool-ml-hero-static.svg"
+    },
+    {
+      "name": "tool-nli-hero",
+      "usage": [
+        "docs/Tools/NLI.md"
+      ],
+      "animated": "/assets/svg/tool-nli-hero.svg",
+      "static": "/assets/svg/tool-nli-hero-static.svg"
+    },
+    {
+      "name": "tool-orchestrator-hero",
+      "usage": [
+        "docs/Tools/Orchestrator.md"
+      ],
+      "animated": "/assets/svg/tool-orchestrator-hero.svg",
+      "static": "/assets/svg/tool-orchestrator-hero-static.svg"
+    },
+    {
+      "name": "tool-plot-hero",
+      "usage": [
+        "docs/Tools/Plot.md"
+      ],
+      "animated": "/assets/svg/tool-plot-hero.svg",
+      "static": "/assets/svg/tool-plot-hero-static.svg"
+    },
+    {
+      "name": "tool-quantum-hero",
+      "usage": [
+        "docs/Tools/Quantum.md"
+      ],
+      "animated": "/assets/svg/tool-quantum-hero.svg",
+      "static": "/assets/svg/tool-quantum-hero-static.svg"
+    },
+    {
+      "name": "tool-report-hero",
+      "usage": [
+        "docs/Tools/Report.md"
+      ],
+      "animated": "/assets/svg/tool-report-hero.svg",
+      "static": "/assets/svg/tool-report-hero-static.svg"
+    },
+    {
+      "name": "tool-statmech-hero",
+      "usage": [
+        "docs/Tools/StatMech.md"
+      ],
+      "animated": "/assets/svg/tool-statmech-hero.svg",
+      "static": "/assets/svg/tool-statmech-hero-static.svg"
+    },
+    {
+      "name": "tool-tensor-hero",
+      "usage": [
+        "docs/Tools/Tensor.md"
+      ],
+      "animated": "/assets/svg/tool-tensor-hero.svg",
+      "static": "/assets/svg/tool-tensor-hero-static.svg"
+    },
+    {
+      "name": "tool-units-hero",
+      "usage": [
+        "docs/Tools/Units.md"
+      ],
+      "animated": "/assets/svg/tool-units-hero.svg",
+      "static": "/assets/svg/tool-units-hero-static.svg"
     }
   ]
 }
-

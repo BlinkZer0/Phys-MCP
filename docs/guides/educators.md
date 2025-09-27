@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/educators.svg" alt="For Educators — Phys-MCP" width="100%">
-</p>
+---
+title: Physics MCP Educator Handbook
+kind: howto
+header_svg:
+  src: "/assets/svg/tool-educators-hero.svg"
+  static: "/assets/svg/tool-educators-hero-static.svg"
+  title: "Physics MCP Educator Handbook"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 [![Educator Handbook](https://img.shields.io/badge/educators-handbook-6366f1?style=for-the-badge)](#what-is-physics-mcp)
 

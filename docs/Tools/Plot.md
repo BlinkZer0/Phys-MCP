@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/plotting-viz.svg" alt="Plotting & Visualization — Phys-MCP" width="100%">
-</p>
+---
+title: Plot Tools
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-plot-hero.svg"
+  static: "/assets/svg/tool-plot-hero-static.svg"
+  title: "Plot Tools"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Plot Tools
 
@@ -38,5 +49,3 @@ Backend
 - Implementations: `packages/python-worker/worker.py`
 
 Plot pun (low-frequency): all creation happens in a buffer—no energy escapes the bounding box.
-
-

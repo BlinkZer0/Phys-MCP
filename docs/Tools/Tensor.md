@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/numerics-solvers.svg" alt="Tensor Utilities — Phys-MCP" width="100%">
-</p>
+---
+title: Tensor Tool
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-tensor-hero.svg"
+  static: "/assets/svg/tool-tensor-hero-static.svg"
+  title: "Tensor Tool"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Tensor Tool
 
@@ -80,5 +91,3 @@
 - Uses SymPy for symbolic computation with safe parsing
 - Full Riemann tensor computation requires sympy.diffgeom for production use
 - Geodesic equations are provided symbolically; numerical integration requires initial conditions
-
-

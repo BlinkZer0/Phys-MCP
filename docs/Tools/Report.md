@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/data-io.svg" alt="Automated Reporting — Phys-MCP" width="100%">
-</p>
+---
+title: Report Tool
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-report-hero.svg"
+  static: "/assets/svg/tool-report-hero-static.svg"
+  title: "Report Tool"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Report Tool
 
@@ -53,5 +64,3 @@
 
 - Currently, only Markdown is supported. PDF generation can be added later via LaTeX/Pandoc as an optional step.
 - Large image/CSV artifacts are referenced by path. Plots already save their PNG/CSV to the artifacts directory.
-
-

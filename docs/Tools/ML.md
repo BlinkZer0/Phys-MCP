@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/ml-ai.svg" alt="ML & AI Augmentation — Phys-MCP" width="100%">
-</p>
+---
+title: Machine Learning & AI Augmentation Tools
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-ml-hero.svg"
+  static: "/assets/svg/tool-ml-hero-static.svg"
+  title: "Machine Learning & AI Augmentation Tools"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Machine Learning & AI Augmentation Tools
 

@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/cas-toolkit.svg" alt="Physical Constants — Phys-MCP" width="100%">
-</p>
+---
+title: Physical Constants Library
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-constants-hero.svg"
+  static: "/assets/svg/tool-constants-hero-static.svg"
+  title: "Physical Constants Library"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Physical Constants Library
 

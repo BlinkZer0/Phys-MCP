@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/tools-overview.svg" alt="Phys-MCP Tools — Complete Catalog" width="100%">
-</p>
+---
+title: Physics MCP Complete Tool Catalog
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-all-hero.svg"
+  static: "/assets/svg/tool-all-hero-static.svg"
+  title: "Physics MCP Complete Tool Catalog"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # Physics MCP Complete Tool Catalog
 
@@ -155,4 +166,3 @@ Each tool has detailed documentation with:
 ---
 
 *This catalog is maintained by the Physics MCP community. Have suggestions or found an issue? [Let us know](https://github.com/your-repo/Phys-MCP/discussions)!*
-

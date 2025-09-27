@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-label="Experiment Orchestrator banner">
+<style>
+svg { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+.title { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+.subtitle { font-size: 18px; font-weight: 500; opacity: 0.92; }
+.grid-lines { stroke-width: 1; stroke-dasharray: 2 10; }
+.wave-line { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 16 18; }
+.wave-line-secondary { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 12 16; opacity: 0.6; }
+.math-curve { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 18 24; }
+.math-marker { stroke-width: 3; stroke-linecap: round; opacity: 0.7; }
+.math-spark { fill: none; stroke-width: 3; stroke-linecap: round; }
+.matrix-cell { rx: 4; }
+.axes-line { stroke-width: 2; stroke-linecap: round; opacity: 0.6; }
+.axes-plot { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 14 16; }
+.plot-dot { r: 6; }
+.plot-dot-secondary { r: 4; opacity: 0.6; }
+.network-link { stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; opacity: 0.6; }
+.network-node { r: 7; }
+.document-page { rx: 16; }
+.document-page-secondary { rx: 16; opacity: 0.72; }
+.document-line { rx: 3; height: 6; opacity: 0.7; }
+.document-line.accent { opacity: 0.95; }
+.document-bullet { opacity: 0.75; }
+.pipeline-bar { height: 18; rx: 9; opacity: 0.35; }
+.pipeline-highlight { height: 18; rx: 9; opacity: 0.65; }
+.orbit-path { fill: none; stroke-width: 2; stroke-dasharray: 6 10; opacity: 0.5; }
+.orbit-core { r: 10; }
+.orbit-dot { r: 6; }
+.dialog-bubble, .dialog-bubble-secondary { rx: 22; }
+.dialog-tail, .dialog-tail-secondary { stroke-width: 0; }
+.dialog-dot { opacity: 0.8; }
+.dialog-line { height: 6; rx: 3; opacity: 0.7; }
+.dag-node { rx: 12; height: 50; }
+.dag-node.secondary { opacity: 0.7; }
+.dag-node.accent { opacity: 0.85; }
+.dag-connector { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 12; opacity: 0.6; }
+.particle { opacity: 0.7; }
+.dial-ring { fill: none; stroke-width: 2; opacity: 0.6; stroke-dasharray: 4 8; }
+.dial-tick { stroke-width: 2; opacity: 0.35; }
+.dial-needle { stroke-width: 3; stroke-linecap: round; }
+.dial-center { r: 6; }
+.heatmap-cell { rx: 6; }
+.tensor-line { stroke-width: 1.5; opacity: 0.35; }
+.tensor-curve { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 10 14; }
+.conversion-bar { height: 4; rx: 2; opacity: 0.4; }
+.conversion-arrow { opacity: 0.75; }
+.conversion-node { opacity: 0.8; }
+.conversion-node.secondary { opacity: 0.6; }
+.sparkline-track { fill: none; stroke-width: 1; opacity: 0.25; }
+.sparkline-path { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 12 16; }
+.sparkline-dot { opacity: 0.9; }
+.icon-tile { rx: 18; opacity: 0.24; }
+.icon-tile.secondary { opacity: 0.26; }
+.icon-tile.tertiary { opacity: 0.22; }
+.icon-math { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 8 12; }
+.icon-math-point { opacity: 0.8; }
+.icon-plot { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 14; }
+.icon-plot-dot { opacity: 0.8; }
+.icon-network { stroke-width: 4; stroke-linecap: round; stroke-dasharray: 8 12; opacity: 0.6; }
+.icon-network-node { opacity: 0.85; }
+.animate-dash { stroke-dashoffset: 0; }
+.animate-pulse { transform-origin: center; }
+.animate-float { transform-origin: center; }
+.animate-orbit { transform-origin: center; }
+.animate-slide { transform-origin: center; }
+.animate-twinkle { transform-origin: center; }
+@media (prefers-reduced-motion: reduce) {
+svg * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+.title { fill: #f9fafc; }
+.subtitle { fill: #dbe3ff; }
+.grid-lines { stroke: #60729a; }
+.wave-line { stroke: #f97316; }
+.wave-line-secondary { stroke: #38bdf8; }
+.math-curve { stroke: #f97316; }
+.math-marker { stroke: #38bdf8; }
+.math-spark { stroke: #a855f7; }
+.matrix-cell { fill: #38bdf8; }
+.axes-line { stroke: #60729a; }
+.axes-plot { stroke: #f97316; }
+.plot-dot { fill: #38bdf8; }
+.plot-dot-secondary { fill: #a855f7; }
+.network-link { stroke: #38bdf8; }
+.network-node { fill: #f97316; }
+.document-page { fill: #f9731633; stroke: #f9731633; }
+.document-page-secondary { fill: #38bdf833; }
+.document-line { fill: #dbe3ff; }
+.document-line.accent { fill: #38bdf8; }
+.document-bullet { fill: #f97316; }
+.pipeline-bar { fill: #f9731633; }
+.pipeline-highlight { fill: #38bdf866; }
+.orbit-path { stroke: #38bdf8; }
+.orbit-core { fill: #a855f7; }
+.orbit-dot { fill: #f97316; }
+.dialog-bubble { fill: #f9731630; }
+.dialog-bubble-secondary { fill: #38bdf826; }
+.dialog-tail { fill: #f9731630; }
+.dialog-tail-secondary { fill: #38bdf826; }
+.dialog-dot { fill: #f97316; }
+.dag-node { fill: #f9731624; }
+.dag-node.secondary { fill: #38bdf824; }
+.dag-node.accent { fill: #a855f733; }
+.dag-connector { stroke: #38bdf8; }
+.particle { fill: #a855f7; }
+.dial-ring { stroke: #38bdf8; }
+.dial-tick { stroke: #dbe3ff; }
+.dial-needle { stroke: #f97316; }
+.dial-center { fill: #a855f7; }
+.heatmap-cell { fill: #38bdf8; }
+.tensor-line { stroke: #dbe3ff; }
+.tensor-curve { stroke: #f97316; }
+.conversion-bar { fill: #dbe3ff; }
+.conversion-arrow { fill: #38bdf8; }
+.conversion-node { fill: #f97316; }
+.conversion-node.secondary { fill: #a855f7; }
+.sparkline-track { stroke: #60729a; }
+.sparkline-path { stroke: #38bdf8; }
+.sparkline-dot { fill: #a855f7; }
+.icon-tile { fill: #f9731633; }
+.icon-tile.secondary { fill: #38bdf833; }
+.icon-tile.tertiary { fill: #a855f729; }
+.icon-math { stroke: #38bdf8; }
+.icon-math-point { fill: #a855f7; }
+.icon-plot { stroke: #f97316; }
+.icon-plot-dot { fill: #a855f7; }
+.icon-network { stroke: #38bdf8; }
+.icon-network-node { fill: #f97316; }
+.orbit-group { transform-origin: center; }
+</style>
+<defs>
+<linearGradient id="tool-orchestrator-hero-bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#070f23"/>
+<stop offset="100%" stop-color="#17203d"/>
+</linearGradient>
+<filter id="tool-orchestrator-hero-glow">
+<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+<feMerge>
+<feMergeNode in="blur"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+</defs>
+<rect width="960" height="220" fill="url(#tool-orchestrator-hero-bg)" rx="24"/>
+<g transform="translate(60,92)">
+<text class="title" x="0" y="0">Experiment Orchestrator</text>
+<text class="subtitle" x="2" y="34">Chain tools into DAGs</text>
+</g>
+<g class="grid-lines">
+<path d="M360 40 H 900"/>
+<path d="M360 90 H 900"/>
+<path d="M360 140 H 900"/>
+<path d="M360 190 H 900"/>
+<path d="M420 20 V 210"/>
+<path d="M520 20 V 210"/>
+<path d="M640 20 V 210"/>
+<path d="M760 20 V 210"/>
+<path d="M880 20 V 210"/>
+</g>
+<g transform="translate(640,70)">
+<rect class="dag-node animate-pulse" style="--duration:6s" x="0" y="0" width="90" height="50" rx="12"/>
+<rect class="dag-node secondary animate-pulse" style="--duration:7s" x="130" y="0" width="90" height="50" rx="12"/>
+<rect class="dag-node accent animate-pulse" style="--duration:5s" x="65" y="78" width="110" height="50" rx="12"/>
+<line class="dag-connector animate-dash" style="--duration:7s" x1="90" y1="25" x2="130" y2="25"/>
+<line class="dag-connector animate-dash" style="--duration:8s" x1="45" y1="50" x2="110" y2="78"/>
+<line class="dag-connector animate-dash" style="--duration:9s" x1="175" y1="50" x2="175" y2="78"/>
+</g>
+<g transform="translate(620,120)">
+<rect class="pipeline-bar animate-slide" style="--duration:6s" x="0" y="0" width="180" height="18" rx="9"/>
+<rect class="pipeline-bar animate-slide" style="--duration:7s" x="0" y="36" width="220" height="18" rx="9"/>
+<rect class="pipeline-bar animate-slide" style="--duration:8s" x="0" y="72" width="150" height="18" rx="9"/>
+<rect class="pipeline-highlight animate-slide" style="--duration:5s" x="0" y="0" width="70" height="18" rx="9"/>
+<rect class="pipeline-highlight animate-slide" style="--duration:6s" x="0" y="36" width="90" height="18" rx="9"/>
+<rect class="pipeline-highlight animate-slide" style="--duration:7s" x="0" y="72" width="60" height="18" rx="9"/>
+</g>
+<g transform="translate(600,170)">
+<path class="sparkline-track" d="M0 18 H220"/>
+<path class="sparkline-path animate-dash" style="--duration:7s" d="M0 20 L40 12 L80 26 L120 8 L160 14 L200 4"/>
+<circle class="sparkline-dot animate-float" style="--duration:4.5s" cx="200" cy="4" r="5"/>
+</g>
+</svg>

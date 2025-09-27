@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/tools-overview.svg" alt="Natural Language Interface — Phys-MCP" width="100%">
-</p>
+---
+title: NLI Tool
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-nli-hero.svg"
+  static: "/assets/svg/tool-nli-hero-static.svg"
+  title: "NLI Tool"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # NLI Tool
 
@@ -48,5 +59,3 @@ Schemas & Prompt
 - Logic and LM usage: `packages/tools-nli/src/index.ts`
 
 A gentle quip: we keep the parsing Hamiltonian simple-no unnecessary terms, just enough to reach the ground truth.
-
-

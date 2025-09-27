@@ -1,6 +1,17 @@
-<p align="center">
-  <img src="/assets/svg/headers/cas-toolkit.svg" alt="CAS Toolkit — Phys-MCP" width="100%">
-</p>
+---
+title: CAS Tools
+kind: reference
+header_svg:
+  src: "/assets/svg/tool-cas-hero.svg"
+  static: "/assets/svg/tool-cas-hero-static.svg"
+  title: "CAS Tools"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
 # CAS Tools
 
@@ -48,5 +59,3 @@ Backend
 - Implementations: `packages/python-worker/worker.py`
 
 A joke with measured units: All derivations are left as an exercise to SymPy; our wrists are conserved quantities.
-
-
