@@ -1,0 +1,30 @@
+{
+  "phase3_tensor_examples": [
+    {
+      "name": "2D Polar Metric Christoffel Symbols",
+      "tool": "tensor_algebra",
+      "args": {
+        "metric": [
+          ["1", "0"],
+          ["0", "r**2"]
+        ],
+        "coords": ["r", "theta"],
+        "compute": ["christoffel"]
+      }
+    },
+    {
+      "name": "Schwarzschild Metric Analysis",
+      "tool": "tensor_algebra", 
+      "args": {
+        "metric": [
+          ["-(1-2*M/r)", "0", "0", "0"],
+          ["0", "1/(1-2*M/r)", "0", "0"],
+          ["0", "0", "r**2", "0"],
+          ["0", "0", "0", "r**2*sin(theta)**2"]
+        ],
+        "coords": ["t", "r", "theta", "phi"],
+        "compute": ["christoffel", "geodesics"]
+      }
+    }
+  ]
+}

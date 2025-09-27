@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "phys-mcp": {
+      "command": "node",
+      "args": ["packages/server/dist/index.js"],
+      "env": {
+        "LM_BASE_URL": "http://localhost:1234/v1",
+        "LM_API_KEY": "",
+        "DEFAULT_MODEL": "qwen2.5-coder"
+      },
+      "disabled": false
+    }
+  }
+}

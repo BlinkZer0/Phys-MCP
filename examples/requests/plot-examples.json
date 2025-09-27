@@ -1,0 +1,71 @@
+[
+  {
+    "description": "Plot sine function",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "1",
+      "method": "plot_function_2d",
+      "params": {
+        "f": "sin(x)",
+        "x_min": 0,
+        "x_max": 6.28318,
+        "dpi": 160,
+        "width": 8,
+        "height": 6
+      }
+    }
+  },
+  {
+    "description": "Plot parametric circle",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "2",
+      "method": "plot_parametric_2d",
+      "params": {
+        "x_t": "cos(t)",
+        "y_t": "sin(t)",
+        "t_min": 0,
+        "t_max": 6.28318,
+        "title": "Unit Circle"
+      }
+    }
+  },
+  {
+    "description": "Plot electric field of point charge",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "3",
+      "method": "plot_field_2d",
+      "params": {
+        "fx": "x/(x**2 + y**2)**(3/2)",
+        "fy": "y/(x**2 + y**2)**(3/2)",
+        "x_min": -2,
+        "x_max": 2,
+        "y_min": -2,
+        "y_max": 2,
+        "grid_points": 15,
+        "plot_type": "quiver",
+        "title": "Electric Field of Point Charge"
+      }
+    }
+  },
+  {
+    "description": "Plot phase portrait (harmonic oscillator)",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "4",
+      "method": "plot.field_2d",
+      "params": {
+        "fx": "y",
+        "fy": "-x",
+        "x_min": -3,
+        "x_max": 3,
+        "y_min": -3,
+        "y_max": 3,
+        "grid_points": 20,
+        "plot_type": "stream",
+        "title": "Phase Portrait: dx/dt = y, dy/dt = -x"
+      }
+    }
+  }
+]

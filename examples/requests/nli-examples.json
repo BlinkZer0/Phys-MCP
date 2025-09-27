@@ -1,0 +1,57 @@
+[
+  {
+    "description": "Parse differentiation request",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "1",
+      "method": "nli.parse",
+      "params": {
+        "text": "Differentiate sin(x^2) with respect to x"
+      }
+    }
+  },
+  {
+    "description": "Parse integration request",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "2",
+      "method": "nli.parse",
+      "params": {
+        "text": "Integrate x squared from 0 to 2"
+      }
+    }
+  },
+  {
+    "description": "Parse plotting request",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "3",
+      "method": "nli.parse",
+      "params": {
+        "text": "Plot y = x^2 from -5 to 5"
+      }
+    }
+  },
+  {
+    "description": "Parse ODE solving request",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "4",
+      "method": "nli.parse",
+      "params": {
+        "text": "Solve y'' + y = 0 with y(0)=0 and y'(0)=1, then plot y from 0 to 10"
+      }
+    }
+  },
+  {
+    "description": "Parse physics calculation",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "5",
+      "method": "nli.parse",
+      "params": {
+        "text": "Calculate the kinetic energy of a 2 kg mass moving at 5 m/s"
+      }
+    }
+  }
+]

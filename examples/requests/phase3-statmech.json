@@ -1,0 +1,30 @@
+{
+  "phase3_statmech_examples": [
+    {
+      "name": "Two-Level System",
+      "tool": "statmech_partition",
+      "args": {
+        "energy_levels": [0.0, 1.602e-19],
+        "temperature": 300.0,
+        "degeneracies": [1, 1]
+      }
+    },
+    {
+      "name": "Three-Level System with Degeneracy",
+      "tool": "statmech_partition",
+      "args": {
+        "energy_levels": [0.0, 2.07e-21, 4.14e-21],
+        "temperature": 77.0,
+        "degeneracies": [1, 2, 1]
+      }
+    },
+    {
+      "name": "High Temperature Limit",
+      "tool": "statmech_partition",
+      "args": {
+        "energy_levels": [0.0, 1e-20, 2e-20, 3e-20],
+        "temperature": 1000.0
+      }
+    }
+  ]
+}

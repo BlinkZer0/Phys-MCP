@@ -1,0 +1,14 @@
+{
+  "report_examples": [
+    {
+      "name": "Generate Markdown Report for Session",
+      "tool": "report_generate",
+      "args": {
+        "session_id": "<replace-with-session-id>",
+        "format": "markdown",
+        "title": "Physics MCP Session Report",
+        "author": "Researcher A"
+      }
+    }
+  ]
+}

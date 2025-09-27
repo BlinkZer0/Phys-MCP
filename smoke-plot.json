@@ -1,0 +1,1 @@
+{ "jsonrpc": "2.0", "id": "1", "method": "tools/call", "params": { "name": "plot_function_2d", "arguments": { "f": "sin(x)", "x_min": 0, "x_max": 6.28318, "dpi": 120, "session_id": "smoke-20250926-192823" } } }

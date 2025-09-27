@@ -1,0 +1,211 @@
+{
+  "phase2_examples": {
+    "cas_enhanced": [
+      {
+        "name": "Enhanced Integration with Variables",
+        "tool": "cas_integrate",
+        "args": {
+          "expr": "a*x^2 + b*x + c",
+          "symbol": "x",
+          "bounds": [0, 1],
+          "vars": {
+            "a": {"value": 2, "unit": "m/s^2"},
+            "b": {"value": 5, "unit": "m/s"},
+            "c": {"value": 1, "unit": "m"}
+          }
+        }
+      },
+      {
+        "name": "Solve Equation with Assumptions",
+        "tool": "cas_solve_equation",
+        "args": {
+          "equation": "x^2 - 4 = 0",
+          "symbol": "x",
+          "assumptions": {
+            "real": true,
+            "positive": true
+          }
+        }
+      },
+      {
+        "name": "Enhanced ODE with Initial Conditions",
+        "tool": "cas_solve_ode",
+        "args": {
+          "ode": "y'' + 4*y = 0",
+          "symbol": "x",
+          "func": "y",
+          "ics": {
+            "y(0)": 1,
+            "y'(0)": 0
+          }
+        }
+      },
+      {
+        "name": "Uncertainty Propagation",
+        "tool": "cas_propagate_uncertainty",
+        "args": {
+          "expr": "sqrt(x^2 + y^2)",
+          "vars": {
+            "x": {"value": 3.0, "sigma": 0.1, "unit": "m"},
+            "y": {"value": 4.0, "sigma": 0.15, "unit": "m"}
+          }
+        }
+      }
+    ],
+    "units_constants": [
+      {
+        "name": "Unit Conversion - Energy",
+        "tool": "units_convert",
+        "args": {
+          "quantity": {"value": 1, "unit": "eV"},
+          "to": "J"
+        }
+      },
+      {
+        "name": "Unit Conversion - Length",
+        "tool": "units_convert",
+        "args": {
+          "quantity": {"value": 1, "unit": "ly"},
+          "to": "m"
+        }
+      },
+      {
+        "name": "Get Physical Constant - Speed of Light",
+        "tool": "constants_get",
+        "args": {
+          "name": "c"
+        }
+      },
+      {
+        "name": "Get Physical Constant - Planck Constant",
+        "tool": "constants_get",
+        "args": {
+          "name": "h"
+        }
+      },
+      {
+        "name": "Get Astrophysical Constant - Solar Mass",
+        "tool": "constants_get",
+        "args": {
+          "name": "M_sun"
+        }
+      }
+    ],
+    "advanced_plotting": [
+      {
+        "name": "Phase Portrait - Damped Oscillator",
+        "tool": "plot_phase_portrait",
+        "args": {
+          "dx": "y",
+          "dy": "-2*x - 0.5*y",
+          "x_min": -3,
+          "x_max": 3,
+          "y_min": -3,
+          "y_max": 3,
+          "title": "Damped Harmonic Oscillator Phase Portrait"
+        }
+      },
+      {
+        "name": "3D Surface - Saddle Point",
+        "tool": "plot_surface_3d",
+        "args": {
+          "f": "x^2 - y^2",
+          "x_min": -2,
+          "x_max": 2,
+          "y_min": -2,
+          "y_max": 2,
+          "title": "Saddle Surface: z = x² - y²"
+        }
+      },
+      {
+        "name": "Contour Plot - Gaussian",
+        "tool": "plot_contour_2d",
+        "args": {
+          "f": "exp(-(x^2 + y^2))",
+          "x_min": -3,
+          "x_max": 3,
+          "y_min": -3,
+          "y_max": 3,
+          "levels": 20,
+          "title": "2D Gaussian Contours"
+        }
+      },
+      {
+        "name": "Vector Field - Circular Flow",
+        "tool": "plot_field_2d",
+        "args": {
+          "fx": "-y",
+          "fy": "x",
+          "x_min": -2,
+          "x_max": 2,
+          "y_min": -2,
+          "y_max": 2,
+          "plot_type": "stream",
+          "title": "Circular Vector Field"
+        }
+      }
+    ],
+    "physics_workflows": [
+      {
+        "name": "Quantum Harmonic Oscillator Energy",
+        "description": "Calculate energy levels with uncertainty",
+        "steps": [
+          {
+            "tool": "constants_get",
+            "args": {"name": "hbar"}
+          },
+          {
+            "tool": "cas_evaluate",
+            "args": {
+              "expr": "hbar * omega * (n + 1/2)",
+              "vars": {
+                "hbar": {"value": 1.055e-34, "unit": "J*s"},
+                "omega": {"value": 1e14, "unit": "rad/s"},
+                "n": 0
+              }
+            }
+          },
+          {
+            "tool": "cas_propagate_uncertainty",
+            "args": {
+              "expr": "hbar * omega * (n + 1/2)",
+              "vars": {
+                "hbar": {"value": 1.055e-34, "sigma": 1e-37, "unit": "J*s"},
+                "omega": {"value": 1e14, "sigma": 1e12, "unit": "rad/s"},
+                "n": {"value": 0, "sigma": 0}
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Projectile Motion Analysis",
+        "description": "Solve trajectory and create phase portrait",
+        "steps": [
+          {
+            "tool": "cas_solve_ode",
+            "args": {
+              "ode": "y'' + g = 0",
+              "symbol": "t",
+              "func": "y",
+              "ics": {
+                "y(0)": 0,
+                "y'(0)": 20
+              }
+            }
+          },
+          {
+            "tool": "plot_parametric_2d",
+            "args": {
+              "x_t": "v0*cos(theta)*t",
+              "y_t": "v0*sin(theta)*t - 0.5*g*t^2",
+              "t_min": 0,
+              "t_max": 4,
+              "title": "Projectile Trajectory"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

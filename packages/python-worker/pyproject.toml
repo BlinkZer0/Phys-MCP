@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phys-mcp-worker"
+version = "0.1.0"
+description = "Python computation worker for Physics MCP Server"
+authors = [{name = "Physics MCP Team"}]
+license = {text = "MIT"}
+requires-python = ">=3.11"
+dependencies = [
+    "sympy>=1.13",
+    "numpy>=2.0",
+    "scipy>=1.14", 
+    "pint>=0.24",
+    "matplotlib>=3.9"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "T20"]
+ignore = ["E501"]  # Line too long (handled by formatter)
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

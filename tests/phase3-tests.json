@@ -1,0 +1,179 @@
+{
+  "phase3_tests": {
+    "tensor_algebra": [
+      {
+        "name": "2D Polar Metric Christoffel",
+        "input": {
+          "metric": [["1", "0"], ["0", "r**2"]],
+          "coords": ["r", "theta"],
+          "compute": ["christoffel"]
+        },
+        "expected_keys": ["metric_determinant", "coordinates", "computed", "results"],
+        "validation": {
+          "metric_determinant": "r**2",
+          "coordinates": ["r", "theta"],
+          "computed": ["christoffel"]
+        }
+      },
+      {
+        "name": "Flat Space Metric",
+        "input": {
+          "metric": [["1", "0"], ["0", "1"]],
+          "coords": ["x", "y"],
+          "compute": ["christoffel"]
+        },
+        "expected_keys": ["metric_determinant", "coordinates", "results"],
+        "validation": {
+          "metric_determinant": "1"
+        }
+      }
+    ],
+    "quantum_ops": [
+      {
+        "name": "Symbolic Commutator",
+        "input": {
+          "operators": ["x", "p"],
+          "task": "commutator"
+        },
+        "expected_keys": ["operators", "commutator", "latex", "task"],
+        "validation": {
+          "operators": ["x", "p"],
+          "task": "commutator"
+        }
+      },
+      {
+        "name": "Pauli Matrix Representations",
+        "input": {
+          "operators": ["sigma_x", "sigma_y"],
+          "task": "matrix_rep"
+        },
+        "expected_keys": ["operators", "matrices", "task"],
+        "validation": {
+          "task": "matrix_rep"
+        }
+      }
+    ],
+    "quantum_solve": [
+      {
+        "name": "Harmonic Oscillator",
+        "input": {
+          "problem": "sho",
+          "params": {
+            "n_levels": 3,
+            "omega": 1.0,
+            "hbar": 1.0
+          }
+        },
+        "expected_keys": ["problem", "parameters", "energies", "energy_units", "wavefunctions"],
+        "validation": {
+          "problem": "sho",
+          "energies": [0.5, 1.5, 2.5]
+        }
+      },
+      {
+        "name": "Particle in Box",
+        "input": {
+          "problem": "particle_in_box",
+          "params": {
+            "L": 1.0,
+            "n_levels": 2,
+            "m": 1.0,
+            "hbar": 1.0
+          }
+        },
+        "expected_keys": ["problem", "parameters", "energies", "wavefunctions"],
+        "validation": {
+          "problem": "particle_in_box"
+        }
+      }
+    ],
+    "quantum_visualize": [
+      {
+        "name": "Bloch Sphere State",
+        "input": {
+          "state": "|0⟩ + |1⟩",
+          "kind": "bloch"
+        },
+        "expected_keys": ["state", "kind"],
+        "validation": {
+          "state": "|0⟩ + |1⟩",
+          "kind": "bloch"
+        }
+      }
+    ],
+    "statmech_partition": [
+      {
+        "name": "Two Level System",
+        "input": {
+          "energy_levels": [0.0, 1.0e-20],
+          "temperature": 300.0
+        },
+        "expected_keys": ["temperature", "energy_levels", "partition_function", "internal_energy", "entropy"],
+        "validation": {
+          "temperature": 300.0,
+          "temperature_unit": "K"
+        }
+      },
+      {
+        "name": "Degenerate System",
+        "input": {
+          "energy_levels": [0.0, 1.0e-21],
+          "temperature": 100.0,
+          "degeneracies": [1, 2]
+        },
+        "expected_keys": ["degeneracies", "populations", "most_populated_level"],
+        "validation": {
+          "degeneracies": [1, 2]
+        }
+      }
+    ]
+  },
+  "integration_tests": [
+    {
+      "name": "Phase 3 Tool Discovery",
+      "description": "Verify all Phase 3 tools are discoverable",
+      "expected_tools": [
+        "tensor_algebra",
+        "quantum_ops", 
+        "quantum_solve",
+        "quantum_visualize",
+        "statmech_partition"
+      ]
+    },
+    {
+      "name": "Acceleration Capabilities",
+      "description": "Test accel_caps reports device info",
+      "tool": "accel_caps",
+      "expected_keys": ["active", "device", "mode", "has_torch"]
+    }
+  ],
+  "error_handling": [
+    {
+      "name": "Invalid Tensor Metric",
+      "tool": "tensor_algebra",
+      "input": {
+        "metric": [["invalid"]],
+        "coords": ["x"],
+        "compute": ["christoffel"]
+      },
+      "expect_error": true
+    },
+    {
+      "name": "Missing Energy Levels",
+      "tool": "statmech_partition",
+      "input": {
+        "temperature": 300.0
+      },
+      "expect_error": true,
+      "error_message": "energy_levels parameter required"
+    },
+    {
+      "name": "Invalid Quantum Problem",
+      "tool": "quantum_solve",
+      "input": {
+        "problem": "invalid_problem"
+      },
+      "expect_error": true
+    }
+  ]
+}

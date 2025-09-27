@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@phys-mcp/mcp-types": ["./packages/mcp-types/src/index.ts"],
+      "@phys-mcp/tools-cas": ["./packages/tools-cas/src/index.ts"],
+      "@phys-mcp/tools-plot": ["./packages/tools-plot/src/index.ts"],
+      "@phys-mcp/tools-nli": ["./packages/tools-nli/src/index.ts"]
+    }
+  },
+  "references": [
+    { "path": "./packages/mcp-types" },
+    { "path": "./packages/tools-cas" },
+    { "path": "./packages/tools-plot" },
+    { "path": "./packages/tools-nli" },
+    { "path": "./packages/server" }
+  ],
+  "files": [],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

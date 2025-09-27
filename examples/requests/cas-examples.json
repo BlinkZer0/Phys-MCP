@@ -1,0 +1,68 @@
+[
+  {
+    "description": "Differentiate sin(x^2) with respect to x",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "1",
+      "method": "cas_diff",
+      "params": {
+        "expr": "sin(x**2)",
+        "symbol": "x"
+      }
+    }
+  },
+  {
+    "description": "Evaluate kinetic energy with units",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "2", 
+      "method": "cas_evaluate",
+      "params": {
+        "expr": "(1/2)*m*v**2",
+        "vars": {
+          "m": {"value": 1.0, "unit": "kg"},
+          "v": {"value": 3.0, "unit": "m/s"}
+        }
+      }
+    }
+  },
+  {
+    "description": "Integrate x^2 from 0 to 2",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "3",
+      "method": "cas_integrate",
+      "params": {
+        "expr": "x**2",
+        "symbol": "x",
+        "bounds": [0, 2]
+      }
+    }
+  },
+  {
+    "description": "Solve quadratic equation x^2 - 4 = 0",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "4",
+      "method": "cas_solve_equation", 
+      "params": {
+        "equation": "x**2 - 4 = 0",
+        "symbol": "x"
+      }
+    }
+  },
+  {
+    "description": "Solve simple harmonic oscillator ODE",
+    "request": {
+      "jsonrpc": "2.0",
+      "id": "5",
+      "method": "cas_solve_ode",
+      "params": {
+        "ode": "y'' + y",
+        "symbol": "x",
+        "func": "y",
+        "ics": {"y(0)": 0, "y'(0)": 1}
+      }
+    }
+  }
+]

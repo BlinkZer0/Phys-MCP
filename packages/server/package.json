@@ -1,0 +1,33 @@
+{
+  "name": "@phys-mcp/server",
+  "version": "0.1.0",
+  "description": "Physics MCP Server - Main server orchestrating CAS, Plot, and NLI tools",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "phys-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@phys-mcp/mcp-types": "workspace:*",
+    "@phys-mcp/tools-cas": "workspace:*",
+    "@phys-mcp/tools-plot": "workspace:*",
+    "@phys-mcp/tools-nli": "workspace:*",
+    "@phys-mcp/tools-units": "workspace:*",
+    "@phys-mcp/tools-constants": "workspace:*",
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/better-sqlite3": "^7.6.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

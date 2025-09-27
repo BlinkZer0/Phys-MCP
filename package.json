@@ -1,0 +1,39 @@
+{
+  "name": "phys-mcp",
+  "version": "0.1.0",
+  "description": "Physics MCP Server with CAS, Plot, and NLI capabilities",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:workspace": "npm run build --workspaces",
+    "build:pnpm": "pnpm -r build",
+    "dev": "bash scripts/dev.sh",
+    "format": "bash scripts/format.sh",
+    "lint": "eslint packages/*/src --ext .ts",
+    "lint:fix": "eslint packages/*/src --ext .ts --fix",
+    "clean": "npm run clean --workspaces && rm -rf node_modules",
+    "clean:pnpm": "pnpm -r clean && rm -rf node_modules",
+    "test": "npm run test --workspaces",
+    "test:install": "node scripts/test-installation.js",
+    "install:python": "cd packages/python-worker && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.17",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

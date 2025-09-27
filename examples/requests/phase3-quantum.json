@@ -1,0 +1,53 @@
+{
+  "phase3_quantum_examples": [
+    {
+      "name": "Pauli Matrix Commutator",
+      "tool": "quantum_ops",
+      "args": {
+        "operators": ["sigma_x", "sigma_y"],
+        "task": "commutator"
+      }
+    },
+    {
+      "name": "Pauli Matrix Representations",
+      "tool": "quantum_ops",
+      "args": {
+        "operators": ["sigma_x", "sigma_y", "sigma_z"],
+        "task": "matrix_rep"
+      }
+    },
+    {
+      "name": "Quantum Harmonic Oscillator",
+      "tool": "quantum_solve",
+      "args": {
+        "problem": "sho",
+        "params": {
+          "n_levels": 4,
+          "omega": 1.0,
+          "hbar": 1.0
+        }
+      }
+    },
+    {
+      "name": "Particle in a Box",
+      "tool": "quantum_solve",
+      "args": {
+        "problem": "particle_in_box",
+        "params": {
+          "L": 1.0,
+          "n_levels": 3,
+          "m": 1.0,
+          "hbar": 1.0
+        }
+      }
+    },
+    {
+      "name": "Bloch Sphere Visualization",
+      "tool": "quantum_visualize",
+      "args": {
+        "state": "|0⟩ + |1⟩",
+        "kind": "bloch"
+      }
+    }
+  ]
+}
