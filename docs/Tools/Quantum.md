@@ -1,17 +1,6 @@
----
-title: Quantum Tooling
-kind: reference
-header_svg:
-  src: "/assets/svg/physics-mcp-hero.svg"
-  static: "/assets/svg/physics-mcp-hero-static.svg"
-  title: "Quantum Modules"
-  animate: true
-  theme_variant: "auto"
-  reduced_motion: "auto"
----
-
-{% assign header_svg = page.header_svg %}
-{% include header-svg.html %}
+<p align="center">
+  <img src="../assets/svg/physics-mcp-hero.svg" width="960" alt="Quantum Modules" />
+</p>
 
 # Quantum Tools
 

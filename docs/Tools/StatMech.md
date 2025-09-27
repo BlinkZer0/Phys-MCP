@@ -1,17 +1,6 @@
----
-title: Statistical Mechanics Tooling
-kind: reference
-header_svg:
-  src: "/assets/svg/cas-lab-hero.svg"
-  static: "/assets/svg/cas-lab-hero-static.svg"
-  title: "Statistical Mechanics"
-  animate: true
-  theme_variant: "auto"
-  reduced_motion: "auto"
----
-
-{% assign header_svg = page.header_svg %}
-{% include header-svg.html %}
+<p align="center">
+  <img src="../assets/svg/cas-lab-hero.svg" width="960" alt="Statistical Mechanics" />
+</p>
 
 # Statistical Mechanics Tool
 

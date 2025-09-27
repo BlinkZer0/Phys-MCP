@@ -1,17 +1,6 @@
----
-title: Educator Handbook
-kind: howto
-header_svg:
-  src: "/assets/svg/physics-mcp-hero.svg"
-  static: "/assets/svg/physics-mcp-hero-static.svg"
-  title: "Physics MCP for Educators"
-  animate: true
-  theme_variant: "auto"
-  reduced_motion: "auto"
----
-
-{% assign header_svg = page.header_svg %}
-{% include header-svg.html %}
+<p align="center">
+  <img src="../assets/svg/physics-mcp-hero.svg" width="960" alt="Physics MCP for Educators" />
+</p>
 
 [![Educator Handbook](https://img.shields.io/badge/educators-handbook-6366f1?style=for-the-badge)](#what-is-physics-mcp)
 

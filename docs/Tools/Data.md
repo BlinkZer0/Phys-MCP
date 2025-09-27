@@ -1,17 +1,6 @@
----
-title: Data Processing & Signal Analysis
-kind: reference
-header_svg:
-  src: "/assets/svg/experiment-orchestrator-hero.svg"
-  static: "/assets/svg/experiment-orchestrator-hero-static.svg"
-  title: "Data Processing"
-  animate: true
-  theme_variant: "auto"
-  reduced_motion: "auto"
----
-
-{% assign header_svg = page.header_svg %}
-{% include header-svg.html %}
+<p align="center">
+  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Data Processing" />
+</p>
 
 # Data Processing & Signal Analysis Tool
 

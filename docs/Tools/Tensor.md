@@ -1,17 +1,6 @@
----
-title: Tensor Tooling
-kind: reference
-header_svg:
-  src: "/assets/svg/distributed-collaboration-hero.svg"
-  static: "/assets/svg/distributed-collaboration-hero-static.svg"
-  title: "Tensor Utilities"
-  animate: true
-  theme_variant: "auto"
-  reduced_motion: "auto"
----
-
-{% assign header_svg = page.header_svg %}
-{% include header-svg.html %}
+<p align="center">
+  <img src="../assets/svg/distributed-collaboration-hero.svg" width="960" alt="Tensor Utilities" />
+</p>
 
 # Tensor Tool
 
