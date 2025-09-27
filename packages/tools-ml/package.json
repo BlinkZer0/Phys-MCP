@@ -1,0 +1,32 @@
+{
+  "name": "@phys-mcp/tools-ml",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ML/AI Augmentation tools for Phys-MCP - symbolic regression, PDE surrogates, pattern recognition, and derivation explanation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@phys-mcp/mcp-types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "physics",
+    "machine-learning",
+    "ai",
+    "symbolic-regression",
+    "pinn",
+    "computer-vision",
+    "scientific-computing"
+  ],
+  "author": "Phys-MCP Team",
+  "license": "MIT"
+}

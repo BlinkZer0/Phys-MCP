@@ -16,5 +16,20 @@
     "width": 384,
     "rows": 3,
     "cols": 4
+  },
+  "ml": {
+    "default_backend": "torch",
+    "max_vram_mb": 4096,
+    "train": {
+      "epochs": 200,
+      "early_stop_patience": 20,
+      "batch_size": 64,
+      "lr": 1e-3
+    },
+    "video": {
+      "fps": 24,
+      "encoder_mp4": "libx264",
+      "encoder_webm": "libvpx-vp9"
+    }
   }
 }

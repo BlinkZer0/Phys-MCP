@@ -37,6 +37,9 @@ let buildExternalTools;
 let handleExternalTool;
 let buildExportTools;
 let handleExportTool;
+// Phase 6 ML tool handlers
+let buildMLTools;
+let handleMLAugmentationTool;
 async function initializeDependencies() {
     try {
         // Use our local MCP types implementation
@@ -165,6 +168,16 @@ async function initializeDependencies() {
     catch (error) {
         console.warn("Export tools not available:", error);
     }
+    // Phase 6 ML tools
+    try {
+        const mlPath = "../../tools-ml/dist/index.js";
+        const mlModule = await import(mlPath);
+        buildMLTools = mlModule.buildMLTools;
+        handleMLAugmentationTool = mlModule.handleMLAugmentationTool;
+    }
+    catch (error) {
+        console.warn("ML tools not available:", error);
+    }
     // Persistence manager
     try {
         const persistModule = await import("./persist.js");
@@ -210,6 +223,9 @@ class PhysicsMCPServer {
             this.tools.push(...buildExternalTools());
         if (buildExportTools)
             this.tools.push(...buildExportTools());
+        // Phase 6 ML tools
+        if (buildMLTools)
+            this.tools.push(...buildMLTools());
         this.setupHandlers();
     }
     setupHandlers() {
@@ -251,6 +267,9 @@ class PhysicsMCPServer {
                 else if (name === "quantum" && handleQuantumTool) {
                     result = await handleQuantumTool(name, args);
                 }
+                else if (name === "ml_ai_augmentation" && handleMLAugmentationTool) {
+                    result = await handleMLAugmentationTool(name, args);
+                }
                 // Legacy support for individual tool names
                 else if (name.startsWith("cas_") && handleCASTool) {
                     result = await handleCASTool(name, args);
@@ -285,6 +304,10 @@ class PhysicsMCPServer {
                 }
                 else if (name.startsWith("export_") && handleExportTool) {
                     result = await handleExportTool(name, args);
+                }
+                else if ((name === "symbolic_regression_train" || name === "surrogate_pde_train" ||
+                    name === "pattern_recognition_infer" || name === "explain_derivation") && handleMLAugmentationTool) {
+                    result = await handleMLAugmentationTool(name, args);
                 }
                 else {
                     throw new Error(`Unknown tool: ${name}`);

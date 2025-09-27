@@ -16,6 +16,8 @@ from typing import Any, Dict, Optional, Union, List
 from io import BytesIO
 import base64
 import time
+import os
+from pathlib import Path
 
 # Core computation libraries
 import sympy as sp
@@ -65,21 +67,49 @@ except Exception:
 
 # Optional quantum physics library
 try:
-    import qutip  # type: ignore
     _HAS_QUTIP = True
 except ImportError:
     qutip = None  # type: ignore
     _HAS_QUTIP = False
 
-# Phase 4 modules
-from . import data_io
-from . import signal_processing
-from . import external_apis
-from . import export_utils
+# Phase 4 imports
+try:
+    import data_io
+    import signal_processing
+    import external_apis
+    import export_utils
+except ImportError as e:
+    print(f"Warning: Phase 4 modules not available: {e}", file=sys.stderr)
 
-# Safety configuration
+# Phase 6 ML imports
+try:
+    import ml_augmentation
+except ImportError as e:
+    print(f"Warning: Phase 6 ML modules not available: {e}", file=sys.stderr)
+
 EXECUTION_TIMEOUT = 10.0  # seconds
 MAX_ARRAY_SIZE = 100000
+
+def load_config() -> Dict[str, Any]:
+    """Load server configuration from server.config.json"""
+    config_path = Path(__file__).parent.parent.parent / "server.config.json"
+    try:
+        if config_path.exists():
+            with open(config_path, 'r') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"Warning: Could not load config: {e}", file=sys.stderr)
+    
+    # Default config
+    return {
+        "accel": {"mode": "auto", "device_preference": ["cuda", "hip", "mps", "xpu", "cpu"]},
+        "ml": {
+            "default_backend": "torch",
+            "max_vram_mb": 4096,
+            "train": {"epochs": 200, "early_stop_patience": 20, "batch_size": 64, "lr": 1e-3},
+            "video": {"fps": 24, "encoder_mp4": "libx264", "encoder_webm": "libvpx-vp9"}
+        }
+    }
 SAFE_SYMPY_NAMESPACE = {
     # Core sympy functions
     'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2',
@@ -1905,6 +1935,7 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
     """Handle a single JSON-RPC request."""
     method = msg["method"]
     params = msg.get("params", {})
+    config = load_config()
     
     # CAS methods
     if method == "cas_evaluate":
@@ -2003,6 +2034,16 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
         return export_utils.export_zenodo(**params)
     elif method == "export_jupyter":
         return export_utils.export_jupyter(**params)
+    
+    # Phase 6 methods - ML/AI Augmentation
+    elif method == "ml_symbolic_regression":
+        return ml_augmentation.ml_symbolic_regression(params, config)
+    elif method == "ml_surrogate_pde":
+        return ml_augmentation.ml_surrogate_pde(params, config)
+    elif method == "ml_pattern_recognition":
+        return ml_augmentation.ml_pattern_recognition(params, config)
+    elif method == "ml_explain_derivation":
+        return ml_augmentation.ml_explain_derivation(params, config)
     
     else:
         raise ValueError(f"Unknown method: {method}")

@@ -6,10 +6,18 @@ Shared functions for artifact creation, plotting, and data handling
 import os
 import io
 import base64
+import uuid
+import time
+from pathlib import Path
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Any, Optional, List
+
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    PANDAS_AVAILABLE = False
 
 
 def fig_to_base64(fig) -> str:
@@ -299,6 +307,23 @@ def create_test_signal(duration: float, sample_rate: float,
     
     return signal
 
+
+# Phase 6 ML utility functions
+def generate_session_id() -> str:
+    """Generate unique session ID"""
+    return f"session_{int(time.time())}_{str(uuid.uuid4())[:8]}"
+
+def ensure_artifacts_dir(session_id: str) -> Path:
+    """Ensure artifacts directory exists and return path"""
+    artifacts_dir = Path("artifacts") / session_id
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+    return artifacts_dir
+
+def encode_image_b64(image_path: Path) -> str:
+    """Encode image file to base64 string"""
+    with open(image_path, 'rb') as f:
+        image_data = f.read()
+    return base64.b64encode(image_data).decode('utf-8')
 
 # Initialize matplotlib style when module is imported
 setup_matplotlib_style()

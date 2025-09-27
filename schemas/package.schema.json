@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Package",
+  "description": "Package configuration",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the package."
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of the package."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the package."
+    },
+    "main": {
+      "type": "string",
+      "description": "The main entry point of the package."
+    },
+    "types": {
+      "type": "string",
+      "description": "TypeScript type definitions."
+    },
+    "scripts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "devDependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "author": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    }
+  },
+  "required": ["name", "version"]
+}
