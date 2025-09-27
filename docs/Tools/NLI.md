@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/headers/tools-overview.svg" alt="Natural Language Interface — Phys-MCP" width="100%">
+  <img src="/assets/svg/headers/tools-overview.svg" alt="Natural Language Interface — Phys-MCP" width="100%">
 </p>
 
 # NLI Tool

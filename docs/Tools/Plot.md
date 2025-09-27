@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/headers/plotting-viz.svg" alt="Plotting & Visualization — Phys-MCP" width="100%">
+  <img src="/assets/svg/headers/plotting-viz.svg" alt="Plotting & Visualization — Phys-MCP" width="100%">
 </p>
 
 # Plot Tools

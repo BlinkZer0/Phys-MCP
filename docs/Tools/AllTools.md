@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/headers/tools-overview.svg" alt="Phys-MCP Tools — Complete Catalog" width="100%">
+  <img src="/assets/svg/headers/tools-overview.svg" alt="Phys-MCP Tools — Complete Catalog" width="100%">
 </p>
 
 # Physics MCP Complete Tool Catalog

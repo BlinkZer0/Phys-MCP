@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/headers/cas-toolkit.svg" alt="CAS Toolkit — Phys-MCP" width="100%">
+  <img src="/assets/svg/headers/cas-toolkit.svg" alt="CAS Toolkit — Phys-MCP" width="100%">
 </p>
 
 # CAS Tools
