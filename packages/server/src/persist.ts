@@ -38,7 +38,7 @@ class PersistenceManager {
   private artifactsDir: string;
 
   constructor(dbPath?: string) {
-    this.dbPath = dbPath || path.join(process.cwd(), 'phys-mcp.db');
+    this.dbPath = dbPath || path.join(process.cwd(), 'data', 'phys-mcp.db');
     this.artifactsDir = path.join(process.cwd(), 'artifacts');
     
     // Ensure artifacts directory exists

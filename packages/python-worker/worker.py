@@ -104,8 +104,8 @@ EXECUTION_TIMEOUT = 10.0  # seconds
 MAX_ARRAY_SIZE = 100000
 
 def load_config() -> Dict[str, Any]:
-    """Load server configuration from server.config.json"""
-    config_path = Path(__file__).parent.parent.parent / "server.config.json"
+    """Load server configuration from config/server.config.json"""
+    config_path = Path(__file__).parent.parent.parent / "config" / "server.config.json"
     try:
         if config_path.exists():
             with open(config_path, 'r') as f:

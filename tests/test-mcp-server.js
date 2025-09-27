@@ -11,9 +11,9 @@ async function testMCPServer() {
   
   try {
     // Start the server process
-    const serverProcess = spawn('node', ['packages/server/dist/index.js'], {
+    const serverProcess = spawn('node', ['../packages/server/dist/index.js'], {
       stdio: ['pipe', 'pipe', 'inherit'],
-      cwd: process.cwd()
+      cwd: __dirname
     });
 
     // Send a list tools request

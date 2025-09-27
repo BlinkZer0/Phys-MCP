@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 async function testToolCount() {
   console.log('🔧 Testing tool count in Phys-MCP server...');
   
-  const serverPath = join(__dirname, 'packages/server/dist/index.js');
+  const serverPath = join(__dirname, '..', 'packages/server/dist/index.js');
   
   // Start the server process
   const server = spawn('node', [serverPath], {

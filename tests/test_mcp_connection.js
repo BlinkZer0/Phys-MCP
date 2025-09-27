@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 async function testMCPServer() {
   console.log('🧪 Testing Phys-MCP server connection...');
   
-  const serverPath = join(__dirname, 'packages/server/dist/index.js');
+  const serverPath = join(__dirname, '..', 'packages/server/dist/index.js');
   
   // Start the server process
   const server = spawn('node', [serverPath], {

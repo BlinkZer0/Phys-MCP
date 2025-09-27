@@ -1,48 +1,48 @@
-# Physics MCP Server
+# Physics MCP Server 2.0
 
 <p align="center">
   <img src="docs/assets/header.svg" width="960" alt="Physics MCP banner" />
 </p>
 
-[Home](README.md) · [Docs](docs/README.md) · [Architecture](docs/Architecture.md) · [Configuration](docs/Configuration.md) · Tools: [CAS](docs/Tools/CAS.md) · [Plot](docs/Tools/Plot.md) · [NLI](docs/Tools/NLI.md) · [Report](docs/Tools/Report.md) · [Tensor](docs/Tools/Tensor.md) · [Quantum](docs/Tools/Quantum.md) · [StatMech](docs/Tools/StatMech.md)
+[Home](README.md) | [Docs](docs/README.md) | [Architecture](docs/Architecture.md) | [Configuration](docs/Configuration.md) | Tool Docs: [All Tools](docs/Tools/AllTools.md) | [CAS](docs/Tools/CAS.md) | [Plot](docs/Tools/Plot.md) | [NLI](docs/Tools/NLI.md) | [Report](docs/Tools/Report.md) | [Tensor](docs/Tools/Tensor.md) | [Quantum](docs/Tools/Quantum.md) | [StatMech](docs/Tools/StatMech.md)
 
 A specialized MCP (Model Context Protocol) server for physicists, providing Computer Algebra System (CAS), plotting, and natural language interface capabilities.
 
 ## Features
 
-### Phase 1-3 (Current)
-- **CAS tools**: evaluate, differentiate, integrate, solve equations/ODEs with optional units
-- **Plot tools**: 2D functions, parametric curves, 2D vector fields, 3D surfaces, contours, phase portraits (PNG + CSV + SVG)
-- **NLI tool**: parse natural language into structured tool calls (LM Studio compatible)
-- **Units & Constants**: Pint-based unit conversion, CODATA and astrophysical constants
-- **Report tool**: generate Markdown reports from persisted sessions
-- **Tensor algebra**: Christoffel symbols, curvature tensors, geodesics
-- **Quantum mechanics**: operator algebra, standard problems (SHO, particle in box), Bloch sphere visualization
-- **Statistical mechanics**: partition functions, thermodynamic quantities
-- **Device acceleration**: Optional GPU acceleration via PyTorch with CPU fallback
+### Server 2.0 Highlights
+- **Core CAS and graphing**: symbolic manipulation, equation solving, and high-resolution plots cover both planning and presentation workflows.
+- **Unit-aware physics**: `units_convert` and `constants_get` keep results consistent across SI, imperial, and astrophysical contexts.
+- **Spectral and signal analysis**: GPU-ready FFT, filtering, spectrogram, and wavelet utilities accelerate large datasets.
+- **Quantum and relativity scaffolding**: dedicated toolchains for operator algebra, standard Hamiltonians, and tensor calculus.
+- **Thermodynamics and partition functions**: `statmech_partition` captures canonical ensemble workflows with cached summaries.
+- **Hardware awareness**: `accel_caps` reports device acceleration modes so you can right-size jobs.
+- **Natural language + API ingress**: `nli_parse` bridges plain English to tool calls and `api_tools` pulls reference data.
+- **AI augmentation**: `ml_ai_augmentation` delivers symbolic regression, PINN surrogates, and derivation explainers with GPU-first defaults.
+- **Collaboration and orchestration**: distributed job submission, experiment DAGs, exports, and Markdown report generation stay in-sync.
 
-## Architecture
-
-```
-phys-mcp/
-├── packages/
-│  ├── server/          # TypeScript MCP server
-│  ├── tools-cas/       # CAS tool adapters
-│  ├── tools-plot/      # Plotting tool adapters
-│  ├── tools-nli/       # NLI parser
-│  ├── tools-units/     # Unit conversion tools
-│  ├── tools-constants/ # Physical constants
-│  ├── tools-report/    # Report generation
-│  ├── tools-tensor/    # Tensor algebra (Phase 3)
-│  ├── tools-quantum/   # Quantum mechanics (Phase 3)
-│  ├── tools-statmech/  # Statistical mechanics (Phase 3)
-│  └── python-worker/   # Python computation backend
-├── examples/
-│  └── requests/        # Example JSON-RPC requests
-├── config/            # Configuration files
-│   └── mcp_config.json  # MCP server configuration
-└── scripts/            # Dev/format/build helpers
-```
+## Tool Suite (21)
+- **cas**: Computer Algebra System operations for evaluating expressions, differentiation, integration, solving equations and ODEs, and propagating uncertainty.
+- **units_convert**: Convert between units via the Pint registry with SI, imperial, and specialized physics unit coverage.
+- **constants_get**: Retrieve CODATA and astrophysical constants including `c`, `h`, `G`, `M_sun`, `pc`, `ly`, and more.
+- **plot**: Generate 2D/3D plots, vector fields, phase portraits, contours, volume plots, animations, and interactive visualizations.
+- **accel_caps**: Report available acceleration hardware and the active `ACCEL_MODE`/`ACCEL_DEVICE`.
+- **nli_parse**: Translate natural language physics requests into structured MCP tool calls.
+- **tensor_algebra**: Compute Christoffel symbols, curvature tensors, and geodesics (scaffold).
+- **quantum**: Quantum computing utilities for operators, solvers, and Bloch/probability visualizations (scaffold).
+- **statmech_partition**: Build partition functions and derived thermodynamic quantities from energy levels.
+- **data**: Import/export scientific data formats (HDF5, FITS, ROOT) plus FFT, filtering, spectrogram, and wavelet helpers.
+- **data_fft**: GPU-accelerated Fast Fourier Transform with detailed diagnostic plots.
+- **data_filter**: GPU-accelerated digital filtering (IIR/FIR) with response analysis.
+- **data_spectrogram**: Short-Time Fourier Transform utilities for time-frequency analysis.
+- **data_wavelet**: Continuous wavelet transform for time-scale analysis.
+- **api_tools**: Access external scientific APIs such as arXiv, CERN Open Data, NASA datasets, and NIST references.
+- **export_tool**: Publish research artifacts to Overleaf, GitHub, Zenodo, Jupyter, and immersive formats.
+- **ml_ai_augmentation**: GPU-first ML workflows for symbolic regression, PDE surrogates, pattern recognition, and derivation explanations.
+- **graphing_calculator**: Full-featured calculator with CAS, graphing, statistics, matrices, and programmable utilities.
+- **distributed_collaboration**: Distributed job submission, session sharing, lab notebooks, and artifact versioning.
+- **experiment_orchestrator**: DAG-driven orchestration with validation, execution, publishing, and collaboration hooks.
+- **report_generate**: Summarize MCP sessions into Markdown reports with linked artifacts.
 
 ## Quick Start
 
@@ -56,26 +56,28 @@ Optional (recommended for faster NLI):
 
 ### Installation
 
+Run these commands from the repository root directory (`phys-mcp/`).
+
 ```bash
-# Install dependencies
+# Install Node.js dependencies from the repo root
 pnpm install
 
-# Install Python dependencies
+# Install Python dependencies (from packages/python-worker/)
 cd packages/python-worker
 pip install -r requirements.txt
 cd ../..
 
-# Build all packages
+# Build all packages from the repo root
 pnpm build
 
-# Start development server
+# Start the development server from phys-mcp/
 pnpm dev
 ```
 
 ### Configuration
 
 - Environment variables used by NLI: `LM_BASE_URL`, `LM_API_KEY` (optional), `DEFAULT_MODEL`
-- See `mcp_config.json` for a working example of server + env configuration
+- See `config/mcp_config.json` for a working example of server + env configuration
 - Add the server to your MCP client configuration
 
 See docs/Configuration for details.
@@ -159,6 +161,7 @@ pnpm run test:install
 ## Documentation
 
 - Docs index: `docs/README.md`
+- Tool catalog: `docs/Tools/AllTools.md`
 - Architecture: `docs/Architecture.md`
 - Configuration: `docs/Configuration.md`
 - Tools:

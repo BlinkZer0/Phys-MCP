@@ -1,10 +1,10 @@
-# Physics MCP Server - Setup Guide
+# Physics MCP Server 2.0 - Setup Guide
 
 <p align="center">
   <img src="assets/header.svg" width="960" alt="Physics MCP banner" />
 </p>
 
-[Home](README.md) · [Docs](docs/README.md) · [Architecture](docs/Architecture.md) · [Configuration](docs/Configuration.md) · Tools: [CAS](docs/Tools/CAS.md) · [Plot](docs/Tools/Plot.md) · [NLI](docs/Tools/NLI.md)
+[Home](README.md) | [Docs](docs/README.md) | [Architecture](docs/Architecture.md) | [Configuration](docs/Configuration.md) | Tool Docs: [All Tools](docs/Tools/AllTools.md) | [CAS](docs/Tools/CAS.md) | [Plot](docs/Tools/Plot.md) | [NLI](docs/Tools/NLI.md)
 
 ## Prerequisites
 
@@ -21,27 +21,29 @@ npm install -g pnpm
 
 ## Installation Steps
 
+> Run all commands from the repository root directory (`phys-mcp/`) unless a different path is noted.
+
 ### 1. Clone and Install Dependencies
 
 ```bash
-# Navigate to project directory
-cd phys-mcp
+# Navigate to the cloned repository (adjust the path to your environment)
+cd path/to/phys-mcp
 
-# Install Node.js dependencies (choose one)
+# Install Node.js dependencies from the repository root (choose one)
 pnpm install          # Recommended
 # OR
 npm install           # Alternative
 
-# Install Python dependencies
+# Install Python dependencies (run from packages/python-worker/)
 cd packages/python-worker
 pip install -r requirements.txt
-cd ../..
+cd ../..  # Return to the repository root
 ```
 
 ### 2. Build the Project
 
 ```bash
-# Build all packages (choose one)
+# Build all packages from the repository root (choose one)
 pnpm build           # If using pnpm
 # OR  
 npm run build        # If using npm
@@ -52,7 +54,7 @@ npm run build        # If using npm
 1. Download and install LM Studio
 2. Download a compatible model (e.g., `qwen2.5-coder`)
 3. Start the local server (usually on `http://localhost:1234`)
-4. Update `mcp_config.json` with your endpoint:
+4. Update `config/mcp_config.json` with your endpoint:
 
 ```json
 {
@@ -83,7 +85,7 @@ bash scripts/dev.sh  # Direct script execution
 
 ### Production Mode
 ```bash
-node packages/server/dist/index.js
+node packages/server/dist/index.js  # Run from phys-mcp/
 ```
 
 ## Testing the Installation
@@ -124,7 +126,7 @@ echo '{"jsonrpc":"2.0","id":"3","method":"nli.parse","params":{"text":"different
 
 3. **LM Studio Connection Issues**
    - Ensure LM Studio is running
-   - Check the endpoint URL in `mcp_config.json`
+   - Check the endpoint URL in `config/mcp_config.json`
    - Verify the model is loaded in LM Studio
 
 4. **Permission Issues (Unix/Linux)**
@@ -158,16 +160,30 @@ npm run build
 
 ```
 phys-mcp/
-├── packages/
-│   ├── server/          # Main MCP server
-│   ├── tools-cas/       # Computer Algebra System tools
-│   ├── tools-plot/      # Plotting tools
-│   ├── tools-nli/       # Natural Language Interface
-│   └── python-worker/   # Python computation backend
-├── examples/requests/   # Example JSON-RPC requests
-├── scripts/            # Development scripts
-└── mcp_config.json     # MCP server configuration
+|- packages/
+|  |- server/                    # TypeScript MCP server core
+|  |- python-worker/             # Python computation backend
+|  |- tools-cas/                 # Computer Algebra System tools
+|  |- tools-units/               # Unit conversion utilities
+|  |- tools-constants/           # Physical constants service
+|  |- tools-plot/                # Plot and visualization adapters
+|  |- tools-signal/              # FFT, filtering, spectrogram, wavelet tools
+|  |- tools-data-io/             # Scientific data import/export helpers
+|  |- tools-ml/                  # ML/AI augmentation workflows
+|  |- tools-graphing-calculator/ # Graphing calculator front-end
+|  |- tools-quantum/             # Quantum operators and solvers
+|  |- tools-tensor/              # Differential geometry helpers
+|  |- tools-statmech/            # Partition function utilities
+|  |- tools-distributed/         # Collaboration and job submission APIs
+|  |- tools-orchestrator/        # Experiment DAG orchestrator
+|  |- tools-export/              # Export and publishing adapters
+|  |- tools-external/            # External API integrations
+|  |- tools-report/              # Report generator
+|- examples/requests/            # Example JSON-RPC requests
+|- config/                       # Server/client configuration samples
+|- scripts/                      # Development scripts
 ```
+
 
 ## Next Steps
 

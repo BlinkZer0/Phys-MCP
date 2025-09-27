@@ -73,7 +73,7 @@ Physics MCP is designed to be re-mixed. This guide shows teachers how to set up 
 Physics MCP is Apache-licensed. Remind learners they can:
 
 - Clone the repo and adjust `packages/tools-graphing-calculator` to add themed templates.
-- Register custom tools in `mcp_config.json` so their bots or IDEs surface new commands instantly.
+- Register custom tools in `config/mcp_config.json` so their bots or IDEs surface new commands instantly.
 - Share pull requests or GitHub Discussions back with the community.
 
 ## Next Steps

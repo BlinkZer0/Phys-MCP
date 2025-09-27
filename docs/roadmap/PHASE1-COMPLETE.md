@@ -93,7 +93,8 @@ phys-mcp/
 ├── examples/requests/   # Example JSON-RPC requests
 ├── scripts/            # Development scripts (Unix + Windows)
 ├── SETUP.md           # Detailed setup instructions
-└── mcp_config.json    # MCP server configuration
+└── config/
+    └── mcp_config.json # MCP server configuration
 ```
 
 ## 🎯 Acceptance Criteria Met

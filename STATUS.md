@@ -68,7 +68,7 @@ The Physics MCP Server is now ready to:
 - [ ] Run `npm run install:python` for Python dependencies
 - [ ] Run `npm run build` to compile TypeScript
 - [ ] Run `npm run test:install` to verify installation
-- [ ] Configure `mcp_config.json` for your MCP client
+- [ ] Configure `config/mcp_config.json` for your MCP client
 - [ ] Optional: Set up LM Studio for NLI features
 
 ## 📚 Documentation Available
@@ -77,7 +77,7 @@ The Physics MCP Server is now ready to:
 - **SETUP.md** - Detailed installation instructions  
 - **PHASE1-COMPLETE.md** - Complete implementation summary
 - **examples/requests/** - JSON-RPC example requests
-- **mcp_config.json** - MCP client configuration template
+- **config/mcp_config.json** - MCP client configuration template
 
 ## 🔧 Development Commands
 

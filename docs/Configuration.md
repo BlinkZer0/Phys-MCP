@@ -12,11 +12,13 @@ header_svg:
 
 # Configuration
 
+> Current server version: 2.0
+
 <p align="center">
   <img src="assets/header.svg" width="960" alt="Physics MCP banner" />
 </p>
 
-[Home](../README.md) · [Architecture](Architecture.md) · [Configuration](Configuration.md) · Tools: [CAS](Tools/CAS.md) · [Plot](Tools/Plot.md) · [NLI](Tools/NLI.md)
+[Home](../README.md) | [Architecture](Architecture.md) | [Configuration](Configuration.md) | Tool Docs: [All Tools](Tools/AllTools.md) | [CAS](Tools/CAS.md) | [Plot](Tools/Plot.md) | [NLI](Tools/NLI.md)
 
 Environment Variables (NLI, optional)
 - `LM_BASE_URL`: Base URL for a local OpenAI-compatible LM API (e.g., `http://localhost:1234/v1` for LM Studio)
