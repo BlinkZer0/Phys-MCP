@@ -1,60 +1,166 @@
 ---
-title: Tool Catalog
+title: Complete Tool Catalog
 kind: reference
+header_svg:
+  src: "/assets/svg/physics-mcp-hero.svg"
+  static: "/assets/svg/physics-mcp-hero-static.svg"
+  title: "All 17 Physics MCP Tools"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
 ---
 
-# Physics MCP Tool Catalog (17)
+# Physics MCP Complete Tool Catalog
 
-Current server version: 2.0. Every tool listed below is available through the Physics MCP Server and can be orchestrated individually or chained inside the experiment orchestrator.
+**Current server version: 2.0** - All 17 tools are available through the Physics MCP Server and can be orchestrated individually or chained together in complex workflows using the experiment orchestrator.
 
-## cas
-Computer Algebra System operations: evaluate expressions, differentiate, integrate, solve equations and ODEs, and propagate uncertainty.
+## 🔢 Core Mathematics & Computation (4 tools)
 
-## units_convert
-Convert between different units using the Pint unit registry, including SI, imperial, and common physics-specific units.
+### 1. [Computer Algebra System (CAS)](CAS.md)
+**Tool name:** `cas`  
+**Purpose:** Symbolic mathematics, equation solving, calculus operations  
+**Capabilities:** Evaluate expressions, differentiate, integrate, solve equations and ODEs, propagate uncertainty  
+**Best for:** Algebraic manipulations, symbolic calculations, mathematical derivations
 
-## constants_get
-Request CODATA and astrophysical constants such as `c`, `h`, `hbar`, `e`, `m_e`, `m_p`, `k_B`, `N_A`, `epsilon_0`, `mu_0`, `G`, `R`, `sigma`, `a_0`, `alpha`, `M_sun`, `pc`, `ly`, and `au`.
+### 2. [Graphing Calculator](GraphingCalculator.md) 
+**Tool name:** `graphing_calculator`  
+**Purpose:** Interactive plotting and mathematical visualization  
+**Capabilities:** Multi-series plotting, parametric curves, implicit functions, animations, matrix operations, statistics  
+**Best for:** Student exploration, interactive demonstrations, mathematical visualization
 
-## plot
-Produce plots and visualizations: 2D functions, parametric curves, vector fields, phase portraits, 3D surfaces, contour plots, volume renderings, animations, and interactive plots.
+### 3. [Units Converter](Units.md)
+**Tool name:** `units_convert`  
+**Purpose:** Unit conversions and dimensional analysis  
+**Capabilities:** Convert between SI, imperial, and physics-specific units with Pint registry  
+**Best for:** Unit consistency, dimensional analysis, physics calculations
 
-## accel_caps
-Report device acceleration capabilities, exposing the active `ACCEL_MODE` and `ACCEL_DEVICE` for downstream scheduling.
+### 4. [Physical Constants](Constants.md)
+**Tool name:** `constants_get`  
+**Purpose:** Access to fundamental physical constants  
+**Capabilities:** CODATA constants, astrophysical constants, uncertainties, proper units  
+**Best for:** Problem setup, constant lookup, precision calculations
 
-## nli_parse
-Translate natural language physics requests into structured MCP tool calls with intent tags and typed parameters.
+## 📊 Visualization & Analysis (4 tools)
 
-## tensor_algebra
-Compute Christoffel symbols, curvature tensors, and geodesics (scaffold implementation ready for extension).
+### 5. [Plot Generator](Plot.md)
+**Tool name:** `plot`  
+**Purpose:** Advanced scientific plotting and visualization  
+**Capabilities:** 2D/3D plots, vector fields, phase portraits, animations, interactive plots  
+**Best for:** Publication-quality figures, complex visualizations, scientific plots
 
-## quantum
-Quantum computing utilities for commutators, matrix representations, solver scaffolds for standard Hamiltonians, and quantum state visualization (Bloch sphere, probability density).
+### 6. [Statistical Mechanics](StatMech.md)
+**Tool name:** `statmech_partition`  
+**Purpose:** Thermodynamic calculations and partition functions  
+**Capabilities:** Calculate partition functions, thermodynamic quantities from energy levels  
+**Best for:** Statistical mechanics courses, thermodynamic analysis
 
-## statmech_partition
-Calculate partition functions and derived thermodynamic quantities from supplied energy levels.
+### 7. [Quantum Tools](Quantum.md)
+**Tool name:** `quantum`  
+**Purpose:** Quantum mechanics calculations and visualization  
+**Capabilities:** Bloch sphere visualization, commutators, matrix representations, quantum state analysis  
+**Best for:** Quantum mechanics courses, quantum computing, quantum state visualization
 
-## data
-Unified data toolkit covering HDF5/FITS/ROOT import/export and GPU-first signal processing (FFT, filtering, spectrogram, wavelet) via the `action` parameter.
+### 8. [Tensor Algebra](Tensor.md)
+**Tool name:** `tensor_algebra`  
+**Purpose:** General relativity and tensor mathematics  
+**Capabilities:** Christoffel symbols, curvature tensors, geodesics, metric tensor operations  
+**Best for:** General relativity, advanced mathematics, tensor calculus
 
-## api_tools
-Connect to external scientific APIs including arXiv, CERN Open Data, NASA datasets, and NIST physical data catalogs.
+## 🔬 Data & Experimentation (4 tools)
 
-## export_tool
-Export research assets to Overleaf LaTeX projects, GitHub repositories, Zenodo datasets, Jupyter notebooks, and VR/AR formats.
+### 9. [Data Processing](Data.md)
+**Tool name:** `data`  
+**Purpose:** Scientific data import/export and signal processing  
+**Capabilities:** HDF5/FITS/ROOT import/export, FFT analysis, filtering, spectrograms, wavelets  
+**Best for:** Experimental data analysis, signal processing, data format conversion
 
-## ml_ai_augmentation
-GPU-first machine learning augmentation: symbolic regression (PySR/genetic programming), physics-informed neural networks, scientific pattern recognition, and derivation explainers with LaTeX output.
+### 10. [External APIs](ExternalAPIs.md)
+**Tool name:** `api_tools`  
+**Purpose:** Access to scientific databases and repositories  
+**Capabilities:** arXiv papers, CERN data, NASA datasets, NIST constants, literature search  
+**Best for:** Research, literature reviews, data acquisition, current events
 
-## graphing_calculator
-Comprehensive graphing calculator with CAS, plotting, matrix operations, statistics, data lists, and programmable utilities.
+### 11. [Export & Publishing](Export.md)
+**Tool name:** `export_tool`  
+**Purpose:** Publish and share research results  
+**Capabilities:** LaTeX reports, GitHub repos, Zenodo datasets, Jupyter notebooks, VR/AR formats  
+**Best for:** Publication, sharing results, creating reports, collaborative work
 
-## distributed_collaboration
-Distributed and collaborative computing: remote job submission, session sharing, lab notebook entries, and artifact versioning with provenance.
+### 12. [Acceleration Detection](CAS.md#accel_caps)
+**Tool name:** `accel_caps`  
+**Purpose:** Hardware acceleration capabilities  
+**Capabilities:** Report GPU capabilities, acceleration modes, device information  
+**Best for:** Performance optimization, hardware utilization
 
-## experiment_orchestrator
-Unified digital physics lab: define, validate, execute, and publish DAG-based experiments with automatic artifact capture and sharing.
+## 🤖 AI & Advanced Tools (5 tools)
 
-## report_generate
-Create Markdown session reports summarizing tool events, artifacts, and linked outputs.
+### 13. [Natural Language Interface](NLI.md)
+**Tool name:** `nli_parse`  
+**Purpose:** Convert natural language to tool commands  
+**Capabilities:** Parse physics requests, generate structured tool calls, intent recognition  
+**Best for:** Voice commands, natural interaction, accessibility
+
+### 14. [Machine Learning & AI](ML.md)
+**Tool name:** `ml_ai_augmentation`  
+**Purpose:** AI-powered physics analysis and pattern recognition  
+**Capabilities:** Symbolic regression, physics-informed neural networks, pattern recognition, derivation explanation  
+**Best for:** Data mining, equation discovery, advanced analysis, AI-assisted learning
+
+### 15. [Distributed Computing](Distributed.md)
+**Tool name:** `distributed_collaboration`  
+**Purpose:** Collaborative computing and remote job execution  
+**Capabilities:** Remote job submission, session sharing, lab notebook, artifact versioning  
+**Best for:** Large-scale computations, collaboration, research workflows
+
+### 16. [Experiment Orchestrator](Orchestrator.md)
+**Tool name:** `experiment_orchestrator`  
+**Purpose:** Chain multiple tools into complex workflows  
+**Capabilities:** DAG definition, validation, execution, publication, workflow automation  
+**Best for:** Complex experiments, reproducible research, automated workflows
+
+### 17. [Report Generator](Report.md)
+**Tool name:** `report_generate`  
+**Purpose:** Generate comprehensive session reports  
+**Capabilities:** Markdown reports, artifact summaries, session documentation  
+**Best for:** Documentation, session summaries, progress tracking
+
+## 🚀 Getting Started with the Tools
+
+### For Educators
+1. **Start Simple**: Begin with [Graphing Calculator](GraphingCalculator.md) for basic plotting
+2. **Add Math**: Use [CAS](CAS.md) for symbolic calculations
+3. **Get Constants**: Access [Physical Constants](Constants.md) for problem setup
+4. **Create Visuals**: Use [Plot Generator](Plot.md) for publication-quality figures
+
+### For Students
+1. **Learn Basics**: Start with [Graphing Calculator](GraphingCalculator.md) and [CAS](CAS.md)
+2. **Explore Physics**: Try [Quantum Tools](Quantum.md) and [Statistical Mechanics](StatMech.md)
+3. **Analyze Data**: Use [Data Processing](Data.md) for lab work
+4. **Share Results**: Use [Export Tools](Export.md) for assignments
+
+### For Researchers
+1. **Complex Workflows**: Use [Experiment Orchestrator](Orchestrator.md) for multi-step analyses
+2. **Collaboration**: Leverage [Distributed Computing](Distributed.md) for team projects
+3. **AI Analysis**: Apply [Machine Learning](ML.md) for pattern recognition
+4. **Publication**: Use [Export Tools](Export.md) for papers and reports
+
+## 🔗 Tool Integration
+
+All tools are designed to work together seamlessly:
+- **Data flows** between tools automatically
+- **Artifacts** are shared and versioned
+- **Workflows** can be saved and reproduced
+- **Results** can be exported in multiple formats
+
+## 📚 Documentation
+
+Each tool has detailed documentation with:
+- **Usage examples** for common tasks
+- **Parameter specifications** for advanced use
+- **Integration patterns** with other tools
+- **Educational applications** for classroom use
+
+---
+
+*This catalog is maintained by the Physics MCP community. Have suggestions or found an issue? [Let us know](https://github.com/your-repo/Phys-MCP/discussions)!*
 
