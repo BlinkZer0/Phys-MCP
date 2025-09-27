@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Physics MCP Complete Tool Catalog
 
 **Current server version: 2.0** - All 17 tools are available through the Physics MCP Server and can be orchestrated individually or chained together in complex workflows using the experiment orchestrator.

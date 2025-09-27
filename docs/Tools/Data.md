@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Data Processing & Signal Analysis Tool
 
 The Data Processing tool provides comprehensive capabilities for importing, analyzing, and processing scientific data from various formats. It includes advanced signal processing capabilities with GPU acceleration.

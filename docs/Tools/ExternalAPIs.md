@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # External Scientific APIs Tool
 
 The External APIs tool provides access to major scientific databases and repositories, allowing you to search for papers, download datasets, and access real-time scientific data.

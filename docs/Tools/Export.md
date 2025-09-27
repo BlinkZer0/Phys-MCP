@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Export & Publishing Tools
 
 The Export tool provides comprehensive capabilities for publishing your physics work in various formats and platforms, from academic papers to interactive notebooks and VR experiences.

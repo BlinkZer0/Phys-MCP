@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Experiment Orchestrator
 
 The Experiment Orchestrator is the crown jewel of Physics MCP—a unified digital physics lab that allows you to define, validate, execute, and publish complex multi-step physics experiments using Directed Acyclic Graphs (DAGs).

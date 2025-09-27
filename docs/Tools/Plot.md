@@ -10,11 +10,10 @@ header_svg:
   reduced_motion: "auto"
 ---
 
-# Plot Tools
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
 
-<p align="center">
-  <img src="../assets/header.svg" width="960" alt="Physics MCP banner" />
-</p>
+# Plot Tools
 
 [Home](../../README.md) · [Architecture](../Architecture.md) · [Configuration](../Configuration.md) · Tools: [CAS](CAS.md) · [Plot](Plot.md) · [NLI](NLI.md)
 

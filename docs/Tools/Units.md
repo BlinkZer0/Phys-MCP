@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Units Converter Tool
 
 The Units Converter tool provides seamless conversion between different unit systems using the Pint unit registry. It supports SI, imperial, and specialized physics units.

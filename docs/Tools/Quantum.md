@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Quantum Tools
 
 Phase 3 quantum mechanics tools for operator algebra, solving standard problems, and visualization.

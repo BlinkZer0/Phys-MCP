@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Machine Learning & AI Augmentation Tools
 
 The ML & AI Augmentation tool provides advanced machine learning capabilities specifically designed for physics applications, including symbolic regression, physics-informed neural networks, and scientific pattern recognition.

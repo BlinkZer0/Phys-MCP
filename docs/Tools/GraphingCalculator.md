@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Graphing Calculator Tooling
 
 The Graphing Calculator tool gives educators and researchers an interactive plotting surface directly inside Physics MCP. It wraps the `graphing_calculator` MCP tool package and exposes quick multi-plot visualisations that run locally while remaining scriptable through the MCP protocol.

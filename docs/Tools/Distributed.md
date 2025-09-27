@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Distributed Computing & Collaboration Tools
 
 The Distributed Computing tool enables collaborative physics research and education by providing remote job submission, session sharing, lab notebook capabilities, and artifact versioning with full provenance tracking.

@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 # Physical Constants Library
 
 The Constants Library provides access to the most up-to-date physical constants from CODATA and astrophysical databases. All values include uncertainties and proper units.

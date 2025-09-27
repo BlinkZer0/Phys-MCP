@@ -10,6 +10,9 @@ header_svg:
   reduced_motion: "auto"
 ---
 
+{% assign header_svg = page.header_svg %}
+{% include header-svg.html %}
+
 [![Educator Handbook](https://img.shields.io/badge/educators-handbook-6366f1?style=for-the-badge)](#what-is-physics-mcp)
 
 # Physics MCP Educator Handbook
