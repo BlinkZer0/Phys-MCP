@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/cas-lab-hero.svg" width="960" alt="Statistical Mechanics" />
+  <img src="../assets/svg/headers/numerics-solvers.svg" alt="Statistical Mechanics — Phys-MCP" width="100%">
 </p>
 
 # Statistical Mechanics Tool

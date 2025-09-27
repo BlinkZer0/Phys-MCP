@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/cas-lab-hero.svg" width="960" alt="Units Converter" />
+  <img src="../assets/svg/headers/cas-toolkit.svg" alt="Units Converter — Phys-MCP" width="100%">
 </p>
 
 # Units Converter Tool

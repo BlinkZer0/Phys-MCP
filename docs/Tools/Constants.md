@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/cas-lab-hero.svg" width="960" alt="Physical Constants" />
+  <img src="../assets/svg/headers/cas-toolkit.svg" alt="Physical Constants — Phys-MCP" width="100%">
 </p>
 
 # Physical Constants Library

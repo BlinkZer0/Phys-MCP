@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Data Processing" />
+  <img src="../assets/svg/headers/data-io.svg" alt="Data & I/O — Phys-MCP" width="100%">
 </p>
 
 # Data Processing & Signal Analysis Tool

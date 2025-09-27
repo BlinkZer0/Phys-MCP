@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="ML & AI Tools" />
+  <img src="../assets/svg/headers/ml-ai.svg" alt="ML & AI Augmentation — Phys-MCP" width="100%">
 </p>
 
 # Machine Learning & AI Augmentation Tools

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/physics-mcp-hero.svg" width="960" alt="Quantum Modules" />
+  <img src="../assets/svg/headers/quantum-tools.svg" alt="Quantum Tools — Phys-MCP" width="100%">
 </p>
 
 # Quantum Tools

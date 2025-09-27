@@ -27,6 +27,9 @@
     "precommit": "pnpm lint && pnpm typecheck",
     "prepare": "husky install",
     "svg:optimize": "node scripts/svg-optimize.mjs",
+    "svg:build": "node ./scripts/svg/generate-headers.mjs && node ./scripts/svg/export-pngs.mjs && svgo -f assets/svg/headers -o assets/svg/headers --config=./scripts/svg/svgo.config.mjs",
+    "svg:check": "svgo -f assets/svg/headers --config=./scripts/svg/svgo.config.mjs --multipass --quiet",
+    "svg:all": "npm run svg:build && npm run svg:check",
     "docs:links": "node scripts/docs-link-check.mjs",
     "docs:mermaid:smoke": "node scripts/docs-mermaid-smoke.mjs",
     "docs:generate": "node scripts/generate-docs.js"
@@ -41,6 +44,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
     "svgo": "^3.3.2",
+    "sharp": "^0.33.4",
     "typescript": "^5.9.2",
     "vitest": "^1.0.0",
     "@vitest/coverage-v8": "^1.0.0",

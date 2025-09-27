@@ -1,0 +1,42 @@
+name: SVG headers
+on:
+  push:
+    paths:
+      - 'assets/svg/headers/**.svg'
+      - 'scripts/svg/**'
+      - 'docs/**.md'
+      - 'educators.md'
+  pull_request:
+    paths:
+      - 'assets/svg/headers/**.svg'
+      - 'docs/**.md'
+      - 'educators.md'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run svg:all
+      - name: Enforce size budgets
+        run: |
+          max=60000
+          fail=0
+          for f in assets/svg/headers/*.svg; do
+            s=$(stat -c%s "$f")
+            if [ "$s" -gt "$max" ]; then
+              echo "::error file=$f::SVG exceeds ${max} bytes (got $s)"
+              fail=1
+            fi
+          done
+          exit $fail
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: header-previews
+          path: |
+            assets/svg/headers
+            assets/png/headers

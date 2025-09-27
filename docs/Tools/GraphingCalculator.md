@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Graphing Calculator Tool" />
+  <img src="../assets/svg/headers/plotting-viz.svg" alt="Graphing Calculator — Phys-MCP" width="100%">
 </p>
 
 # Graphing Calculator Tooling

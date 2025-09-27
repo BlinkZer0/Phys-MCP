@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" aria-labelledby="title desc"><title id="title">Data &amp; I/O</title><desc id="desc">Flowing data streams with file icons and connection lines.</desc><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#0ea5e922"/></pattern></defs><style>@keyframes drift { from { transform: translateX(0) } to { transform: translateX(-200px) } }
+    @keyframes pulse { 0%,100% { opacity:.8 } 50% { opacity:1 } }
+    @keyframes sweep { 0% { transform: translateX(-1200px) } 100% { transform: translateX(1200px) } }
+    @keyframes rotate { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes shimmer { 0%,100% { opacity: 0.3 } 50% { opacity: 0.8 } }
+    @keyframes draw { from { stroke-dasharray: 0,800 } to { stroke-dasharray: 800,0 } }
+    @keyframes march { from { stroke-dashoffset: 0 } to { stroke-dashoffset: 12 } }
+
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important }
+    }
+
+    .bg { fill: url(#dots) }
+    .accent { fill: url(#g) }
+    .stroke { stroke: url(#g); stroke-width: 2; fill: none; opacity: .7 }
+    .drift { animation: drift 60s linear infinite }
+    .pulse { animation: pulse 4s ease-in-out infinite }
+    .sweep { animation: sweep 8s linear infinite }
+    .rotate { animation: rotate 20s linear infinite }
+    .orbit { animation: orbit 6s linear infinite }
+    .shimmer { animation: shimmer 3s ease-in-out infinite }
+    .draw { animation: draw 3s ease-in-out forwards }
+    .march { animation: march 1s linear infinite }
+    text.title { font-size: 42px; font-weight: 700; fill: #0b1220; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }
+    text.sub { font-size: 18px; fill: #0b122099; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }</style><rect width="1200" height="240" class="bg"/><g transform="translate(900,60)"><rect width="30" height="40" y="20" fill="#fff" stroke="#0ea5e9" stroke-width="2" rx="4"/><path stroke="#0ea5e9" stroke-width="2" d="M15,10 L15,20"/><circle cx="15" cy="8" r="3" fill="#0ea5e9"/><rect width="30" height="40" x="50" y="20" fill="#fff" stroke="#0ea5e9" stroke-width="2" rx="4"/><path stroke="#0ea5e9" stroke-width="2" d="M65,10 L65,20"/><circle cx="65" cy="8" r="3" fill="#0ea5e9"/><rect width="30" height="40" x="100" y="20" fill="#fff" stroke="#0ea5e9" stroke-width="2" rx="4"/><path stroke="#0ea5e9" stroke-width="2" d="M115,10 L115,20"/><circle cx="115" cy="8" r="3" fill="#0ea5e9"/><rect width="30" height="40" x="150" y="20" fill="#fff" stroke="#0ea5e9" stroke-width="2" rx="4"/><path stroke="#0ea5e9" stroke-width="2" d="M165,10 L165,20"/><circle cx="165" cy="8" r="3" fill="#0ea5e9"/><rect width="30" height="40" x="200" y="20" fill="#fff" stroke="#0ea5e9" stroke-width="2" rx="4"/><path stroke="#0ea5e9" stroke-width="2" d="M215,10 L215,20"/><circle cx="215" cy="8" r="3" fill="#0ea5e9"/></g><g class="drift" transform="translate(0,0)"><path d="M -50 80 C 200 60, 400 100, 800 70" class="stroke"/><path d="M -50 100 C 200 80, 400 120, 800 90" class="stroke"/><path d="M -50 120 C 200 100, 400 140, 800 110" class="stroke"/><path d="M -50 140 C 200 120, 400 160, 800 130" class="stroke"/></g><g transform="translate(40,150)"><text class="title">Data &amp; I/O</text><text y="28" class="sub">Import • Export • Processing</text></g></svg>

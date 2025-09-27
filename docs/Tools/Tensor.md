@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/distributed-collaboration-hero.svg" width="960" alt="Tensor Utilities" />
+  <img src="../assets/svg/headers/numerics-solvers.svg" alt="Tensor Utilities — Phys-MCP" width="100%">
 </p>
 
 # Tensor Tool

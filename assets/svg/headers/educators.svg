@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" aria-labelledby="title desc"><title id="title">Educators</title><desc id="desc">Chalkboard scribble underline with gentle dust specks.</desc><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#0ea5e922"/></pattern></defs><style>@keyframes drift { from { transform: translateX(0) } to { transform: translateX(-200px) } }
+    @keyframes pulse { 0%,100% { opacity:.8 } 50% { opacity:1 } }
+    @keyframes sweep { 0% { transform: translateX(-1200px) } 100% { transform: translateX(1200px) } }
+    @keyframes rotate { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes shimmer { 0%,100% { opacity: 0.3 } 50% { opacity: 0.8 } }
+    @keyframes draw { from { stroke-dasharray: 0,800 } to { stroke-dasharray: 800,0 } }
+    @keyframes march { from { stroke-dashoffset: 0 } to { stroke-dashoffset: 12 } }
+
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important }
+    }
+
+    .bg { fill: url(#dots) }
+    .accent { fill: url(#g) }
+    .stroke { stroke: url(#g); stroke-width: 2; fill: none; opacity: .7 }
+    .drift { animation: drift 60s linear infinite }
+    .pulse { animation: pulse 4s ease-in-out infinite }
+    .sweep { animation: sweep 8s linear infinite }
+    .rotate { animation: rotate 20s linear infinite }
+    .orbit { animation: orbit 6s linear infinite }
+    .shimmer { animation: shimmer 3s ease-in-out infinite }
+    .draw { animation: draw 3s ease-in-out forwards }
+    .march { animation: march 1s linear infinite }
+    text.title { font-size: 42px; font-weight: 700; fill: #0b1220; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }
+    text.sub { font-size: 18px; fill: #0b122099; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }</style><rect width="1200" height="240" class="bg"/><rect width="380" height="160" x="760" y="40" fill="#0b1220" rx="10"/><path fill="none" stroke="#f9fafb" stroke-width="4" d="M780,150 C 840,140 900,160 980,150 1060,140 1100,160 1120,150" class="draw"/><circle cx="1062.0016452374277" cy="127.99398793004903" r="1.5842743404184743" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:0s"/><circle cx="797.3601638901083" cy="165.03261872716405" r="1.46808399557515" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:0.2s"/><circle cx="1051.4145658038212" cy="76.97655526730115" r="0.48576459025622803" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:0.4s"/><circle cx="823.3110846796495" cy="160.3614652361807" r="0.9249081404671062" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:0.6000000000000001s"/><circle cx="865.6156529127142" cy="90.13531825882018" r="0.362275002657279" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:0.8s"/><circle cx="817.7662403692809" cy="70.71167005030046" r="0.7474808457514248" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:1s"/><circle cx="1017.1708260802644" cy="109.41810029876592" r="1.195404570738571" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:1.2000000000000002s"/><circle cx="795.3773495468764" cy="165.0869530084251" r="0.9367082303271739" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:1.4000000000000001s"/><circle cx="1021.9360084886674" cy="103.93539819557944" r="0.8748842941858483" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:1.6s"/><circle cx="788.1320275592807" cy="78.11565769234328" r="1.1655582728864764" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:1.8s"/><circle cx="866.7771125531923" cy="106.73401892424229" r="0.3414932606261088" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:2s"/><circle cx="1025.1873637000658" cy="178.9014565165253" r="1.646663628952951" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:2.2s"/><circle cx="1064.454497683851" cy="93.88218362164518" r="1.3243765747024503" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:2.4000000000000004s"/><circle cx="976.6589158449256" cy="153.130158773296" r="0.4279866645306201" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:2.6s"/><circle cx="782.441971683214" cy="158.52982197342837" r="1.261380863445595" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:2.8000000000000003s"/><circle cx="838.0083597131736" cy="80.63882804400191" r="1.454457946826184" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:3s"/><circle cx="979.4305215098907" cy="74.23169043732446" r="1.3567907468992766" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:3.2s"/><circle cx="1007.5480693660573" cy="98.81607506125698" r="0.8441261027726397" fill="#f9fafb" class="pulse" opacity=".15" style="animation-delay:3.4000000000000004s"/><g transform="translate(40,150)"><text class="title">For Educators</text><text y="28" class="sub">Classroom-ready modules &amp; demos</text></g></svg>

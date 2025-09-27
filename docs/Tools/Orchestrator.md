@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Experiment Orchestrator" />
+  <img src="../assets/svg/headers/numerics-solvers.svg" alt="Experiment Orchestrator — Phys-MCP" width="100%">
 </p>
 
 # Experiment Orchestrator

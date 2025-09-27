@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/distributed-collaboration-hero.svg" width="960" alt="Distributed Computing" />
+  <img src="../assets/svg/headers/distributed.svg" alt="Distributed Computing — Phys-MCP" width="100%">
 </p>
 
 # Distributed Computing & Collaboration Tools

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Automated Reporting" />
+  <img src="../assets/svg/headers/data-io.svg" alt="Automated Reporting — Phys-MCP" width="100%">
 </p>
 
 # Report Tool

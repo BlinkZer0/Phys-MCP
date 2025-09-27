@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="External APIs" />
+  <img src="../assets/svg/headers/data-io.svg" alt="External APIs — Phys-MCP" width="100%">
 </p>
 
 # External Scientific APIs Tool

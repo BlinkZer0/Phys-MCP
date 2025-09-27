@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/physics-mcp-hero.svg" width="960" alt="Physics MCP for Educators" />
+  <img src="../assets/svg/headers/educators.svg" alt="For Educators — Phys-MCP" width="100%">
 </p>
 
 [![Educator Handbook](https://img.shields.io/badge/educators-handbook-6366f1?style=for-the-badge)](#what-is-physics-mcp)

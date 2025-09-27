@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../assets/svg/experiment-orchestrator-hero.svg" width="960" alt="Export Tools" />
+  <img src="../assets/svg/headers/data-io.svg" alt="Export & Publishing — Phys-MCP" width="100%">
 </p>
 
 # Export & Publishing Tools

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" aria-labelledby="title desc"><title id="title">Quantum Tools</title><desc id="desc">Orbitals with orbiting electrons and a shimmering wave band.</desc><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#0ea5e922"/></pattern></defs><style>@keyframes drift { from { transform: translateX(0) } to { transform: translateX(-200px) } }
+    @keyframes pulse { 0%,100% { opacity:.8 } 50% { opacity:1 } }
+    @keyframes sweep { 0% { transform: translateX(-1200px) } 100% { transform: translateX(1200px) } }
+    @keyframes rotate { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+    @keyframes shimmer { 0%,100% { opacity: 0.3 } 50% { opacity: 0.8 } }
+    @keyframes draw { from { stroke-dasharray: 0,800 } to { stroke-dasharray: 800,0 } }
+    @keyframes march { from { stroke-dashoffset: 0 } to { stroke-dashoffset: 12 } }
+
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important }
+    }
+
+    .bg { fill: url(#dots) }
+    .accent { fill: url(#g) }
+    .stroke { stroke: url(#g); stroke-width: 2; fill: none; opacity: .7 }
+    .drift { animation: drift 60s linear infinite }
+    .pulse { animation: pulse 4s ease-in-out infinite }
+    .sweep { animation: sweep 8s linear infinite }
+    .rotate { animation: rotate 20s linear infinite }
+    .orbit { animation: orbit 6s linear infinite }
+    .shimmer { animation: shimmer 3s ease-in-out infinite }
+    .draw { animation: draw 3s ease-in-out forwards }
+    .march { animation: march 1s linear infinite }
+    text.title { font-size: 42px; font-weight: 700; fill: #0b1220; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }
+    text.sub { font-size: 18px; fill: #0b122099; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, &apos;Helvetica Neue&apos;, Arial, &apos;Noto Sans&apos;, &apos;Liberation Sans&apos;, sans-serif; }</style><rect width="1200" height="240" class="bg"/><g transform="translate(1040,120)"><ellipse class="stroke" rx="70" ry="28"/><ellipse class="stroke" rx="70" ry="28" transform="rotate(60)"/><ellipse class="stroke" rx="70" ry="28" transform="rotate(-60)"/><circle r="4" class="accent"><animateMotion dur="6s" path="M 70 0 A 70 28 0 1 1 -70 0 A 70 28 0 1 1 70 0" repeatCount="indefinite" rotate="auto"/><animateTransform attributeName="transform" dur="6s" from="0" repeatCount="indefinite" to="360" type="rotate"/></circle><circle r="4" class="accent"><animateMotion dur="6s" path="M 70 0 A 70 28 0 1 1 -70 0 A 70 28 0 1 1 70 0" repeatCount="indefinite" rotate="auto"/><animateTransform attributeName="transform" dur="6s" from="120" repeatCount="indefinite" to="480" type="rotate"/></circle><circle r="4" class="accent"><animateMotion dur="6s" path="M 70 0 A 70 28 0 1 1 -70 0 A 70 28 0 1 1 70 0" repeatCount="indefinite" rotate="auto"/><animateTransform attributeName="transform" dur="6s" from="240" repeatCount="indefinite" to="600" type="rotate"/></circle></g><rect width="1200" height="8" y="190" class="accent pulse"/><g transform="translate(40,150)"><text class="title">Quantum Tools</text><text y="28" class="sub">States • Operators • Measurement</text></g></svg>
