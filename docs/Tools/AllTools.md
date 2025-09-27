@@ -3,7 +3,7 @@ title: Tool Catalog
 kind: reference
 ---
 
-# Physics MCP Tool Catalog (21)
+# Physics MCP Tool Catalog (17)
 
 Current server version: 2.0. Every tool listed below is available through the Physics MCP Server and can be orchestrated individually or chained inside the experiment orchestrator.
 
@@ -35,19 +35,7 @@ Quantum computing utilities for commutators, matrix representations, solver scaf
 Calculate partition functions and derived thermodynamic quantities from supplied energy levels.
 
 ## data
-Data processing toolkit for importing/exporting scientific formats (HDF5, FITS, ROOT) and running signal processing primitives (FFT, filtering, spectrograms, wavelets).
-
-## data_fft
-GPU-accelerated Fast Fourier Transform routines with diagnostic plots for frequency-domain validation.
-
-## data_filter
-GPU-accelerated digital filtering (IIR/FIR) with magnitude/phase response analysis.
-
-## data_spectrogram
-Short-Time Fourier Transform helpers for time-frequency analysis and diagnostic spectrograms.
-
-## data_wavelet
-Continuous wavelet transform utilities for multi-scale time-series investigations.
+Unified data toolkit covering HDF5/FITS/ROOT import/export and GPU-first signal processing (FFT, filtering, spectrogram, wavelet) via the `action` parameter.
 
 ## api_tools
 Connect to external scientific APIs including arXiv, CERN Open Data, NASA datasets, and NIST physical data catalogs.

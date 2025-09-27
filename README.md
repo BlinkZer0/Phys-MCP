@@ -6,6 +6,11 @@
 
 [Home](README.md) | [Docs](docs/README.md) | [Architecture](docs/Architecture.md) | [Configuration](docs/Configuration.md) | Tool Docs: [All Tools](docs/Tools/AllTools.md) | [CAS](docs/Tools/CAS.md) | [Plot](docs/Tools/Plot.md) | [NLI](docs/Tools/NLI.md) | [Report](docs/Tools/Report.md) | [Tensor](docs/Tools/Tensor.md) | [Quantum](docs/Tools/Quantum.md) | [StatMech](docs/Tools/StatMech.md)
 
+<p align="center">
+  <a href="docs/guides/educators.md"><img alt="Educators Guide" src="https://img.shields.io/badge/Educators-Handbook-blueviolet?style=for-the-badge&logo=googlescholar&logoColor=white" /></a>
+  <a href="https://github.com/BlinkZer0/Phys-MCP/stargazers"><img alt="Star Phys-MCP" src="https://img.shields.io/github/stars/BlinkZer0/Phys-MCP?style=for-the-badge&label=Star%20Project&logo=github" /></a>
+</p>
+
 A specialized MCP (Model Context Protocol) server for physicists, providing Computer Algebra System (CAS), plotting, and natural language interface capabilities.
 
 ## Features
@@ -21,7 +26,7 @@ A specialized MCP (Model Context Protocol) server for physicists, providing Comp
 - **AI augmentation**: `ml_ai_augmentation` delivers symbolic regression, PINN surrogates, and derivation explainers with GPU-first defaults.
 - **Collaboration and orchestration**: distributed job submission, experiment DAGs, exports, and Markdown report generation stay in-sync.
 
-## Tool Suite (21)
+## Tool Suite (17)
 - **cas**: Computer Algebra System operations for evaluating expressions, differentiation, integration, solving equations and ODEs, and propagating uncertainty.
 - **units_convert**: Convert between units via the Pint registry with SI, imperial, and specialized physics unit coverage.
 - **constants_get**: Retrieve CODATA and astrophysical constants including `c`, `h`, `G`, `M_sun`, `pc`, `ly`, and more.
@@ -31,11 +36,7 @@ A specialized MCP (Model Context Protocol) server for physicists, providing Comp
 - **tensor_algebra**: Compute Christoffel symbols, curvature tensors, and geodesics (scaffold).
 - **quantum**: Quantum computing utilities for operators, solvers, and Bloch/probability visualizations (scaffold).
 - **statmech_partition**: Build partition functions and derived thermodynamic quantities from energy levels.
-- **data**: Import/export scientific data formats (HDF5, FITS, ROOT) plus FFT, filtering, spectrogram, and wavelet helpers.
-- **data_fft**: GPU-accelerated Fast Fourier Transform with detailed diagnostic plots.
-- **data_filter**: GPU-accelerated digital filtering (IIR/FIR) with response analysis.
-- **data_spectrogram**: Short-Time Fourier Transform utilities for time-frequency analysis.
-- **data_wavelet**: Continuous wavelet transform for time-scale analysis.
+- **data**: Unified data toolkit for HDF5/FITS/ROOT I/O plus GPU-first FFT, filtering, spectrogram, and wavelet analysis via the `action` parameter.
 - **api_tools**: Access external scientific APIs such as arXiv, CERN Open Data, NASA datasets, and NIST references.
 - **export_tool**: Publish research artifacts to Overleaf, GitHub, Zenodo, Jupyter, and immersive formats.
 - **ml_ai_augmentation**: GPU-first ML workflows for symbolic regression, PDE surrogates, pattern recognition, and derivation explanations.

@@ -36,8 +36,6 @@ let handleStatmechTool: any;
 // Phase 4 tool handlers
 let buildDataIOTools: any;
 let handleDataIOTool: any;
-let buildSignalTools: any;
-let handleSignalTool: any;
 let buildExternalTools: any;
 let handleExternalTool: any;
 let buildExportTools: any;
@@ -163,14 +161,8 @@ async function initializeDependencies() {
   } catch (error) {
     console.warn("Data I/O tools not available:", error);
   }
-  try {
-    const signalPath = "../../tools-signal/dist/index.js";
-    const signalModule = await import(signalPath as any);
-    buildSignalTools = (signalModule as any).buildSignalTools;
-    handleSignalTool = (signalModule as any).handleSignalTool;
-  } catch (error) {
-    console.warn("Signal tools not available:", error);
-  }
+  // Signal tools are now consolidated under the 'data' tool
+  // The tools-signal package is still used for handlers but not for tool registration
   try {
     const externalPath = "../../tools-external/dist/index.js";
     const externalModule = await import(externalPath as any);
@@ -295,10 +287,8 @@ class PhysicsMCPServer {
         console.log("🔧 Loading Data I/O tools...");
         this.tools.push(...buildDataIOTools());
       }
-      if (buildSignalTools) {
-        console.log("🔧 Loading Signal tools...");
-        this.tools.push(...buildSignalTools());
-      }
+      // Signal tools are now consolidated under the 'data' tool
+      // Individual signal tools (data_fft, data_filter, etc.) are supported via legacy routing
       if (buildExternalTools) {
         console.log("🔧 Loading External API tools...");
         this.tools.push(...buildExternalTools());

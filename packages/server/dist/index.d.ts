@@ -30,8 +30,6 @@ declare let buildStatmechTools: any;
 declare let handleStatmechTool: any;
 declare let buildDataIOTools: any;
 declare let handleDataIOTool: any;
-declare let buildSignalTools: any;
-declare let handleSignalTool: any;
 declare let buildExternalTools: any;
 declare let handleExternalTool: any;
 declare let buildExportTools: any;
