@@ -1,3 +1,15 @@
+---
+title: Statistical Mechanics Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/cas-lab-hero.svg"
+  static: "/assets/svg/cas-lab-hero-static.svg"
+  title: "Statistical Mechanics"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Statistical Mechanics Tool
 
 - Name: `statmech_partition`
@@ -76,3 +88,5 @@
 - Uses CODATA 2018 Boltzmann constant: k_B = 1.380649×10⁻²³ J/K
 - Automatically shifts energies to avoid numerical overflow
 - Returns most populated energy level index
+
+

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+"use strict";
 /**
  * Physics MCP Server
  *
@@ -9,6 +10,7 @@ let Server;
 let StdioServerTransport;
 let CallToolRequestSchema;
 let ListToolsRequestSchema;
+let InitializeRequestSchema;
 let getPersistenceManagerFn;
 // Tool handlers - these will be set during initialization
 let buildCASTools;
@@ -40,18 +42,32 @@ let handleExportTool;
 // Phase 6 ML tool handlers
 let buildMLTools;
 let handleMLAugmentationTool;
+// Graphing Calculator tool handlers
+let buildGraphingCalculatorTools;
+let handleGraphingCalculatorTool;
+// Phase 7 & 8 tool handlers
+let buildDistributedTools;
+let handleDistributedCollaborationTool;
+let buildOrchestratorTools;
+let handleExperimentOrchestratorTool;
 async function initializeDependencies() {
     try {
-        // Use our local MCP types implementation
-        const mcpModule = await import("../../mcp-types/dist/index.js");
-        Server = mcpModule.Server;
-        StdioServerTransport = mcpModule.StdioServerTransport;
-        // For now, we'll use simple objects for schemas
-        CallToolRequestSchema = { method: "tools/call" };
-        ListToolsRequestSchema = { method: "tools/list" };
+        console.log("🔧 Loading MCP SDK...");
+        // Use the official MCP SDK
+        const serverModule = await import("@modelcontextprotocol/sdk/server/index.js");
+        const stdioModule = await import("@modelcontextprotocol/sdk/server/stdio.js");
+        const typesModule = await import("@modelcontextprotocol/sdk/types.js");
+        console.log("🔧 MCP SDK modules loaded, setting up exports...");
+        Server = serverModule.Server;
+        StdioServerTransport = stdioModule.StdioServerTransport;
+        CallToolRequestSchema = typesModule.CallToolRequestSchema;
+        ListToolsRequestSchema = typesModule.ListToolsRequestSchema;
+        InitializeRequestSchema = typesModule.InitializeRequestSchema;
+        console.log("🔧 MCP SDK setup complete");
+        console.log("🔧 Server class:", typeof Server);
     }
     catch (error) {
-        console.error("Failed to load MCP types:", error);
+        console.error("Failed to load MCP SDK:", error);
         throw error;
     }
     try {
@@ -178,6 +194,35 @@ async function initializeDependencies() {
     catch (error) {
         console.warn("ML tools not available:", error);
     }
+    // Graphing Calculator tools
+    try {
+        const graphingCalcPath = "../../tools-graphing-calculator/dist/index.js";
+        const graphingCalcModule = await import(graphingCalcPath);
+        buildGraphingCalculatorTools = graphingCalcModule.buildGraphingCalculatorTools;
+        handleGraphingCalculatorTool = graphingCalcModule.handleGraphingCalculatorTool;
+    }
+    catch (error) {
+        console.warn("Graphing Calculator tools not available:", error);
+    }
+    // Phase 7 & 8 tools
+    try {
+        const distributedPath = "../../tools-distributed/dist/index.js";
+        const distributedModule = await import(distributedPath);
+        buildDistributedTools = distributedModule.buildDistributedTools;
+        handleDistributedCollaborationTool = distributedModule.handleDistributedCollaborationTool;
+    }
+    catch (error) {
+        console.warn("Distributed collaboration tools not available:", error);
+    }
+    try {
+        const orchestratorPath = "../../tools-orchestrator/dist/index.js";
+        const orchestratorModule = await import(orchestratorPath);
+        buildOrchestratorTools = orchestratorModule.buildOrchestratorTools;
+        handleExperimentOrchestratorTool = orchestratorModule.handleExperimentOrchestratorTool;
+    }
+    catch (error) {
+        console.warn("Experiment orchestrator tools not available:", error);
+    }
     // Persistence manager
     try {
         const persistModule = await import("./persist.js");
@@ -191,44 +236,117 @@ class PhysicsMCPServer {
     server;
     tools = [];
     constructor() {
+        console.log("🔧 Creating MCP Server instance...");
         this.server = new Server({
             name: "phys-mcp",
             version: "0.1.0",
+        }, {
+            capabilities: {
+                tools: {}
+            }
         });
+        console.log("🔧 MCP Server instance created");
         // Collect all available tools
-        if (buildCASTools)
-            this.tools.push(...buildCASTools());
-        if (buildPlotTools)
-            this.tools.push(...buildPlotTools());
-        if (buildNLITools)
-            this.tools.push(...buildNLITools());
-        if (buildUnitsTools)
-            this.tools.push(...buildUnitsTools());
-        if (buildConstantsTools)
-            this.tools.push(...buildConstantsTools());
-        if (buildReportTools)
-            this.tools.push(...buildReportTools());
-        if (buildTensorTools)
-            this.tools.push(...buildTensorTools());
-        if (buildQuantumTools)
-            this.tools.push(...buildQuantumTools());
-        if (buildStatmechTools)
-            this.tools.push(...buildStatmechTools());
-        // Phase 4 tools
-        if (buildDataIOTools)
-            this.tools.push(...buildDataIOTools());
-        if (buildSignalTools)
-            this.tools.push(...buildSignalTools());
-        if (buildExternalTools)
-            this.tools.push(...buildExternalTools());
-        if (buildExportTools)
-            this.tools.push(...buildExportTools());
-        // Phase 6 ML tools
-        if (buildMLTools)
-            this.tools.push(...buildMLTools());
-        this.setupHandlers();
+        console.log("🔧 Loading tools...");
+        try {
+            // Core physics tools
+            if (buildCASTools) {
+                console.log("🔧 Loading CAS tools...");
+                this.tools.push(...buildCASTools());
+            }
+            if (buildUnitsTools) {
+                console.log("🔧 Loading Units tools...");
+                this.tools.push(...buildUnitsTools());
+            }
+            if (buildConstantsTools) {
+                console.log("🔧 Loading Constants tools...");
+                this.tools.push(...buildConstantsTools());
+            }
+            if (buildPlotTools) {
+                console.log("🔧 Loading Plot tools...");
+                this.tools.push(...buildPlotTools());
+            }
+            if (buildNLITools) {
+                console.log("🔧 Loading NLI tools...");
+                this.tools.push(...buildNLITools());
+            }
+            // Phase 3 tools (scaffolding)
+            if (buildTensorTools) {
+                console.log("🔧 Loading Tensor tools...");
+                this.tools.push(...buildTensorTools());
+            }
+            if (buildQuantumTools) {
+                console.log("🔧 Loading Quantum tools...");
+                this.tools.push(...buildQuantumTools());
+            }
+            if (buildStatmechTools) {
+                console.log("🔧 Loading StatMech tools...");
+                this.tools.push(...buildStatmechTools());
+            }
+            // Phase 4 tools
+            if (buildDataIOTools) {
+                console.log("🔧 Loading Data I/O tools...");
+                this.tools.push(...buildDataIOTools());
+            }
+            if (buildSignalTools) {
+                console.log("🔧 Loading Signal tools...");
+                this.tools.push(...buildSignalTools());
+            }
+            if (buildExternalTools) {
+                console.log("🔧 Loading External API tools...");
+                this.tools.push(...buildExternalTools());
+            }
+            if (buildExportTools) {
+                console.log("🔧 Loading Export tools...");
+                this.tools.push(...buildExportTools());
+            }
+            // Phase 6 ML tools
+            if (buildMLTools) {
+                console.log("🔧 Loading ML tools...");
+                this.tools.push(...buildMLTools());
+            }
+            // Graphing Calculator tools
+            if (buildGraphingCalculatorTools) {
+                console.log("🔧 Loading Graphing Calculator tools...");
+                this.tools.push(...buildGraphingCalculatorTools());
+            }
+            // Phase 7 & 8 tools
+            if (buildDistributedTools) {
+                console.log("🔧 Loading Distributed Collaboration tools...");
+                this.tools.push(...buildDistributedTools());
+            }
+            if (buildOrchestratorTools) {
+                console.log("🔧 Loading Experiment Orchestrator tools...");
+                this.tools.push(...buildOrchestratorTools());
+            }
+            // Report tools (local handler)
+            if (buildReportTools) {
+                console.log("🔧 Loading Report tools...");
+                this.tools.push(...buildReportTools());
+            }
+            console.log("🔧 Setting up handlers...");
+            this.setupHandlers();
+            console.log("🔧 PhysicsMCPServer constructor complete");
+        }
+        catch (error) {
+            console.error("❌ Error in PhysicsMCPServer constructor:", error);
+            throw error;
+        }
     }
     setupHandlers() {
+        // Handle MCP initialization
+        this.server.setRequestHandler(InitializeRequestSchema, async (request) => {
+            return {
+                protocolVersion: "2024-11-05",
+                capabilities: {
+                    tools: {},
+                },
+                serverInfo: {
+                    name: "phys-mcp",
+                    version: "0.1.0",
+                },
+            };
+        });
         // List available tools
         this.server.setRequestHandler(ListToolsRequestSchema, async () => {
             return {
@@ -270,6 +388,15 @@ class PhysicsMCPServer {
                 else if (name === "ml_ai_augmentation" && handleMLAugmentationTool) {
                     result = await handleMLAugmentationTool(name, args);
                 }
+                else if (name === "graphing_calculator" && handleGraphingCalculatorTool) {
+                    result = await handleGraphingCalculatorTool(name, args);
+                }
+                else if (name === "distributed_collaboration" && handleDistributedCollaborationTool) {
+                    result = await handleDistributedCollaborationTool(name, args);
+                }
+                else if (name === "experiment_orchestrator" && handleExperimentOrchestratorTool) {
+                    result = await handleExperimentOrchestratorTool(name, args);
+                }
                 // Legacy support for individual tool names
                 else if (name.startsWith("cas_") && handleCASTool) {
                     result = await handleCASTool(name, args);
@@ -308,6 +435,20 @@ class PhysicsMCPServer {
                 else if ((name === "symbolic_regression_train" || name === "surrogate_pde_train" ||
                     name === "pattern_recognition_infer" || name === "explain_derivation") && handleMLAugmentationTool) {
                     result = await handleMLAugmentationTool(name, args);
+                }
+                else if (name.startsWith("calculator_") && handleGraphingCalculatorTool) {
+                    // Route legacy calculator tools to the main graphing_calculator tool
+                    const operation = name.replace("calculator_", "");
+                    const updatedArgs = { ...args, operation };
+                    result = await handleGraphingCalculatorTool("graphing_calculator", updatedArgs);
+                }
+                else if ((name === "job_submit" || name === "session_share" ||
+                    name === "lab_notebook" || name === "artifact_versioning") && handleDistributedCollaborationTool) {
+                    result = await handleDistributedCollaborationTool(name, args);
+                }
+                else if ((name === "define_dag" || name === "validate_dag" || name === "run_dag" ||
+                    name === "publish_report" || name === "collaborate_share") && handleExperimentOrchestratorTool) {
+                    result = await handleExperimentOrchestratorTool(name, args);
                 }
                 else {
                     throw new Error(`Unknown tool: ${name}`);
@@ -357,12 +498,12 @@ class PhysicsMCPServer {
         // Handle graceful shutdown
         process.on("SIGINT", () => this.shutdown());
         process.on("SIGTERM", () => this.shutdown());
-        console.error("🚀 Physics MCP Server starting...");
-        console.error(`📊 Loaded ${this.tools.length} tools:`);
+        console.log("🚀 Physics MCP Server starting...");
+        console.log(`📊 Loaded ${this.tools.length} tools:`);
         for (const tool of this.tools) {
-            console.error(`  - ${tool.name}: ${tool.description}`);
+            console.log(`  - ${tool.name}: ${tool.description}`);
         }
-        console.error("🎯 Server ready for connections");
+        console.log("🎯 Server ready for connections");
         await this.server.connect(transport);
     }
     shutdown() {
@@ -371,13 +512,20 @@ class PhysicsMCPServer {
         if (handleCASTool && handleCASTool.shutdownWorkerClient) {
             handleCASTool.shutdownWorkerClient();
         }
-        // Clear singleton reference
+        // Clear singleton references
         serverInstance = null;
+        process.env.PHYS_MCP_SERVER_RUNNING = 'false';
         process.exit(0);
     }
 }
 // Singleton to prevent multiple server instances
 let serverInstance = null;
+// Process-level singleton to prevent multiple instances across imports
+if (process.env.PHYS_MCP_SERVER_RUNNING === 'true') {
+    console.error("⚠️ Phys-MCP server already running in this process");
+    process.exit(0);
+}
+process.env.PHYS_MCP_SERVER_RUNNING = 'true';
 // Start the server
 async function main() {
     // Prevent multiple instances
@@ -397,9 +545,7 @@ async function main() {
     }
 }
 // Only run if this is the main module
-const normalizedArgv1 = process.argv[1]?.replace(/\\/g, '/');
-const normalizedMetaUrl = import.meta.url.replace('file:///', 'file:/');
-const isMainModule = normalizedArgv1 && (normalizedMetaUrl.endsWith(normalizedArgv1) || normalizedArgv1.endsWith('index.js'));
+const isMainModule = process.argv[1] && process.argv[1].endsWith('index.js');
 if (isMainModule) {
     main().catch((error) => {
         console.error("❌ Unhandled error:", error);
@@ -521,4 +667,3 @@ async function persistArtifactsIfAny(name, result, pm, sessionId) {
     }
     return result;
 }
-export {};

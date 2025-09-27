@@ -1,3 +1,15 @@
+---
+title: Architecture
+kind: explanation
+header_svg:
+  src: "/assets/svg/distributed-collaboration-hero.svg"
+  static: "/assets/svg/distributed-collaboration-hero-static.svg"
+  title: "Architecture Overview"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Architecture
 
 <p align="center">
@@ -13,7 +25,8 @@
 
 Flow
 - MCP client sends `tools/list` and `tools/call`.
-- Server registers tool metadata from tool packages and routes calls by prefix (`cas.*`, `plot.*`, `nli.*`).
+- Server registers tool metadata from tool packages and routes calls by prefix (`cas.*`, `plot.*`, 
+li.*`).
 - CAS/Plot calls are proxied to the Python worker via a lightweight JSON-RPC protocol over stdin/stdout.
 - NLI calls go to a local LM REST API (`/chat/completions`) when configured; otherwise a rule-based parser is used.
 
@@ -31,3 +44,5 @@ Notes
 - Images are returned as base64-encoded PNG; CSV data is included where relevant.
 
 Humorous invariant: this diagram conserves coherence better than most wavefunctions.
+
+

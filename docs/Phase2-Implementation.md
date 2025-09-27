@@ -1,3 +1,15 @@
+---
+title: Phase 2 Implementation
+kind: tutorial
+header_svg:
+  src: "/assets/svg/experiment-orchestrator-hero.svg"
+  static: "/assets/svg/experiment-orchestrator-hero-static.svg"
+  title: "Phase 2 Implementation"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Physics MCP Server - Phase 2 Implementation
 
 ## Overview
@@ -154,7 +166,8 @@ The server now routes tools based on prefixes:
 - `plot_*` → Plotting tools
 - `units_*` → Units tools
 - `constants_*` → Constants tools
-- `nli_*` → Natural Language Interface
+- 
+li_*` → Natural Language Interface
 
 ## Usage Examples
 
@@ -252,3 +265,5 @@ The server now routes tools based on prefixes:
 Phase 2 successfully transforms the Physics MCP Server into a comprehensive computational physics platform. With enhanced CAS capabilities, full units/constants support, advanced plotting, and persistent session management, it provides a solid foundation for complex physics calculations and analysis workflows.
 
 The implementation maintains backward compatibility with Phase 1 while adding significant new capabilities. All new features are thoroughly tested and documented, ready for production use in physics education, research, and engineering applications.
+
+

@@ -1,3 +1,15 @@
+---
+title: Configuration
+kind: howto
+header_svg:
+  src: "/assets/svg/cas-lab-hero.svg"
+  static: "/assets/svg/cas-lab-hero-static.svg"
+  title: "Configure Physics MCP"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Configuration
 
 <p align="center">
@@ -16,7 +28,7 @@ Notes
 - A local LM (e.g., LM Studio) improves NLI speed and robustness, but it is not required for core calculations.
 
 MCP Client Config
-- See `mcp_config.json` for a ready-to-use entry. Example:
+- See `config/mcp_config.json` for a ready-to-use entry. Example:
 
 ```
 {
@@ -41,7 +53,8 @@ Python Worker Dependencies
 
 Local Development
 - Build: `pnpm build`
-- Run: `pnpm dev` or `node packages/server/dist/index.js`
+- Run: `pnpm dev` or 
+ode packages/server/dist/index.js`
 - Test: `pnpm run test:install`
 
 Quick LM Studio setup (optional)
@@ -50,3 +63,5 @@ Quick LM Studio setup (optional)
 3. If required, set `LM_API_KEY` for your local server.
 
 Joke in reduced units: the NLI won't violate causality—if you don’t set `LM_BASE_URL`, it simply takes the rule-based path.
+
+

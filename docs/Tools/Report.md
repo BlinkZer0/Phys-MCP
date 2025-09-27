@@ -1,3 +1,15 @@
+---
+title: Report Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/experiment-orchestrator-hero.svg"
+  static: "/assets/svg/experiment-orchestrator-hero-static.svg"
+  title: "Automated Reporting"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Report Tool
 
 - Name: `report_generate`
@@ -49,3 +61,5 @@
 
 - Currently, only Markdown is supported. PDF generation can be added later via LaTeX/Pandoc as an optional step.
 - Large image/CSV artifacts are referenced by path. Plots already save their PNG/CSV to the artifacts directory.
+
+

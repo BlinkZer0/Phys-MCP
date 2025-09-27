@@ -1,3 +1,15 @@
+---
+title: Phase 5 Visualization Examples
+kind: tutorial
+header_svg:
+  src: "/assets/svg/cas-lab-hero.svg"
+  static: "/assets/svg/cas-lab-hero-static.svg"
+  title: "Phase 5 Visualization"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Phase 5: Advanced Visualization Examples
 
 This document provides examples of using the Phase 5 advanced visualization tools in Phys-MCP.
@@ -384,6 +396,7 @@ pip install trimesh[easy]
 
 ## See Also
 
-- [Phase 4 Documentation](phase4_examples.md)
-- [GPU Acceleration Guide](acceleration.md)
-- [API Reference](api_reference.md)
+- [Phase 2 Implementation](Phase2-Implementation.md)
+- [Phases 7 & 8 Implementation](phases_7_8_implementation.md)
+- [Plot Tool Reference](Tools/Plot.md)
+

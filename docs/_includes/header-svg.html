@@ -1,0 +1,90 @@
+<!-- Generic header SVG include. Replace {{ ... }} with your templating variables. -->
+<div class="doc-hero" data-header-svg data-animate="{{ header_svg.animate | default(true) }}" data-theme="{{ header_svg.theme_variant | default("auto") }}" data-reduced-motion="{{ header_svg.reduced_motion | default("auto") }}">
+  <figure class="doc-hero__figure">
+    <object class="doc-hero__animated" type="image/svg+xml" data="{{ header_svg.src }}" role="img" aria-label="{{ header_svg.title }}"></object>
+    <img class="doc-hero__fallback" src="{{ header_svg.static | default(header_svg.src | replace('.svg','-static.svg')) }}" alt="{{ header_svg.title }}" loading="lazy"/>
+    {% if header_svg.title %}
+    <figcaption class="doc-hero__caption">{{ header_svg.title }}</figcaption>
+    {% endif %}
+  </figure>
+</div>
+<style>
+  .doc-hero { margin: 1.5rem 0 2.5rem; position: relative; }
+  .doc-hero__figure { margin: 0; display: grid; place-items: center; }
+  .doc-hero__animated { width: 100%; height: auto; max-height: 320px; }
+  .doc-hero__fallback { display: none; width: 100%; height: auto; max-height: 320px; }
+  .doc-hero__caption { text-align: center; color: var(--doc-hero-caption, #94a3b8); font-size: 0.9rem; margin-top: 0.75rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .doc-hero svg [*|href],
+    .doc-hero svg animate,
+    .doc-hero svg animateTransform {
+      animation: none !important;
+    }
+  }
+</style>
+<script>
+(() => {
+  if (window.__docHeroInitialized) return;
+  window.__docHeroInitialized = true;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function applyMotionPreference(root, forcedSetting) {
+    const shouldReduce = forcedSetting === 'force_on' || (forcedSetting !== 'force_off' && prefersReducedMotion.matches);
+    if (!root) return;
+    if (shouldReduce) {
+      root.classList.remove('is-playing');
+      root.classList.add('is-reduced-motion');
+      root.querySelectorAll('animate, animateTransform').forEach((el) => {
+        el.beginElement?.();
+        el.setAttribute('repeatCount', '0');
+      });
+      root.querySelectorAll('[class*="is-playing"]').forEach((el) => el.classList.remove('is-playing'));
+    } else {
+      root.classList.remove('is-reduced-motion');
+    }
+  }
+
+  document.querySelectorAll('[data-header-svg]').forEach((container) => {
+    const animate = container.dataset.animate !== 'false';
+    const forcedMotion = container.dataset.reducedMotion || 'auto';
+    const obj = container.querySelector('.doc-hero__animated');
+    const fallback = container.querySelector('.doc-hero__fallback');
+
+    function activateIntersection(svgRoot) {
+      if (!animate || !('IntersectionObserver' in window)) {
+        svgRoot?.classList.add('is-playing');
+        return;
+      }
+      let lastState = false;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !lastState) {
+            svgRoot.classList.add('is-playing');
+            lastState = true;
+          }
+          if (!entry.isIntersecting && lastState) {
+            svgRoot.classList.remove('is-playing');
+            lastState = false;
+          }
+        });
+      }, { threshold: 0.2 });
+      observer.observe(container);
+    }
+
+    if (!obj) return;
+    obj.addEventListener('error', () => {
+      if (fallback) fallback.style.display = 'block';
+    });
+    obj.addEventListener('load', () => {
+      const svgRoot = obj.contentDocument?.querySelector('svg');
+      if (!svgRoot) {
+        if (fallback) fallback.style.display = 'block';
+        return;
+      }
+      applyMotionPreference(svgRoot, forcedMotion);
+      activateIntersection(svgRoot);
+      prefersReducedMotion.addEventListener('change', () => applyMotionPreference(svgRoot, forcedMotion));
+    });
+  });
+})();
+</script>

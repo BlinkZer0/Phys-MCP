@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-label="Physics MCP banner">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <path id="orbitPath" d="M 680,110 m -40,0 a 40,20 0 1,0 80,0 a 40,20 0 1,0 -80,0"/>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="960" height="220" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <g transform="translate(40,92)">
+    <text x="0" y="0" fill="#e2e8f0" font-family="Segoe UI, Inter, system-ui" font-size="44" font-weight="700">
+      Physics MCP
+      <animate attributeName="fill" values="#e2e8f0;#c7d2fe;#e2e8f0" dur="6s" repeatCount="indefinite"/>
+    </text>
+    <text x="2" y="34" fill="#94a3b8" font-family="Segoe UI, Inter, system-ui" font-size="18" font-weight="400">
+      CAS • Plotting • Natural Language Interface
+    </text>
+  </g>
+
+  <!-- Animated sine wave -->
+  <g transform="translate(40,150)">
+    <path id="wavePath" d="M 0 0 C 40 -20, 80 20, 120 0 S 200 0, 240 0 S 320 0, 360 0 S 440 0, 480 0 S 560 0, 600 0 S 680 0, 720 0 S 800 0, 840 0 S 920 0, 960 0"
+          fill="none" stroke="url(#wave)" stroke-width="3" stroke-linecap="round" filter="url(#glow)"
+          stroke-dasharray="12 18">
+      <animate attributeName="stroke-dashoffset" from="0" to="-180" dur="4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Orbiting particle -->
+  <g>
+    <use href="#orbitPath" fill="none" stroke="#64748b" stroke-dasharray="3 4"/>
+    <circle r="5" fill="#fbbf24" filter="url(#glow)">
+      <animateMotion dur="5.5s" repeatCount="indefinite">
+        <mpath href="#orbitPath"/>
+      </animateMotion>
+    </circle>
+  </g>
+
+  <!-- Subtle grid -->
+  <g opacity="0.08" stroke="#e2e8f0">
+    <path d="M0 50 H960"/>
+    <path d="M0 100 H960"/>
+    <path d="M0 150 H960"/>
+    <path d="M160 0 V220"/>
+    <path d="M320 0 V220"/>
+    <path d="M480 0 V220"/>
+    <path d="M640 0 V220"/>
+    <path d="M800 0 V220"/>
+  </g>
+
+  <!-- Accessibility: reduced motion hint (no-op here; viewer may ignore animation) -->
+  <title>Physics MCP – animated banner (sine wave + orbit)</title>
+</svg>

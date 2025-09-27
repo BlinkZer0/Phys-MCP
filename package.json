@@ -11,7 +11,7 @@
     "build": "node scripts/build.js",
     "build:workspace": "npm run build --workspaces",
     "build:pnpm": "pnpm -r build",
-    "dev": "bash scripts/dev.sh",
+    "dev": "scripts\\dev.bat",
     "format": "bash scripts/format.sh",
     "lint": "eslint packages/*/src --ext .ts",
     "lint:fix": "eslint packages/*/src --ext .ts --fix",
@@ -19,9 +19,13 @@
     "clean:pnpm": "pnpm -r clean && rm -rf node_modules",
     "test": "npm run test --workspaces",
     "test:install": "node scripts/test-installation.js",
-    "install:python": "cd packages/python-worker && pip install -r requirements.txt"
+    "install:python": "cd packages/python-worker && pip install -r requirements.txt",
+    "svg:optimize": "node scripts/svg-optimize.mjs",
+    "docs:links": "node scripts/docs-link-check.mjs",
+    "docs:mermaid:smoke": "node scripts/docs-mermaid-smoke.mjs"
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.6.1",
     "@types/node": "^20.19.17",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -29,11 +33,15 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
+    "svgo": "^3.3.2",
     "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@8.15.0"
+  "packageManager": "pnpm@8.15.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.18.2"
+  }
 }

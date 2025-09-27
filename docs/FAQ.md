@@ -1,3 +1,15 @@
+---
+title: FAQ
+kind: reference
+header_svg:
+  src: "/assets/svg/physics-mcp-hero.svg"
+  static: "/assets/svg/physics-mcp-hero-static.svg"
+  title: "Frequently Asked Questions"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # FAQ
 
 <p align="center">
@@ -29,3 +41,5 @@
   - Absolutely. Follow the pattern in the tool packages and register them in the server.
 
 Sardonic aside: our commits observe gauge symmetry—violations are purely a choice of documentation gauge.
+
+

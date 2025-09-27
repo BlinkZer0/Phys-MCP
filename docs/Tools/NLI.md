@@ -1,3 +1,15 @@
+---
+title: NLI Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/physics-mcp-hero.svg"
+  static: "/assets/svg/physics-mcp-hero-static.svg"
+  title: "Natural Language Interface"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # NLI Tool
 
 <p align="center">
@@ -9,7 +21,8 @@
 Natural Language Interface parses free-text physics requests into structured tool calls.
 
 Tool
-- `nli_parse`
+- 
+li_parse`
   - Params: `text` (string)
   - Returns: `{ intent, args, confidence?, explanation? }`
   - Example request:
@@ -47,3 +60,5 @@ Schemas & Prompt
 - Logic and LM usage: `packages/tools-nli/src/index.ts`
 
 A gentle quip: we keep the parsing Hamiltonian simple-no unnecessary terms, just enough to reach the ground truth.
+
+

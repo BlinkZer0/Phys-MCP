@@ -1,0 +1,52 @@
+{
+  "updatedAt": "2025-09-26T23:27:49.9474690-05:00",
+  "assets": [
+    {
+      "name": "physics-mcp-hero",
+      "usage": [
+        "docs/README.md",
+        "docs/FAQ.md",
+        "docs/contrib/authoring.md",
+        "docs/Tools/NLI.md",
+        "docs/Tools/Quantum.md"
+      ],
+      "static": "/assets/svg/physics-mcp-hero-static.svg",
+      "animated": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "name": "distributed-collaboration-hero",
+      "usage": [
+        "docs/Architecture.md",
+        "docs/phases_7_8_implementation.md",
+        "docs/Tools/Tensor.md",
+        "docs/guides/educators.md"
+      ],
+      "static": "/assets/svg/distributed-collaboration-hero-static.svg",
+      "animated": "/assets/svg/distributed-collaboration-hero.svg"
+    },
+    {
+      "name": "cas-lab-hero",
+      "usage": [
+        "docs/Configuration.md",
+        "docs/phase5_examples.md",
+        "docs/Tools/CAS.md",
+        "docs/Tools/StatMech.md"
+      ],
+      "static": "/assets/svg/cas-lab-hero-static.svg",
+      "animated": "/assets/svg/cas-lab-hero.svg"
+    },
+    {
+      "name": "experiment-orchestrator-hero",
+      "usage": [
+        "docs/Phase2-Implementation.md",
+        "docs/examples/mermaid-and-math.md",
+        "docs/Tools/Plot.md",
+        "docs/Tools/Report.md",
+        "docs/Tools/GraphingCalculator.md"
+      ],
+      "static": "/assets/svg/experiment-orchestrator-hero-static.svg",
+      "animated": "/assets/svg/experiment-orchestrator-hero.svg"
+    }
+  ]
+}
+

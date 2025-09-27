@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="expTitle expDesc">
+  <title id="expTitle">Experiment Orchestrator</title>
+  <desc id="expDesc">Timeline of experimental stages with animated progress markers.</desc>
+  <style>
+    :root { color-scheme: light dark; }
+    svg {
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(160deg, #0f172a 0%, #1d263b 50%, #111827 100%);
+    }
+    .timeline {
+      fill: none;
+      stroke: rgba(148, 163, 184, 0.25);
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+    .timeline-highlight {
+      stroke: url(#timelineGradient);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 80 560;
+      stroke-dashoffset: 80;
+      animation: progress 7s ease-in-out infinite;
+      animation-play-state: paused;
+    }
+    .stage {
+      fill: #22d3ee;
+      filter: url(#pulseGlow);
+      transform-origin: center;
+      animation: pulse 3s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      animation-play-state: paused;
+    }
+    .stage-label {
+      fill: rgba(226, 232, 240, 0.85);
+      font-size: 14px;
+      text-anchor: middle;
+    }
+    svg.is-playing .timeline-highlight,
+    svg.is-playing .stage {
+      animation-play-state: running;
+    }
+    @keyframes progress {
+      0% { stroke-dashoffset: 640; }
+      50% { stroke-dashoffset: 160; }
+      100% { stroke-dashoffset: -80; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-highlight,
+      .stage {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+  </style>
+  <defs>
+    <linearGradient id="timelineGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee" />
+      <stop offset="50%" stop-color="#38f08f" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+    <filter id="pulseGlow">
+      <feGaussianBlur stdDeviation="2" result="pulseBlur" />
+      <feMerge>
+        <feMergeNode in="pulseBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="40" y="90" width="880" height="40" rx="20" class="timeline" />
+  <rect x="40" y="90" width="880" height="40" rx="20" class="timeline-highlight" />
+  <text x="60" y="60" font-size="40" font-weight="700" fill="#f1f5f9">Experiment Orchestrator</text>
+  <text x="62" y="88" font-size="18" fill="#cbd5f5">Scheduling agents, data capture &amp; analysis</text>
+  <g transform="translate(60 110)">
+    <g transform="translate(0 0)">
+      <circle class="stage" cx="0" cy="0" r="16" style="--delay: 0.2s" />
+      <text class="stage-label" x="0" y="46">Plan</text>
+    </g>
+    <g transform="translate(210 0)">
+      <circle class="stage" cx="0" cy="0" r="16" style="--delay: 0.8s" />
+      <text class="stage-label" x="0" y="46">Sim</text>
+    </g>
+    <g transform="translate(420 0)">
+      <circle class="stage" cx="0" cy="0" r="16" style="--delay: 1.5s" />
+      <text class="stage-label" x="0" y="46">Run</text>
+    </g>
+    <g transform="translate(630 0)">
+      <circle class="stage" cx="0" cy="0" r="16" style="--delay: 2.2s" />
+      <text class="stage-label" x="0" y="46">Collect</text>
+    </g>
+    <g transform="translate(840 0)">
+      <circle class="stage" cx="0" cy="0" r="16" style="--delay: 2.8s" />
+      <text class="stage-label" x="0" y="46">Report</text>
+    </g>
+  </g>
+</svg>

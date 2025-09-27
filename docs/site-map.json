@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2025-09-26T23:27:32.8185465-05:00",
+  "kinds": [
+    "tutorial",
+    "howto",
+    "reference",
+    "explanation"
+  ],
+  "pages": [
+    {
+      "path": "docs/README.md",
+      "title": "Physics MCP Documentation",
+      "kind": "explanation",
+      "headerSvg": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "path": "docs/Architecture.md",
+      "title": "Architecture",
+      "kind": "explanation",
+      "headerSvg": "/assets/svg/distributed-collaboration-hero.svg"
+    },
+    {
+      "path": "docs/Configuration.md",
+      "title": "Configuration",
+      "kind": "howto",
+      "headerSvg": "/assets/svg/cas-lab-hero.svg"
+    },
+    {
+      "path": "docs/FAQ.md",
+      "title": "FAQ",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "path": "docs/Phase2-Implementation.md",
+      "title": "Phase 2 Implementation",
+      "kind": "tutorial",
+      "headerSvg": "/assets/svg/experiment-orchestrator-hero.svg"
+    },
+    {
+      "path": "docs/phase5_examples.md",
+      "title": "Phase 5 Visualization Examples",
+      "kind": "tutorial",
+      "headerSvg": "/assets/svg/cas-lab-hero.svg"
+    },
+    {
+      "path": "docs/phases_7_8_implementation.md",
+      "title": "Phases 7 & 8 Implementation",
+      "kind": "tutorial",
+      "headerSvg": "/assets/svg/distributed-collaboration-hero.svg"
+    },
+    {
+      "path": "docs/examples/mermaid-and-math.md",
+      "title": "Mermaid & KaTeX Demo",
+      "kind": "howto",
+      "headerSvg": "/assets/svg/experiment-orchestrator-hero.svg"
+    },
+    {
+      "path": "docs/contrib/authoring.md",
+      "title": "Authoring Guide",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "path": "docs/Tools/CAS.md",
+      "title": "CAS Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/cas-lab-hero.svg"
+    },
+    {
+      "path": "docs/Tools/Plot.md",
+      "title": "Plot Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/experiment-orchestrator-hero.svg"
+    },
+    {
+      "path": "docs/Tools/NLI.md",
+      "title": "NLI Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "path": "docs/Tools/Report.md",
+      "title": "Report Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/experiment-orchestrator-hero.svg"
+    },
+    {
+      "path": "docs/Tools/Tensor.md",
+      "title": "Tensor Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/distributed-collaboration-hero.svg"
+    },
+    {
+      "path": "docs/Tools/Quantum.md",
+      "title": "Quantum Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/physics-mcp-hero.svg"
+    },
+    {
+      "path": "docs/Tools/StatMech.md",
+      "title": "Statistical Mechanics Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/cas-lab-hero.svg"
+    },
+    {
+      "path": "docs/Tools/GraphingCalculator.md",
+      "title": "Graphing Calculator Tooling",
+      "kind": "reference",
+      "headerSvg": "/assets/svg/experiment-orchestrator-hero.svg"
+    },
+    {
+      "path": "docs/guides/educators.md",
+      "title": "Educator Quick Start",
+      "kind": "howto",
+      "headerSvg": "/assets/svg/distributed-collaboration-hero.svg"
+    }
+  ]
+}
+

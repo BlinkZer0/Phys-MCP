@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-label="Physics MCP banner (static)">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="960" height="220" fill="url(#bg)"/>
+  <g transform="translate(40,92)">
+    <text x="0" y="0" fill="#e2e8f0" font-family="Segoe UI, Inter, system-ui" font-size="44" font-weight="700">
+      Physics MCP
+    </text>
+    <text x="2" y="34" fill="#94a3b8" font-family="Segoe UI, Inter, system-ui" font-size="18" font-weight="400">
+      CAS · Plotting · Natural Language Interface
+    </text>
+  </g>
+  <g transform="translate(40,150)">
+    <path d="M 0 0 C 40 -20, 80 20, 120 0 S 200 0, 240 0 S 320 0, 360 0 S 440 0, 480 0 S 560 0, 600 0 S 680 0, 720 0 S 800 0, 840 0 S 920 0, 960 0"
+          fill="none" stroke="url(#wave)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g opacity="0.08" stroke="#e2e8f0">
+    <path d="M0 50 H960"/>
+    <path d="M0 100 H960"/>
+    <path d="M0 150 H960"/>
+    <path d="M160 0 V220"/>
+    <path d="M320 0 V220"/>
+    <path d="M480 0 V220"/>
+    <path d="M640 0 V220"/>
+    <path d="M800 0 V220"/>
+  </g>
+  <circle cx="720" cy="110" r="5" fill="#fbbf24"/>
+</svg>

@@ -20,6 +20,13 @@ except ImportError:
     JUPYTER_AVAILABLE = False
 
 try:
+    from nbconvert import exporters
+    NBCONVERT_AVAILABLE = True
+except ImportError:
+    NBCONVERT_AVAILABLE = False
+    exporters = None
+
+try:
     import requests
     REQUESTS_AVAILABLE = True
 except ImportError:
@@ -363,12 +370,70 @@ plt.style.use('default')
     
     # Export to other formats if requested
     exported_files = [notebook_path]
-    
-    if export_format != "ipynb":
-        # Note: Would require nbconvert for actual format conversion
-        # This is a placeholder for the conversion logic
-        converted_path = notebook_path.replace('.ipynb', f'.{export_format}')
+    resolved_format = 'ipynb'
+
+    if export_format.lower() != "ipynb":
+        normalized_format = export_format.lower().strip()
+        format_aliases = {
+            'md': 'markdown',
+            'markdown': 'markdown',
+            'htm': 'html',
+            'html': 'html',
+            'pdf': 'pdf',
+            'latex': 'latex',
+            'tex': 'latex',
+            'python': 'python',
+            'py': 'python'
+        }
+        target_format = format_aliases.get(normalized_format, normalized_format)
+        resolved_format = target_format
+
+        if not NBCONVERT_AVAILABLE or exporters is None:
+            raise RuntimeError(
+                f"nbconvert not available. Install with: pip install nbconvert to export as {export_format}"
+            )
+
+        try:
+            exporter_cls = exporters.get_exporter(target_format)
+        except ValueError as exc:
+            raise ValueError(f"Unsupported export format: {export_format}") from exc
+
+        exporter = exporter_cls()
+        resources = {
+            'metadata': {
+                'name': os.path.splitext(notebook_name)[0],
+                'path': notebook_dir
+            }
+        }
+
+        try:
+            body, nb_resources = exporter.from_notebook_node(nb, resources=resources)
+        except Exception as exc:
+            raise RuntimeError(f"Failed to export notebook to {export_format}: {exc}") from exc
+
+        extension = 'py' if target_format == 'python' else target_format
+        converted_path = os.path.splitext(notebook_path)[0] + f'.{extension}'
+
+        if isinstance(body, bytes):
+            with open(converted_path, 'wb') as f:
+                f.write(body)
+        else:
+            with open(converted_path, 'w', encoding='utf-8') as f:
+                f.write(body)
+
         exported_files.append(converted_path)
+
+        output_files = (nb_resources or {}).get('output_files', {})
+        if output_files:
+            resource_dir = os.path.splitext(converted_path)[0] + '_files'
+            os.makedirs(resource_dir, exist_ok=True)
+            for filename, data in output_files.items():
+                resource_path = os.path.join(resource_dir, filename)
+                if isinstance(data, str):
+                    data = data.encode('utf-8')
+                with open(resource_path, 'wb') as fh:
+                    fh.write(data)
+                exported_files.append(resource_path)
     
     return {
         "notebook_name": notebook_name,
@@ -382,7 +447,10 @@ plt.style.use('default')
         "meta": {
             "created": datetime.now().isoformat(),
             "includes_outputs": include_outputs,
-            "nbformat_version": nbformat.v4
+            "nbformat_version": nbformat.v4,
+            "resolved_format": resolved_format,
+            "nbconvert_available": NBCONVERT_AVAILABLE,
+            "exported_file_count": len(exported_files)
         }
     }
 

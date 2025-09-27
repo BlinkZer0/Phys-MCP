@@ -1,3 +1,15 @@
+---
+title: Tensor Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/distributed-collaboration-hero.svg"
+  static: "/assets/svg/distributed-collaboration-hero-static.svg"
+  title: "Tensor Utilities"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Tensor Tool
 
 - Name: `tensor_algebra`
@@ -76,3 +88,5 @@
 - Uses SymPy for symbolic computation with safe parsing
 - Full Riemann tensor computation requires sympy.diffgeom for production use
 - Geodesic equations are provided symbolically; numerical integration requires initial conditions
+
+

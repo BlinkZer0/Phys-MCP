@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="title desc">
+  <title id="title">Distributed Collaboration (static)</title>
+  <desc id="desc">Static depiction of collaboration nodes.</desc>
+  <style>
+    svg { font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #0f172a, #1e293b); }
+    .grid line { stroke: rgba(226, 232, 240, 0.12); stroke-width: 1; }
+    .node { fill: #38bdf8; stroke: rgba(14, 165, 233, 0.6); stroke-width: 2; }
+    .node-secondary { fill: #f97316; stroke: rgba(249, 115, 22, 0.6); }
+    .link { stroke-width: 3; stroke-linecap: round; stroke: rgba(56, 189, 248, 0.6); }
+    text { fill: #e2e8f0; }
+  </style>
+  <g class="grid">
+    <line x1="80" y1="30" x2="80" y2="190" />
+    <line x1="280" y1="30" x2="280" y2="190" />
+    <line x1="480" y1="30" x2="480" y2="190" />
+    <line x1="680" y1="30" x2="680" y2="190" />
+    <line x1="880" y1="30" x2="880" y2="190" />
+    <line x1="60" y1="80" x2="900" y2="80" />
+    <line x1="60" y1="150" x2="900" y2="150" />
+  </g>
+  <text x="60" y="70" font-size="40" font-weight="700">Distributed Collaboration</text>
+  <text x="62" y="104" font-size="18" fill="#94a3b8">Agent mesh coordinating shared experiments</text>
+  <g>
+    <circle class="node" cx="220" cy="150" r="16" />
+    <circle class="node" cx="420" cy="110" r="18" />
+    <circle class="node-secondary" cx="620" cy="160" r="14" />
+    <circle class="node" cx="780" cy="100" r="20" />
+    <path class="link" d="M220 150 C 320 60, 520 60, 620 160" />
+    <path class="link" d="M420 110 C 480 170, 700 200, 780 100" />
+    <path class="link" d="M220 150 C 320 150, 520 130, 780 100" />
+  </g>
+</svg>

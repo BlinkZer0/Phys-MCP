@@ -1,3 +1,15 @@
+---
+title: Quantum Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/physics-mcp-hero.svg"
+  static: "/assets/svg/physics-mcp-hero-static.svg"
+  title: "Quantum Modules"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Quantum Tools
 
 Phase 3 quantum mechanics tools for operator algebra, solving standard problems, and visualization.
@@ -102,3 +114,5 @@ Phase 3 quantum mechanics tools for operator algebra, solving standard problems,
 - **qutip**: Optional for matrix representations and Bloch sphere visualization
 - **sympy**: Required for symbolic operator algebra
 - Install qutip: `pip install qutip`
+
+

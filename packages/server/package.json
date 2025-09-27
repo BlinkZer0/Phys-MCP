@@ -14,18 +14,31 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.1",
     "@phys-mcp/mcp-types": "workspace:*",
     "@phys-mcp/tools-cas": "workspace:*",
-    "@phys-mcp/tools-plot": "workspace:*",
-    "@phys-mcp/tools-nli": "workspace:*",
-    "@phys-mcp/tools-units": "workspace:*",
     "@phys-mcp/tools-constants": "workspace:*",
+    "@phys-mcp/tools-data-io": "workspace:*",
+    "@phys-mcp/tools-distributed": "workspace:*",
+    "@phys-mcp/tools-export": "workspace:*",
+    "@phys-mcp/tools-external": "workspace:*",
+    "@phys-mcp/tools-graphing-calculator": "workspace:*",
+    "@phys-mcp/tools-ml": "workspace:*",
+    "@phys-mcp/tools-nli": "workspace:*",
+    "@phys-mcp/tools-orchestrator": "workspace:*",
+    "@phys-mcp/tools-plot": "workspace:*",
+    "@phys-mcp/tools-quantum": "workspace:*",
+    "@phys-mcp/tools-report": "workspace:*",
+    "@phys-mcp/tools-signal": "workspace:*",
+    "@phys-mcp/tools-statmech": "workspace:*",
+    "@phys-mcp/tools-tensor": "workspace:*",
+    "@phys-mcp/tools-units": "workspace:*",
     "better-sqlite3": "^11.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
+    "@types/better-sqlite3": "^7.6.0",
     "@types/node": "^20.0.0",
-    "@types/better-sqlite3": "^7.6.0"
+    "typescript": "^5.0.0"
   },
   "files": [
     "dist"

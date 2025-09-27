@@ -1,0 +1,26 @@
+{
+  "multipass": true,
+  "plugins": [
+    "preset-default",
+    {
+      "name": "removeViewBox",
+      "active": false
+    },
+    {
+      "name": "cleanupIDs",
+      "params": {
+        "minify": false,
+        "preservePrefixes": ["is", "doc-"],
+        "preserve": ["glow", "pulse", "beam", "orbitPath", "timelineGradient", "beamGradient", "pulseGlow"]
+      }
+    },
+    {
+      "name": "removeUnknownsAndDefaults",
+      "active": false
+    },
+    {
+      "name": "removeUselessStrokeAndFill",
+      "active": false
+    }
+  ]
+}

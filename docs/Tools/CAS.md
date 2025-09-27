@@ -1,3 +1,15 @@
+---
+title: CAS Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/cas-lab-hero.svg"
+  static: "/assets/svg/cas-lab-hero-static.svg"
+  title: "Computer Algebra System"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # CAS Tools
 
 <p align="center">
@@ -48,3 +60,5 @@ Backend
 - Implementations: `packages/python-worker/worker.py`
 
 A joke with measured units: All derivations are left as an exercise to SymPy; our wrists are conserved quantities.
+
+

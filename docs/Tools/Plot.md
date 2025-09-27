@@ -1,3 +1,15 @@
+---
+title: Plot Tooling
+kind: reference
+header_svg:
+  src: "/assets/svg/experiment-orchestrator-hero.svg"
+  static: "/assets/svg/experiment-orchestrator-hero-static.svg"
+  title: "Plotting Utilities"
+  animate: true
+  theme_variant: "auto"
+  reduced_motion: "auto"
+---
+
 # Plot Tools
 
 <p align="center">
@@ -38,3 +50,5 @@ Backend
 - Implementations: `packages/python-worker/worker.py`
 
 Plot pun (low-frequency): all creation happens in a buffer—no energy escapes the bounding box.
+
+

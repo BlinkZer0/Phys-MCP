@@ -39,8 +39,9 @@ phys-mcp/
 │  └── python-worker/   # Python computation backend
 ├── examples/
 │  └── requests/        # Example JSON-RPC requests
-├── scripts/            # Dev/format/build helpers
-└── mcp_config.json     # MCP server configuration
+├── config/            # Configuration files
+│   └── mcp_config.json  # MCP server configuration
+└── scripts/            # Dev/format/build helpers
 ```
 
 ## Quick Start

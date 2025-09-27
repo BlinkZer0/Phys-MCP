@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="casTitle casDesc">
+  <title id="casTitle">Computer Algebra Lab</title>
+  <desc id="casDesc">Symbolic manipulation visual with animated beams entering a solver.</desc>
+  <style>
+    :root { color-scheme: light dark; }
+    svg {
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 40% 40%, #1e3a8a, #111827 60%);
+    }
+    .plateau {
+      fill: rgba(15, 23, 42, 0.85);
+      stroke: rgba(148, 163, 184, 0.4);
+      stroke-width: 2;
+    }
+    .beam {
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke: url(#beamGradient);
+      filter: url(#beamGlow);
+      animation: travel 5s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      animation-play-state: paused;
+    }
+    .matrix rect {
+      fill: rgba(148, 163, 184, 0.18);
+      stroke: rgba(96, 165, 250, 0.35);
+      stroke-width: 0.5;
+    }
+    .matrix text {
+      fill: rgba(226, 232, 240, 0.7);
+      font-size: 12px;
+    }
+    svg.is-playing .beam {
+      animation-play-state: running;
+    }
+    @keyframes travel {
+      0% { stroke-dashoffset: 240; opacity: 0; }
+      10% { opacity: 1; }
+      60% { stroke-dashoffset: 40; opacity: 1; }
+      100% { stroke-dashoffset: -160; opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .beam { animation: none !important; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="beamGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#f97216" />
+    </linearGradient>
+    <filter id="beamGlow">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <text x="60" y="64" font-size="42" font-weight="700" fill="#f8fafc">CAS Lab</text>
+  <text x="62" y="96" font-size="18" fill="#cbd5f5">Symbolic engines &amp; simplifiers</text>
+  <g transform="translate(60 120)">
+    <rect class="plateau" x="0" y="0" width="840" height="72" rx="20" />
+    <g class="matrix" transform="translate(24 16)">
+      <rect x="0" y="0" width="720" height="40" rx="8" />
+      <text x="24" y="26">{ A·x = b | ∂ℒ/∂θ = 0 }</text>
+    </g>
+    <line class="beam" x1="40" y1="100" x2="340" y2="-20" stroke-dasharray="140 260" style="--delay: .4s" />
+    <line class="beam" x1="200" y1="110" x2="480" y2="-40" stroke-dasharray="180 320" style="--delay: 1.2s" />
+    <line class="beam" x1="400" y1="90" x2="720" y2="-40" stroke-dasharray="160 280" style="--delay: 2s" />
+  </g>
+</svg>

@@ -87,6 +87,19 @@ try:
 except ImportError as e:
     print(f"Warning: Phase 6 ML modules not available: {e}", file=sys.stderr)
 
+# Phase 7 & 8 imports
+try:
+    import distributed_collaboration
+    import experiment_orchestrator
+except ImportError as e:
+    print(f"Warning: Phase 7 & 8 modules not available: {e}", file=sys.stderr)
+
+# Graphing Calculator imports
+try:
+    from graphing_calculator import GraphingCalculator
+except ImportError as e:
+    print(f"Warning: Graphing Calculator modules not available: {e}", file=sys.stderr)
+
 EXECUTION_TIMEOUT = 10.0  # seconds
 MAX_ARRAY_SIZE = 100000
 
@@ -2044,6 +2057,34 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
         return ml_augmentation.ml_pattern_recognition(params, config)
     elif method == "ml_explain_derivation":
         return ml_augmentation.ml_explain_derivation(params, config)
+    
+    # Phase 7 methods - Distributed Collaboration
+    elif method == "distributed_job_submit":
+        return distributed_collaboration.distributed_job_submit(params, config)
+    elif method == "distributed_session_share":
+        return distributed_collaboration.distributed_session_share(params, config)
+    elif method == "distributed_lab_notebook":
+        return distributed_collaboration.distributed_lab_notebook(params, config)
+    elif method == "distributed_artifact_versioning":
+        return distributed_collaboration.distributed_artifact_versioning(params, config)
+    
+    # Phase 8 methods - Experiment Orchestrator
+    elif method == "orchestrator_define_dag":
+        return experiment_orchestrator.orchestrator_define_dag(params, config)
+    elif method == "orchestrator_validate_dag":
+        return experiment_orchestrator.orchestrator_validate_dag(params, config)
+    elif method == "orchestrator_run_dag":
+        return experiment_orchestrator.orchestrator_run_dag(params, config)
+    elif method == "orchestrator_publish_report":
+        return experiment_orchestrator.orchestrator_publish_report(params, config)
+    elif method == "orchestrator_collaborate_share":
+        return experiment_orchestrator.orchestrator_collaborate_share(params, config)
+    
+    # Graphing Calculator methods
+    elif method == "graphing_calculator":
+        calculator = GraphingCalculator()
+        operation = params.get('operation', '')
+        return calculator.handle_operation(operation, params)
     
     else:
         raise ValueError(f"Unknown method: {method}")

@@ -15,7 +15,8 @@
       "@phys-mcp/mcp-types": ["./packages/mcp-types/src/index.ts"],
       "@phys-mcp/tools-cas": ["./packages/tools-cas/src/index.ts"],
       "@phys-mcp/tools-plot": ["./packages/tools-plot/src/index.ts"],
-      "@phys-mcp/tools-nli": ["./packages/tools-nli/src/index.ts"]
+      "@phys-mcp/tools-nli": ["./packages/tools-nli/src/index.ts"],
+      "@phys-mcp/tools-graphing-calculator": ["./packages/tools-graphing-calculator/src/index.ts"]
     }
   },
   "references": [
@@ -23,6 +24,7 @@
     { "path": "./packages/tools-cas" },
     { "path": "./packages/tools-plot" },
     { "path": "./packages/tools-nli" },
+    { "path": "./packages/tools-graphing-calculator" },
     { "path": "./packages/server" }
   ],
   "files": [],

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="casTitle casDesc">
+  <title id="casTitle">Computer Algebra Lab (static)</title>
+  <desc id="casDesc">Static symbolic manipulation layout.</desc>
+  <style>
+    svg { font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif; background: radial-gradient(circle at 40% 40%, #1e3a8a, #111827 60%); }
+    .plateau { fill: rgba(15, 23, 42, 0.85); stroke: rgba(148, 163, 184, 0.4); stroke-width: 2; }
+    .matrix rect { fill: rgba(148, 163, 184, 0.18); stroke: rgba(96, 165, 250, 0.35); stroke-width: 0.5; }
+    .matrix text { fill: rgba(226, 232, 240, 0.7); font-size: 12px; }
+    text { fill: #f8fafc; }
+  </style>
+  <text x="60" y="64" font-size="42" font-weight="700">CAS Lab</text>
+  <text x="62" y="96" font-size="18" fill="#cbd5f5">Symbolic engines &amp; simplifiers</text>
+  <g transform="translate(60 120)">
+    <rect class="plateau" x="0" y="0" width="840" height="72" rx="20" />
+    <g class="matrix" transform="translate(24 16)">
+      <rect x="0" y="0" width="720" height="40" rx="8" />
+      <text x="24" y="26">{ A·x = b | ∂ℒ/∂θ = 0 }</text>
+    </g>
+  </g>
+</svg>

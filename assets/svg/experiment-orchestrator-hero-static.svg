@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="expTitle expDesc">
+  <title id="expTitle">Experiment Orchestrator (static)</title>
+  <desc id="expDesc">Simplified timeline of experimental stages.</desc>
+  <style>
+    svg { font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif; background: linear-gradient(160deg, #0f172a 0%, #1d263b 50%, #111827 100%); }
+    .timeline { fill: none; stroke: rgba(148, 163, 184, 0.35); stroke-width: 6; stroke-linecap: round; }
+    .highlight { stroke: rgba(34, 211, 238, 0.85); stroke-width: 6; stroke-linecap: round; }
+    .stage { fill: #22d3ee; }
+    .stage-label { fill: rgba(226, 232, 240, 0.85); font-size: 14px; text-anchor: middle; }
+    text { fill: #f1f5f9; }
+  </style>
+  <rect x="40" y="90" width="880" height="40" rx="20" class="timeline" />
+  <rect x="40" y="90" width="440" height="40" rx="20" class="highlight" />
+  <text x="60" y="60" font-size="40" font-weight="700">Experiment Orchestrator</text>
+  <text x="62" y="88" font-size="18">Scheduling agents, data capture &amp; analysis</text>
+  <g transform="translate(60 110)">
+    <g transform="translate(0 0)">
+      <circle class="stage" cx="0" cy="0" r="16" />
+      <text class="stage-label" x="0" y="46">Plan</text>
+    </g>
+    <g transform="translate(210 0)">
+      <circle class="stage" cx="0" cy="0" r="16" />
+      <text class="stage-label" x="0" y="46">Sim</text>
+    </g>
+    <g transform="translate(420 0)">
+      <circle class="stage" cx="0" cy="0" r="16" />
+      <text class="stage-label" x="0" y="46">Run</text>
+    </g>
+    <g transform="translate(630 0)">
+      <circle class="stage" cx="0" cy="0" r="16" />
+      <text class="stage-label" x="0" y="46">Collect</text>
+    </g>
+    <g transform="translate(840 0)">
+      <circle class="stage" cx="0" cy="0" r="16" />
+      <text class="stage-label" x="0" y="46">Report</text>
+    </g>
+  </g>
+</svg>
