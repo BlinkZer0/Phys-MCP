@@ -6,11 +6,13 @@
  * Communicates via JSON-RPC over stdio with MCP clients.
  */
 import 'dotenv/config';
-let Server;
-let StdioServerTransport;
-let CallToolRequestSchema;
-let ListToolsRequestSchema;
-let InitializeRequestSchema;
+// MCP SDK components - will be set during initialization
+// These are kept as 'any' because the MCP SDK doesn't provide proper TypeScript types yet
+let Server; // eslint-disable-line @typescript-eslint/no-explicit-any
+let StdioServerTransport; // eslint-disable-line @typescript-eslint/no-explicit-any
+let CallToolRequestSchema; // eslint-disable-line @typescript-eslint/no-explicit-any
+let ListToolsRequestSchema; // eslint-disable-line @typescript-eslint/no-explicit-any
+let InitializeRequestSchema; // eslint-disable-line @typescript-eslint/no-explicit-any
 let getPersistenceManagerFn;
 // Tool handlers - these will be set during initialization
 let buildCASTools;
@@ -353,6 +355,9 @@ class PhysicsMCPServer {
                 let result;
                 // Local handler for report generation
                 if (name === "report_generate") {
+                    if (!pm) {
+                        throw new Error("Persistence layer not available; cannot generate reports");
+                    }
                     result = await handleReportGenerate(args, pm, sessionId);
                 }
                 // Route to appropriate tool handler - consolidated tools
@@ -567,13 +572,13 @@ async function handleReportGenerate(args, pm, sessionId) {
     }
     const { randomUUID } = await import('node:crypto');
     const fs = await import('node:fs');
-    const sid = sessionId || (args && args.session_id);
+    const sid = sessionId || (args && typeof args.session_id === 'string' ? args.session_id : undefined);
     if (!sid) {
         throw new Error("report_generate requires 'session_id'");
     }
-    const format = (args && args.format) || 'markdown';
-    const title = (args && args.title) || 'Physics MCP Session Report';
-    const author = (args && args.author) || '';
+    const format = (args && typeof args.format === 'string' ? args.format : undefined) || 'markdown';
+    const title = (args && typeof args.title === 'string' ? args.title : undefined) || 'Physics MCP Session Report';
+    const author = (args && typeof args.author === 'string' ? args.author : undefined) || '';
     const include = (args && args.include) || ["cas", "plots", "constants", "units"]; // advisory only for now
     // Gather session data
     const events = pm.getSessionEvents(sid) || [];
@@ -623,8 +628,8 @@ async function handleReportGenerate(args, pm, sessionId) {
         format: 'markdown',
         bytes: stats.size,
         session_id: sid,
-        title,
-        author
+        title: title,
+        author: author
     };
 }
 async function persistArtifactsIfAny(name, result, pm, sessionId) {
@@ -634,7 +639,7 @@ async function persistArtifactsIfAny(name, result, pm, sessionId) {
     const { randomUUID } = await import('node:crypto');
     const artifactsMeta = [];
     // Save PNG image if present
-    if (result.image_png_b64) {
+    if (result.image_png_b64 && typeof result.image_png_b64 === 'string') {
         try {
             const imgBuffer = Buffer.from(result.image_png_b64, 'base64');
             const pngName = `${name}-${randomUUID()}.png`;
@@ -649,7 +654,7 @@ async function persistArtifactsIfAny(name, result, pm, sessionId) {
         }
     }
     // Save CSV if present
-    if (result.csv_data) {
+    if (result.csv_data && typeof result.csv_data === 'string') {
         try {
             const csvName = `${name}-${randomUUID()}.csv`;
             const csvPath = pm.getArtifactPath(sessionId, csvName);
@@ -662,7 +667,7 @@ async function persistArtifactsIfAny(name, result, pm, sessionId) {
         }
     }
     // Save SVG if present
-    if (result.image_svg) {
+    if (result.image_svg && typeof result.image_svg === 'string') {
         try {
             const svgName = `${name}-${randomUUID()}.svg`;
             const svgPath = pm.getArtifactPath(sessionId, svgName);

@@ -29,6 +29,10 @@ async function parseWithLM(text) {
         throw new Error("LM_BASE_URL environment variable not set");
     }
     try {
+        // Short timeout so we can gracefully fall back if LM is slow or unreachable
+        const controller = new AbortController();
+        const timeoutMs = Number(process.env.NLI_LM_TIMEOUT_MS || 2500);
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
         const response = await fetch(`${baseUrl}/chat/completions`, {
             method: "POST",
             headers: {
@@ -44,6 +48,7 @@ async function parseWithLM(text) {
                 temperature: 0.1,
                 max_tokens: 500,
             }),
+            signal: controller.signal,
         });
         if (!response.ok) {
             throw new Error(`LM API error: ${response.status} ${response.statusText}`);
@@ -72,12 +77,14 @@ async function parseWithLM(text) {
         if (!parsed.intent || !parsed.args) {
             throw new Error("Invalid response structure from language model");
         }
-        return {
+        const result = {
             intent: parsed.intent,
             args: parsed.args,
             confidence: parsed.confidence,
             explanation: parsed.explanation,
         };
+        clearTimeout(timer);
+        return result;
     }
     catch (error) {
         console.error("LM parsing error:", error);
@@ -245,15 +252,21 @@ export async function handleNLITool(name, arguments_) {
         throw new Error(`Unknown NLI tool: ${name}`);
     }
     const params = arguments_;
-    try {
-        // Try LM parsing first
-        return await parseWithLM(params.text);
+    // Prefer LM only if explicitly configured and not disabled
+    const lmDisabled = (process.env.NLI_DISABLE_LM || '').toLowerCase() === 'true';
+    const hasBaseUrl = !!process.env.LM_BASE_URL;
+    if (!lmDisabled && hasBaseUrl) {
+        try {
+            // Try LM parsing first
+            return await parseWithLM(params.text);
+        }
+        catch (error) {
+            console.warn("LM parsing failed, falling back to rules:", error);
+            return parseWithRules(params.text);
+        }
     }
-    catch (error) {
-        console.warn("LM parsing failed, falling back to rules:", error);
-        // Fallback to rule-based parsing
-        return parseWithRules(params.text);
-    }
+    // No LM configured or LM explicitly disabled -> use rules directly
+    return parseWithRules(params.text);
 }
 // Re-export types for convenience
 export * from "./schema.js";

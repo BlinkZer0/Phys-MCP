@@ -3,7 +3,9 @@
  *
  * Provides unit conversion capabilities using the Python worker.
  */
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { UnitsConvertSchema } from './schema.js';
 let workerProcess = null;
 let requestId = 0;
@@ -14,11 +16,45 @@ function initWorkerProcess() {
     if (workerProcess) {
         return workerProcess;
     }
-    const pythonPath = process.env.PYTHON_PATH || 'python';
-    const workerPath = '../python-worker/worker.py';
-    workerProcess = spawn(pythonPath, [workerPath], {
+    // Resolve absolute path to the Python worker (match CAS worker-client strategy)
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const workerPath = path.resolve(__dirname, '../../python-worker/worker.py');
+    // Probe for a suitable Python interpreter
+    const envPython = process.env.PYTHON_PATH?.trim();
+    const username = process.env.USERNAME || process.env.USER || '';
+    const winCandidatesAbs = [
+        `C:\\Python313\\python.exe`,
+        `C:\\Python312\\python.exe`,
+        `C:\\Python311\\python.exe`,
+        username ? `C:\\Users\\${username}\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe` : ''
+    ].filter(Boolean);
+    const candidates = [
+        ...(envPython ? [envPython] : []),
+        ...(process.platform === 'win32' ? [...winCandidatesAbs, 'py', 'python', 'python3'] : ['python', 'python3'])
+    ];
+    let pythonCmd = null;
+    for (const cmd of candidates) {
+        try {
+            const probe = spawnSync(cmd, ['--version'], { stdio: 'ignore' });
+            // status can be null on Windows Store python, consider that acceptable
+            if (!probe.error && (probe.status === 0 || probe.status === null)) {
+                pythonCmd = cmd;
+                break;
+            }
+        }
+        catch {
+            // try next candidate
+        }
+    }
+    if (!pythonCmd) {
+        throw new Error('No suitable Python interpreter found. Set PYTHON_PATH or install Python.');
+    }
+    // Use worker directory as CWD so relative imports and venvs resolve consistently
+    const workerCwd = path.dirname(workerPath);
+    workerProcess = spawn(pythonCmd, [workerPath], {
         stdio: ['pipe', 'pipe', 'pipe'],
-        cwd: process.cwd()
+        cwd: workerCwd
     });
     workerProcess.on('error', (error) => {
         console.error('Python worker error:', error);

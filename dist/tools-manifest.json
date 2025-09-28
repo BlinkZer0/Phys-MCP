@@ -1,0 +1,2872 @@
+{
+  "mcp_tools_manifest": {
+    "server_info": {
+      "name": "phys-mcp",
+      "version": "0.1.0",
+      "description": "Physics/Numerics MCP tool suite for scientific computing with GPU acceleration, advanced visualization, and comprehensive mathematical operations.",
+      "protocol_version": "1.0.0"
+    },
+    "tools": [
+      {
+        "name": "cas",
+        "description": "Computer Algebra System operations: evaluate expressions, differentiate, integrate, solve equations and ODEs, propagate uncertainty",
+        "category": "cas",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "CAS operation to perform",
+              "enum": [
+                "evaluate",
+                "diff",
+                "integrate",
+                "solve_equation",
+                "solve_ode",
+                "propagate_uncertainty"
+              ]
+            },
+            "expr": {
+              "type": "string",
+              "description": "Mathematical expression to process"
+            },
+            "vars": {
+              "type": "object",
+              "description": "Variables to substitute in the expression",
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "number"
+                      },
+                      "unit": {
+                        "type": "string"
+                      },
+                      "sigma": {
+                        "type": "number",
+                        "description": "Standard uncertainty (for uncertainty propagation)"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ]
+                  }
+                ]
+              }
+            },
+            "symbol": {
+              "type": "string",
+              "description": "Variable to differentiate/integrate with respect to, or solve for"
+            },
+            "order": {
+              "type": "integer",
+              "description": "Order of differentiation",
+              "default": 1,
+              "minimum": 1
+            },
+            "bounds": {
+              "type": "array",
+              "description": "Integration bounds [lower, upper] for definite integral",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "equation": {
+              "type": "string",
+              "description": "Equation to solve (e.g., 'x^2 - 4 = 0')"
+            },
+            "ode": {
+              "type": "string",
+              "description": "Differential equation (e.g., 'y'' + y = 0')"
+            },
+            "func": {
+              "type": "string",
+              "description": "Dependent function name for ODE (e.g., 'y')"
+            },
+            "ics": {
+              "type": "object",
+              "description": "Initial conditions for ODE",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "example_usage": [
+          "Calculate the derivative of x^2 + 3x + 1",
+          "Solve the equation x^2 - 4 = 0",
+          "Integrate sin(x) from 0 to π"
+        ],
+        "capabilities": [
+          "integration",
+          "differentiation",
+          "equation_solving",
+          "action_evaluate",
+          "action_diff",
+          "action_integrate",
+          "action_solve_equation",
+          "action_solve_ode",
+          "action_propagate_uncertainty"
+        ]
+      },
+      {
+        "name": "constants_get",
+        "description": "Get a physical constant by name. Available constants include CODATA values (c, h, hbar, e, m_e, m_p, k_B, N_A, epsilon_0, mu_0, G, R, sigma, a_0, alpha) and astrophysical constants (M_sun, pc, ly, au).",
+        "category": "constants",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the physical constant (e.g., 'c', 'h', 'e', 'k_B', 'G', 'M_sun', 'pc', 'ly')"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example_usage": [
+          "Get the speed of light constant",
+          "Retrieve Planck's constant"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "data",
+        "description": "Data processing operations: import/export scientific formats (HDF5, FITS, ROOT), signal processing (FFT, filtering, spectrograms, wavelets)",
+        "category": "dataio",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Data operation to perform",
+              "enum": [
+                "import_hdf5",
+                "import_fits",
+                "import_root",
+                "export_hdf5",
+                "fft",
+                "filter",
+                "spectrogram",
+                "wavelet"
+              ]
+            },
+            "file_path": {
+              "type": "string",
+              "description": "Path to input/output file"
+            },
+            "dataset_path": {
+              "type": "string",
+              "description": "Path to dataset within HDF5 file"
+            },
+            "hdu_index": {
+              "type": "integer",
+              "default": 0,
+              "description": "HDU index for FITS files"
+            },
+            "tree_name": {
+              "type": "string",
+              "description": "Tree name for ROOT files"
+            },
+            "branches": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Branch names for ROOT files"
+            },
+            "max_entries": {
+              "type": "integer",
+              "default": 10000,
+              "description": "Max entries to read from ROOT"
+            },
+            "data": {
+              "type": "object",
+              "description": "Data to export"
+            },
+            "compression": {
+              "type": "string",
+              "enum": [
+                "gzip",
+                "lzf",
+                "szip",
+                "none"
+              ],
+              "default": "gzip",
+              "description": "Compression for export"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Metadata for export"
+            },
+            "signal_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Input signal data array"
+            },
+            "sample_rate": {
+              "type": "number",
+              "description": "Sample rate in Hz"
+            },
+            "window": {
+              "type": "string",
+              "enum": [
+                "hann",
+                "hamming",
+                "blackman",
+                "bartlett",
+                "none"
+              ],
+              "default": "hann",
+              "description": "Window function"
+            },
+            "filter_type": {
+              "type": "string",
+              "enum": [
+                "lowpass",
+                "highpass",
+                "bandpass",
+                "bandstop"
+              ],
+              "description": "Filter type"
+            },
+            "cutoff_freq": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              ],
+              "description": "Cutoff frequency or [low, high] for bandpass/bandstop"
+            },
+            "filter_order": {
+              "type": "integer",
+              "default": 4,
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Filter order"
+            },
+            "window_size": {
+              "type": "integer",
+              "default": 256,
+              "description": "Window size for STFT"
+            },
+            "overlap": {
+              "type": "number",
+              "default": 0.5,
+              "minimum": 0,
+              "maximum": 0.95,
+              "description": "Window overlap fraction"
+            },
+            "window_type": {
+              "type": "string",
+              "enum": [
+                "hann",
+                "hamming",
+                "blackman",
+                "bartlett"
+              ],
+              "default": "hann",
+              "description": "Window function for STFT"
+            },
+            "wavelet": {
+              "type": "string",
+              "enum": [
+                "morlet",
+                "mexican_hat",
+                "daubechies",
+                "haar"
+              ],
+              "default": "morlet",
+              "description": "Wavelet function"
+            },
+            "scales": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Scale values for wavelet transform"
+            },
+            "emit_plots": {
+              "type": "boolean",
+              "default": true,
+              "description": "Generate diagnostic plots"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": true,
+              "description": "Export data as CSV"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "example_usage": [
+          "Use data for data processing operations: import/export scientific formats (hdf5, fits, root), signal processing (fft, filtering, spectrograms, wavelets)"
+        ],
+        "capabilities": [
+          "data_export",
+          "action_import_hdf5",
+          "action_import_fits",
+          "action_import_root",
+          "action_export_hdf5",
+          "action_fft",
+          "action_filter",
+          "action_spectrogram",
+          "action_wavelet"
+        ]
+      },
+      {
+        "name": "distributed_collaboration",
+        "description": "🌐 **Distributed & Collaborative Computing Tool** - Graphics-at-scale distributed computing with comprehensive collaboration features. Provides job submission, session sharing, lab notebook, and artifact versioning.\n\n**Methods Available:**\n- **job_submit**: Run remote jobs on Slurm or Kubernetes with log streaming and artifact retrieval\n- **session_share**: Create multi-user shares for sessions with read/write access control\n- **lab_notebook**: Append signed, versioned notebook entries with tool-call provenance\n- **artifact_versioning**: Register artifacts with content-addressable hashes and lineage tracking\n\n**Compute Backends:**\n- **Slurm**: Submit batch jobs via sbatch, poll status, retrieve artifacts via rsync/scp\n- **Kubernetes**: Create Jobs/CronJobs, watch pod logs, pull artifacts from volumes/object store\n\n**Graphics-at-Scale Features:**\n- Remote jobs push artifacts back to local registry with full provenance (device, mesh, commit)\n- Contact sheet previews and thumbnail sets for long sweeps/animations\n- Cache keys include device_kind and code_version for reproducibility\n\n**Collaboration Features:**\n- Multi-user session sharing with expiring links and role management\n- Signed notebook entries with tool-call provenance and artifact thumbnails\n- Git/DVC-style artifact versioning with content-addressable hashes and lineage\n\n**Key Features:**\n- Full provenance tracking (device, mesh, commit SHA, duration)\n- Content-addressable artifact registry with lineage\n- Professional collaboration workflows with signatures and versioning\n- Integration with existing Phys-MCP acceleration and graphics contracts",
+        "category": "distributed",
+        "input_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "job_submit"
+                },
+                "backend": {
+                  "type": "string",
+                  "enum": [
+                    "slurm",
+                    "k8s"
+                  ],
+                  "description": "Compute backend: Slurm or Kubernetes"
+                },
+                "job_spec": {
+                  "type": "object",
+                  "description": "Normalized job specification",
+                  "properties": {
+                    "resources": {
+                      "type": "object",
+                      "properties": {
+                        "cpu": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "CPU cores"
+                        },
+                        "memory": {
+                          "type": "string",
+                          "description": "Memory (e.g., \"4Gi\", \"8GB\")"
+                        },
+                        "gpu": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "description": "GPU count"
+                        },
+                        "nodes": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "Node count"
+                        },
+                        "time_limit": {
+                          "type": "string",
+                          "description": "Time limit (e.g., \"1:00:00\")"
+                        }
+                      }
+                    },
+                    "image": {
+                      "type": "string",
+                      "description": "Container image"
+                    },
+                    "command": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Command to execute",
+                      "minItems": 1
+                    },
+                    "env": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "description": "Environment variables"
+                    },
+                    "mounts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "source": {
+                            "type": "string"
+                          },
+                          "target": {
+                            "type": "string"
+                          },
+                          "readonly": {
+                            "type": "boolean",
+                            "default": false
+                          }
+                        },
+                        "required": [
+                          "source",
+                          "target"
+                        ]
+                      },
+                      "description": "Volume mounts"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ]
+                },
+                "artifacts_path": {
+                  "type": "string",
+                  "description": "Remote path where job writes artifacts"
+                },
+                "stream_logs": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Stream job logs in real-time"
+                },
+                "timeout_sec": {
+                  "type": "integer",
+                  "default": 3600,
+                  "minimum": 60,
+                  "maximum": 86400,
+                  "description": "Job timeout in seconds"
+                }
+              },
+              "required": [
+                "method",
+                "backend",
+                "job_spec",
+                "artifacts_path"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "session_share"
+                },
+                "session_id": {
+                  "type": "string",
+                  "description": "Session ID to share"
+                },
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "read",
+                    "write"
+                  ],
+                  "default": "read",
+                  "description": "Access level for participants"
+                },
+                "expires_in_hours": {
+                  "type": "integer",
+                  "default": 72,
+                  "minimum": 1,
+                  "maximum": 8760,
+                  "description": "Share expiration in hours"
+                },
+                "participants": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of participant identifiers"
+                }
+              },
+              "required": [
+                "method",
+                "session_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "lab_notebook"
+                },
+                "session_id": {
+                  "type": "string",
+                  "description": "Session ID for the notebook entry"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Entry title",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "notes_md": {
+                  "type": "string",
+                  "description": "Markdown notes content"
+                },
+                "attach_artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Artifact paths to attach"
+                },
+                "sign_as": {
+                  "type": "string",
+                  "description": "User identity for signature"
+                }
+              },
+              "required": [
+                "method",
+                "session_id",
+                "title"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "artifact_versioning"
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Artifact paths to register",
+                  "minItems": 1
+                },
+                "parents": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Parent artifact hashes for lineage"
+                },
+                "params_json": {
+                  "type": "object",
+                  "description": "Parameters used to generate artifacts"
+                },
+                "code_version": {
+                  "type": "string",
+                  "description": "Code version/commit hash"
+                }
+              },
+              "required": [
+                "method",
+                "artifacts"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "example_usage": [
+          "Use distributed_collaboration for 🌐 **distributed & collaborative computing tool** - graphics-at-scale distributed computing with comprehensive collaboration features"
+        ],
+        "capabilities": [
+          "animation"
+        ]
+      },
+      {
+        "name": "export_tool",
+        "description": "Export research outputs to various platforms: Overleaf LaTeX projects, GitHub repositories, Zenodo datasets, Jupyter notebooks, VR/AR formats",
+        "category": "export",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "export_type": {
+              "type": "string",
+              "description": "Export destination",
+              "enum": [
+                "overleaf",
+                "github",
+                "zenodo",
+                "jupyter",
+                "vr_export"
+              ]
+            },
+            "title": {
+              "type": "string",
+              "description": "Title for the export"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the content"
+            },
+            "project_name": {
+              "type": "string",
+              "description": "Name for the Overleaf project"
+            },
+            "template": {
+              "type": "string",
+              "enum": [
+                "article",
+                "report",
+                "book",
+                "beamer",
+                "poster"
+              ],
+              "default": "article",
+              "description": "LaTeX document template"
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of author names"
+            },
+            "abstract": {
+              "type": "string",
+              "description": "Document abstract"
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "figure",
+                      "table",
+                      "equation"
+                    ]
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "caption": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Artifacts to include in the document"
+            },
+            "bibliography": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "BibTeX entries"
+            },
+            "repository_name": {
+              "type": "string",
+              "description": "GitHub repository name"
+            },
+            "private": {
+              "type": "boolean",
+              "default": false,
+              "description": "Make repository private"
+            },
+            "include_artifacts": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include generated artifacts (plots, data)"
+            },
+            "include_code": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include analysis code and notebooks"
+            },
+            "license": {
+              "type": "string",
+              "enum": [
+                "MIT",
+                "Apache-2.0",
+                "GPL-3.0",
+                "BSD-3-Clause",
+                "CC-BY-4.0"
+              ],
+              "default": "MIT",
+              "description": "Repository license"
+            },
+            "topics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "GitHub topics/tags"
+            },
+            "readme_content": {
+              "type": "string",
+              "description": "Custom README content"
+            },
+            "creators": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "affiliation": {
+                    "type": "string"
+                  },
+                  "orcid": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              },
+              "description": "Dataset creators"
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Keywords for the dataset"
+            },
+            "upload_type": {
+              "type": "string",
+              "enum": [
+                "dataset",
+                "software",
+                "publication"
+              ],
+              "default": "dataset",
+              "description": "Type of upload"
+            },
+            "related_identifiers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string"
+                  },
+                  "relation": {
+                    "type": "string"
+                  },
+                  "resource_type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Related publications or datasets"
+            },
+            "notebook_name": {
+              "type": "string",
+              "description": "Jupyter notebook filename"
+            },
+            "session_data": {
+              "type": "object",
+              "description": "Session data to convert to notebook"
+            },
+            "include_outputs": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include cell outputs (plots, results)"
+            },
+            "kernel": {
+              "type": "string",
+              "enum": [
+                "python3",
+                "julia",
+                "r"
+              ],
+              "default": "python3",
+              "description": "Jupyter kernel to use"
+            },
+            "export_format": {
+              "type": "string",
+              "enum": [
+                "ipynb",
+                "html",
+                "pdf",
+                "slides"
+              ],
+              "default": "ipynb",
+              "description": "Export format"
+            },
+            "geometry": {
+              "type": "object",
+              "properties": {
+                "vertices": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "description": "Array of [x,y,z] coordinates"
+                },
+                "faces": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "description": "Array of vertex indices"
+                },
+                "normals": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "nullable": true,
+                  "description": "Optional normals"
+                },
+                "colors": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "nullable": true,
+                  "description": "Optional colors"
+                }
+              },
+              "required": [
+                "vertices",
+                "faces"
+              ],
+              "description": "3D geometry data"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "glb",
+                "ply"
+              ],
+              "default": "glb",
+              "description": "Export format"
+            },
+            "extras": {
+              "type": "object",
+              "description": "Additional metadata"
+            }
+          },
+          "required": [
+            "export_type"
+          ]
+        },
+        "example_usage": [
+          "Use export_tool for export research outputs to various platforms: overleaf latex projects, github repositories, zenodo datasets, jupyter notebooks, vr/ar formats"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "api_tools",
+        "description": "Access external scientific APIs: arXiv papers, CERN Open Data, NASA datasets, NIST physical data",
+        "category": "external",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "description": "External API to access",
+              "enum": [
+                "arxiv",
+                "cern",
+                "nasa",
+                "nist"
+              ]
+            },
+            "query": {
+              "type": "string",
+              "description": "Search query (title, author, abstract, etc.)"
+            },
+            "category": {
+              "type": "string",
+              "description": "arXiv category (e.g., 'physics', 'math-ph', 'quant-ph')"
+            },
+            "sort_by": {
+              "type": "string",
+              "enum": [
+                "relevance",
+                "lastUpdatedDate",
+                "submittedDate"
+              ],
+              "default": "relevance",
+              "description": "Sort order for results"
+            },
+            "download_pdfs": {
+              "type": "boolean",
+              "default": false,
+              "description": "Download PDF files for found papers"
+            },
+            "dataset_name": {
+              "type": "string",
+              "description": "Name or ID of CERN Open Data dataset"
+            },
+            "experiment": {
+              "type": "string",
+              "enum": [
+                "CMS",
+                "ATLAS",
+                "ALICE",
+                "LHCb"
+              ],
+              "description": "LHC experiment (optional filter)"
+            },
+            "data_type": {
+              "type": "string",
+              "enum": [
+                "AOD",
+                "MINIAOD",
+                "NanoAOD",
+                "derived"
+              ],
+              "description": "Data format type"
+            },
+            "year": {
+              "type": "integer",
+              "minimum": 2010,
+              "maximum": 2024,
+              "description": "Data collection year"
+            },
+            "max_files": {
+              "type": "integer",
+              "default": 5,
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Maximum number of files to retrieve"
+            },
+            "dataset_type": {
+              "type": "string",
+              "enum": [
+                "astronomy",
+                "earth",
+                "planetary",
+                "heliophysics"
+              ],
+              "description": "Type of NASA dataset"
+            },
+            "mission": {
+              "type": "string",
+              "description": "Mission name (e.g., 'Hubble', 'Kepler', 'MODIS')"
+            },
+            "instrument": {
+              "type": "string",
+              "description": "Instrument name"
+            },
+            "date_range": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "end": {
+                  "type": "string",
+                  "format": "date"
+                }
+              },
+              "description": "Date range for data collection"
+            },
+            "coordinates": {
+              "type": "object",
+              "properties": {
+                "ra": {
+                  "type": "number",
+                  "description": "Right ascension (degrees)"
+                },
+                "dec": {
+                  "type": "number",
+                  "description": "Declination (degrees)"
+                },
+                "radius": {
+                  "type": "number",
+                  "description": "Search radius (arcminutes)"
+                }
+              },
+              "description": "Sky coordinates for astronomical data"
+            },
+            "element": {
+              "type": "string",
+              "description": "Chemical element symbol (for atomic data)"
+            },
+            "property": {
+              "type": "string",
+              "description": "Physical property to search for"
+            },
+            "temperature": {
+              "type": "number",
+              "description": "Temperature in Kelvin (for material properties)"
+            },
+            "pressure": {
+              "type": "number",
+              "description": "Pressure in Pa (for material properties)"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "json",
+                "xml",
+                "csv"
+              ],
+              "default": "json",
+              "description": "Output format"
+            },
+            "max_results": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum number of results to return"
+            }
+          },
+          "required": [
+            "api"
+          ]
+        },
+        "example_usage": [
+          "Use api_tools for access external scientific apis: arxiv papers, cern open data, nasa datasets, nist physical data"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "graphing_calculator",
+        "description": "🧮 **Comprehensive Graphing Calculator** - Full-featured calculator with CAS, graphing, statistics, and matrix operations.\n\n**Core Operations:**\n- **Basic Math**: evaluate, simplify, expand, factor algebraic expressions\n- **Equation Solving**: solve_equation, solve_system, find_roots (numerical & symbolic)\n- **Calculus**: derivative, integral, limit, series expansions\n- **Graphing**: plot_function, plot_parametric, plot_polar, plot_implicit, plot_inequality\n- **Matrix Ops**: matrix_add, matrix_multiply, matrix_determinant, matrix_inverse, matrix_eigenvalues\n- **Statistics**: stats_descriptive, stats_regression, stats_distribution, stats_hypothesis_test\n- **Data Analysis**: create_list, list_operations, table_values\n- **Programming**: store_variable, recall_variable, define_function, execute_program\n- **Utilities**: convert_units, financial_calc\n\n**Key Features:**\n- Computer Algebra System (CAS) for symbolic computation\n- High-resolution graphing with multiple plot types\n- Comprehensive statistical analysis and regression\n- Matrix operations and linear algebra\n- Variable storage and custom function definitions\n- Unit conversions and financial calculations\n- Export capabilities (CSV data, high-quality plots)\n\n**Graphics-First Outputs:**\n- Professional mathematical plots with customizable styling\n- Statistical charts and regression analysis\n- Matrix visualizations and eigenvalue plots\n- Function analysis with critical points and asymptotes\n- Interactive parameter exploration\n\n**Natural Language Interface:**\n- \"Graph y = x^2 + 2x + 1 from -5 to 5\"\n- \"Solve the system: x + y = 5, 2x - y = 1\"\n- \"Find the derivative of sin(x) * cos(x)\"\n- \"Calculate regression for this data: [1,2,3,4,5] vs [2,4,7,8,10]\"\n- \"What's the determinant of [[1,2],[3,4]]?\"",
+        "category": "graphingcalculator",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "type": "string",
+              "enum": [
+                "evaluate",
+                "simplify",
+                "expand",
+                "factor",
+                "solve_equation",
+                "solve_system",
+                "find_roots",
+                "derivative",
+                "integral",
+                "limit",
+                "series",
+                "plot_function",
+                "plot_parametric",
+                "plot_polar",
+                "plot_implicit",
+                "plot_inequality",
+                "plot_data",
+                "matrix_add",
+                "matrix_multiply",
+                "matrix_determinant",
+                "matrix_inverse",
+                "matrix_eigenvalues",
+                "matrix_rref",
+                "stats_descriptive",
+                "stats_regression",
+                "stats_distribution",
+                "stats_hypothesis_test",
+                "create_list",
+                "list_operations",
+                "table_values",
+                "store_variable",
+                "recall_variable",
+                "define_function",
+                "execute_program",
+                "convert_units",
+                "financial_calc"
+              ],
+              "description": "Calculator operation to perform"
+            },
+            "expression": {
+              "type": "string",
+              "description": "Mathematical expression"
+            },
+            "variable": {
+              "type": "string",
+              "description": "Variable for calculus operations"
+            },
+            "variables": {
+              "type": "object",
+              "description": "Variable substitutions"
+            },
+            "equation": {
+              "type": "string",
+              "description": "Equation to solve"
+            },
+            "equations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "System of equations"
+            },
+            "function": {
+              "type": "string",
+              "description": "Function to graph"
+            },
+            "x_range": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "X-axis range [min, max]"
+            },
+            "y_range": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Y-axis range [min, max]"
+            },
+            "matrix": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "description": "Matrix A"
+            },
+            "matrix_b": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "description": "Matrix B"
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Data for statistical analysis"
+            },
+            "data_x": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "X-data for regression"
+            },
+            "data_y": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Y-data for regression"
+            },
+            "regression_type": {
+              "type": "string",
+              "enum": [
+                "linear",
+                "quadratic",
+                "cubic",
+                "exponential",
+                "logarithmic",
+                "power",
+                "sinusoidal"
+              ],
+              "description": "Regression type"
+            },
+            "list_name": {
+              "type": "string",
+              "description": "List identifier"
+            },
+            "list_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "List data"
+            },
+            "var_name": {
+              "type": "string",
+              "description": "Variable name"
+            },
+            "var_value": {
+              "description": "Variable value"
+            },
+            "from_unit": {
+              "type": "string",
+              "description": "Source unit"
+            },
+            "to_unit": {
+              "type": "string",
+              "description": "Target unit"
+            },
+            "value": {
+              "type": "number",
+              "description": "Value to convert"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "exact",
+                "decimal",
+                "fraction"
+              ],
+              "default": "decimal",
+              "description": "Output format"
+            },
+            "precision": {
+              "type": "number",
+              "default": 6,
+              "description": "Decimal precision"
+            },
+            "plot_title": {
+              "type": "string",
+              "description": "Plot title"
+            },
+            "show_grid": {
+              "type": "boolean",
+              "default": true,
+              "description": "Show grid on plots"
+            },
+            "export_data": {
+              "type": "boolean",
+              "default": false,
+              "description": "Export plot data as CSV"
+            }
+          },
+          "required": [
+            "operation"
+          ]
+        },
+        "example_usage": [
+          "Evaluate 2 + 3 * 4",
+          "Find the roots of x^2 - 5x + 6 = 0",
+          "Calculate the matrix determinant of [[1,2],[3,4]]"
+        ],
+        "capabilities": [
+          "symbolic_computation",
+          "visualization",
+          "equation_solving",
+          "unit_conversion",
+          "operation_evaluate",
+          "operation_simplify",
+          "operation_expand",
+          "operation_factor",
+          "operation_solve_equation",
+          "operation_solve_system",
+          "operation_find_roots",
+          "operation_derivative",
+          "operation_integral",
+          "operation_limit",
+          "operation_series",
+          "operation_plot_function",
+          "operation_plot_parametric",
+          "operation_plot_polar",
+          "operation_plot_implicit",
+          "operation_plot_inequality",
+          "operation_plot_data",
+          "operation_matrix_add",
+          "operation_matrix_multiply",
+          "operation_matrix_determinant",
+          "operation_matrix_inverse",
+          "operation_matrix_eigenvalues",
+          "operation_matrix_rref",
+          "operation_stats_descriptive",
+          "operation_stats_regression",
+          "operation_stats_distribution",
+          "operation_stats_hypothesis_test",
+          "operation_create_list",
+          "operation_list_operations",
+          "operation_table_values",
+          "operation_store_variable",
+          "operation_recall_variable",
+          "operation_define_function",
+          "operation_execute_program",
+          "operation_convert_units",
+          "operation_financial_calc"
+        ]
+      },
+      {
+        "name": "ml_ai_augmentation",
+        "description": "🧠 **ML/AI Augmentation Tool** - GPU-first machine learning capabilities for scientific computing with graphics-first outputs. Provides symbolic regression, PDE surrogates, pattern recognition, and derivation explanation.\n\n**Methods Available:**\n- **symbolic_regression_train**: Discover interpretable equations from data using PySR or genetic programming\n- **surrogate_pde_train**: Train physics-informed neural networks (PINNs) or data-driven PDE surrogates  \n- **pattern_recognition_infer**: Detection/segmentation/classification on scientific imagery using YOLO/U-Net\n- **explain_derivation**: LLM-powered mathematical derivation and explanation with LaTeX output\n\n**GPU Acceleration:**\n- Automatic device selection (CUDA/HIP/MPS/XPU) with CPU fallback\n- VRAM monitoring and automatic batch size adjustment\n- Memory-efficient processing with configurable caps\n\n**Graphics-First Outputs:**\n- Training curves and loss plots for all methods\n- Prediction vs truth overlays and error visualizations  \n- Confusion matrices for classification tasks\n- Optional MP4/WebM/GIF animations for PDE field evolution\n- Professional LaTeX formatting for mathematical explanations\n\n**Key Features:**\n- Caching by parameter hash for reproducibility\n- Early stopping and timeout protection\n- Comprehensive error handling and validation\n- Integration with Phase 5 visualization pipeline\n- Natural language interface ready",
+        "category": "ml",
+        "input_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "symbolic_regression_train"
+                },
+                "X": {
+                  "type": "string",
+                  "description": "Path to CSV/NPZ or inline base64 CSV; features"
+                },
+                "y": {
+                  "type": "string",
+                  "description": "Path or base64; target"
+                },
+                "features": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional feature names"
+                },
+                "ops": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": [
+                    "+",
+                    "-",
+                    "*",
+                    "/",
+                    "sin",
+                    "cos",
+                    "exp",
+                    "log",
+                    "pow"
+                  ],
+                  "description": "Mathematical operations to use in symbolic regression"
+                },
+                "max_depth": {
+                  "type": "integer",
+                  "default": 12,
+                  "minimum": 1,
+                  "maximum": 20,
+                  "description": "Maximum expression tree depth"
+                },
+                "pop_size": {
+                  "type": "integer",
+                  "default": 1000,
+                  "minimum": 10,
+                  "maximum": 10000,
+                  "description": "Population size for genetic programming"
+                },
+                "trials": {
+                  "type": "integer",
+                  "default": 1,
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "Number of independent trials"
+                },
+                "metric": {
+                  "type": "string",
+                  "enum": [
+                    "mse",
+                    "mae",
+                    "r2"
+                  ],
+                  "default": "mse",
+                  "description": "Fitness metric for symbolic regression"
+                },
+                "seed": {
+                  "type": "integer",
+                  "default": 0,
+                  "description": "Random seed for reproducibility"
+                },
+                "use_pysr": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Use PySR if available, otherwise fallback to internal SR"
+                }
+              },
+              "required": [
+                "method",
+                "X",
+                "y"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "surrogate_pde_train"
+                },
+                "problem": {
+                  "type": "string",
+                  "enum": [
+                    "pinn",
+                    "data"
+                  ],
+                  "default": "pinn",
+                  "description": "PINN (physics-informed) or data-driven approach"
+                },
+                "equations": {
+                  "type": "string",
+                  "description": "For PINN: PDE in symbolic form; For data: operator form or metadata"
+                },
+                "domain": {
+                  "type": "object",
+                  "description": "Bounds & BC/IC specs",
+                  "properties": {
+                    "bounds": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                      },
+                      "description": "Spatial/temporal domain bounds"
+                    },
+                    "boundary_conditions": {
+                      "type": "object",
+                      "description": "Boundary condition specifications"
+                    },
+                    "initial_conditions": {
+                      "type": "object",
+                      "description": "Initial condition specifications"
+                    }
+                  }
+                },
+                "train_data": {
+                  "type": "string",
+                  "description": "Optional path/base64 to (x,t,u) samples for data-driven"
+                },
+                "epochs": {
+                  "type": "integer",
+                  "default": 200,
+                  "minimum": 1,
+                  "maximum": 10000,
+                  "description": "Training epochs"
+                },
+                "batch_size": {
+                  "type": "integer",
+                  "default": 1024,
+                  "minimum": 1,
+                  "maximum": 65536,
+                  "description": "Training batch size"
+                },
+                "lr": {
+                  "type": "number",
+                  "default": 0.001,
+                  "minimum": 0.000001,
+                  "maximum": 1,
+                  "description": "Learning rate"
+                },
+                "animate": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Generate field animation"
+                },
+                "fps": {
+                  "type": "integer",
+                  "default": 24,
+                  "minimum": 1,
+                  "maximum": 60,
+                  "description": "Animation frames per second"
+                },
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "mp4",
+                    "webm",
+                    "gif"
+                  ],
+                  "default": "mp4",
+                  "description": "Animation output format"
+                }
+              },
+              "required": [
+                "method",
+                "problem",
+                "equations",
+                "domain"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "pattern_recognition_infer"
+                },
+                "task": {
+                  "type": "string",
+                  "enum": [
+                    "detect",
+                    "segment",
+                    "classify"
+                  ],
+                  "default": "detect",
+                  "description": "Computer vision task type"
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Paths or base64 images",
+                  "minItems": 1
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Pretrained tag or path (e.g., \"yolo11n.pt\" or \"unet_fluorescence.pt\")"
+                },
+                "threshold": {
+                  "type": "number",
+                  "default": 0.25,
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Detection/classification confidence threshold"
+                },
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Class labels for classification/detection"
+                }
+              },
+              "required": [
+                "method",
+                "task",
+                "images",
+                "model"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "explain_derivation"
+                },
+                "goal": {
+                  "type": "string",
+                  "enum": [
+                    "derive",
+                    "explain"
+                  ],
+                  "default": "explain",
+                  "description": "Derive new result or explain existing one"
+                },
+                "context_expr_sympy": {
+                  "type": "string",
+                  "description": "SymPy expression to explain/derive from"
+                },
+                "assumptions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Mathematical assumptions and constraints"
+                },
+                "audience_level": {
+                  "type": "string",
+                  "enum": [
+                    "undergrad",
+                    "grad",
+                    "expert"
+                  ],
+                  "default": "grad",
+                  "description": "Target audience complexity level"
+                }
+              },
+              "required": [
+                "method",
+                "goal"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "example_usage": [
+          "Train symbolic regression to discover equation from data",
+          "Train a physics-informed neural network for PDE solving"
+        ],
+        "capabilities": [
+          "symbolic_computation",
+          "visualization",
+          "equation_solving",
+          "machine_learning",
+          "animation"
+        ]
+      },
+      {
+        "name": "nli_parse",
+        "description": "Parse natural language physics requests into structured tool calls",
+        "category": "nli",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Natural language request to parse into a structured tool call"
+            }
+          },
+          "required": [
+            "text"
+          ]
+        },
+        "example_usage": [
+          "Use nli_parse for parse natural language physics requests into structured tool calls"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "experiment_orchestrator",
+        "description": "🔬 **Unified Digital Physics Lab (Experiment Orchestrator)** - Graphics-centric orchestration for complex physics experiments. Provides DAG definition, validation, execution, report publishing, and collaboration.\n\n**Methods Available:**\n- **define_dag**: Create validated Directed Acyclic Graphs from NL or JSON with declared visual outputs\n- **validate_dag**: Static checks for acyclic structure, schema validation, caps enforcement, and graphics audit\n- **run_dag**: Execute DAGs locally or via distributed computing with parallelization and caching\n- **publish_report**: Generate paper-like PDFs with auto-captioned figures and BibTeX integration\n- **collaborate_share**: Share DAG + artifacts + reports with participants using session sharing\n\n**DAG Features:**\n- **Node Types**: Support for all existing Phys-MCP tools (cas, plot, data, quantum, ml_ai_augmentation, etc.)\n- **Visual Outputs**: Every numeric node declares emit_plots, emit_csv, emit_animation\n- **Parallelization**: GPU-friendly nodes executed in parallel where safe\n- **Caching**: Parameter-based caching with content-addressable artifacts\n- **Provenance**: Full lineage tracking with device, mesh, commit SHA, duration\n\n**Graphics-Centric Design:**\n- **Auto-Captions**: Figures captioned from tool parameters and metadata\n- **Thumbnails**: Link to full-resolution artifacts in reports\n- **Contact Sheets**: Preview grids for bulk visualizations\n- **Professional Output**: LaTeX-quality PDFs with proper figure placement\n\n**Execution Policies:**\n- **local_first**: Prefer local execution, offload only when necessary\n- **remote_first**: Prefer distributed execution via job_submit\n- **auto**: Intelligent scheduling based on resource requirements and availability\n\n**Integration Features:**\n- **Distributed Computing**: Seamless integration with distributed_collaboration.job_submit\n- **Session Management**: Built on session_share infrastructure for collaboration\n- **Artifact Registry**: Content-addressable storage with Git/DVC-style versioning\n- **Safety Contracts**: Honors all acceleration, graphics, and safety caps from previous phases",
+        "category": "orchestrator",
+        "input_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "define_dag"
+                },
+                "spec": {
+                  "type": "object",
+                  "description": "Explicit DAG JSON specification",
+                  "properties": {
+                    "nodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique node identifier"
+                          },
+                          "tool": {
+                            "type": "string",
+                            "description": "Tool name to execute"
+                          },
+                          "method": {
+                            "type": "string",
+                            "description": "Optional method for consolidated tools"
+                          },
+                          "params": {
+                            "type": "object",
+                            "description": "Parameters for the tool/method"
+                          },
+                          "dependencies": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Node IDs this node depends on"
+                          },
+                          "visual_outputs": {
+                            "type": "object",
+                            "properties": {
+                              "static": {
+                                "type": "boolean",
+                                "description": "Produces static plots/images"
+                              },
+                              "series": {
+                                "type": "boolean",
+                                "description": "Produces data series/CSV"
+                              },
+                              "animation": {
+                                "type": "boolean",
+                                "description": "Produces animations/videos"
+                              }
+                            },
+                            "description": "Declared visual output types"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "tool",
+                          "params"
+                        ]
+                      },
+                      "minItems": 1
+                    },
+                    "edges": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "from": {
+                            "type": "string",
+                            "description": "Source node ID"
+                          },
+                          "to": {
+                            "type": "string",
+                            "description": "Target node ID"
+                          },
+                          "data_key": {
+                            "type": "string",
+                            "description": "Optional data key for parameter passing"
+                          }
+                        },
+                        "required": [
+                          "from",
+                          "to"
+                        ]
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "author": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "nodes",
+                    "edges"
+                  ]
+                },
+                "natural_language": {
+                  "type": "string",
+                  "description": "Natural language description to translate to DAG"
+                }
+              },
+              "oneOf": [
+                {
+                  "required": [
+                    "method",
+                    "spec"
+                  ]
+                },
+                {
+                  "required": [
+                    "method",
+                    "natural_language"
+                  ]
+                }
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "validate_dag"
+                },
+                "dag_id": {
+                  "type": "string",
+                  "description": "DAG ID to validate"
+                }
+              },
+              "required": [
+                "method",
+                "dag_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "run_dag"
+                },
+                "dag_id": {
+                  "type": "string",
+                  "description": "DAG ID to execute"
+                },
+                "parallelism": {
+                  "type": "integer",
+                  "default": 2,
+                  "minimum": 1,
+                  "maximum": 16,
+                  "description": "Maximum parallel node execution"
+                },
+                "offload_policy": {
+                  "type": "string",
+                  "enum": [
+                    "local_first",
+                    "remote_first",
+                    "auto"
+                  ],
+                  "default": "auto",
+                  "description": "Policy for offloading nodes to remote compute"
+                }
+              },
+              "required": [
+                "method",
+                "dag_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "publish_report"
+                },
+                "run_id": {
+                  "type": "string",
+                  "description": "Run ID to generate report for"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Report title"
+                },
+                "authors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Report authors"
+                },
+                "bib": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "BibTeX entries"
+                }
+              },
+              "required": [
+                "method",
+                "run_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "collaborate_share"
+                },
+                "dag_id": {
+                  "type": "string",
+                  "description": "DAG ID to share"
+                },
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "read",
+                    "write"
+                  ],
+                  "description": "Access level for participants"
+                },
+                "participants": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of participant identifiers",
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "method",
+                "dag_id",
+                "access",
+                "participants"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "example_usage": [
+          "Generate visualization using experiment_orchestrator"
+        ],
+        "capabilities": [
+          "visualization",
+          "integration",
+          "quantum_computing",
+          "animation"
+        ]
+      },
+      {
+        "name": "plot",
+        "description": "Generate various types of plots: 2D functions, parametric curves, vector fields, phase portraits, 3D surfaces, contour plots, volume visualizations, animations, interactive plots",
+        "category": "plot",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "plot_type": {
+              "type": "string",
+              "description": "Type of plot to generate",
+              "enum": [
+                "function_2d",
+                "parametric_2d",
+                "field_2d",
+                "phase_portrait",
+                "surface_3d",
+                "contour_2d",
+                "volume_3d",
+                "animation",
+                "interactive"
+              ]
+            },
+            "f": {
+              "type": "string",
+              "description": "Function expression f(x) or f(x,y)"
+            },
+            "x_t": {
+              "type": "string",
+              "description": "Parametric x(t) expression"
+            },
+            "y_t": {
+              "type": "string",
+              "description": "Parametric y(t) expression"
+            },
+            "fx": {
+              "type": "string",
+              "description": "X-component of vector field F_x(x,y)"
+            },
+            "fy": {
+              "type": "string",
+              "description": "Y-component of vector field F_y(x,y)"
+            },
+            "dx": {
+              "type": "string",
+              "description": "dx/dt expression for dynamical system"
+            },
+            "dy": {
+              "type": "string",
+              "description": "dy/dt expression for dynamical system"
+            },
+            "x_min": {
+              "type": "number",
+              "description": "Minimum x value"
+            },
+            "x_max": {
+              "type": "number",
+              "description": "Maximum x value"
+            },
+            "y_min": {
+              "type": "number",
+              "description": "Minimum y value"
+            },
+            "y_max": {
+              "type": "number",
+              "description": "Maximum y value"
+            },
+            "t_min": {
+              "type": "number",
+              "description": "Minimum parameter value"
+            },
+            "t_max": {
+              "type": "number",
+              "description": "Maximum parameter value"
+            },
+            "x": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 3,
+              "description": "[min,max,steps?]"
+            },
+            "y": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 3
+            },
+            "z": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 3
+            },
+            "x_range": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 3
+            },
+            "t_range": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 3
+            },
+            "samples": {
+              "type": "integer",
+              "description": "Number of sample points",
+              "default": 1000,
+              "minimum": 10
+            },
+            "grid_points": {
+              "type": "integer",
+              "description": "Grid points per axis",
+              "default": 20,
+              "minimum": 5
+            },
+            "levels": {
+              "type": "integer",
+              "description": "Number of contour levels",
+              "default": 15,
+              "minimum": 5
+            },
+            "plot_type_field": {
+              "type": "string",
+              "description": "Type of field plot",
+              "enum": [
+                "quiver",
+                "stream"
+              ],
+              "default": "quiver"
+            },
+            "frame_expr": {
+              "type": "string",
+              "description": "Expression producing frame array or 2D function value at (x,t)"
+            },
+            "expr": {
+              "type": "string",
+              "description": "Mathematical expression for interactive plots"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "slices",
+                "isosurface"
+              ],
+              "default": "slices",
+              "description": "Volume rendering mode"
+            },
+            "iso_level": {
+              "type": "number",
+              "description": "Used when mode='isosurface'"
+            },
+            "renderer": {
+              "type": "string",
+              "enum": [
+                "imshow",
+                "contour",
+                "line",
+                "surface"
+              ],
+              "default": "imshow",
+              "description": "Rendering method"
+            },
+            "emit_animation": {
+              "type": "boolean",
+              "default": false,
+              "description": "Generate animation"
+            },
+            "animate_axis": {
+              "type": "string",
+              "enum": [
+                "x",
+                "y",
+                "z"
+              ],
+              "default": "z",
+              "description": "Animation axis"
+            },
+            "fps": {
+              "type": "integer",
+              "default": 24,
+              "description": "Frames per second"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "mp4",
+                "webm",
+                "gif"
+              ],
+              "default": "mp4",
+              "description": "Output format"
+            },
+            "emit_frames": {
+              "type": "boolean",
+              "default": false,
+              "description": "Export individual frames"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": false,
+              "description": "Export data as CSV"
+            },
+            "frames_cap": {
+              "type": "integer",
+              "default": 300,
+              "description": "Maximum frames"
+            },
+            "samples_cap": {
+              "type": "integer",
+              "default": 160,
+              "description": "Maximum samples"
+            },
+            "allow_large": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow large computations"
+            },
+            "grid_limit": {
+              "type": "integer",
+              "default": 24,
+              "description": "Grid limit for interactive plots"
+            },
+            "controls": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  },
+                  "step": {
+                    "type": "number"
+                  },
+                  "default": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "name",
+                  "min",
+                  "max",
+                  "step",
+                  "default"
+                ]
+              },
+              "description": "Interactive control parameters"
+            },
+            "title": {
+              "type": "string",
+              "description": "Plot title"
+            },
+            "xlabel": {
+              "type": "string",
+              "description": "X-axis label"
+            },
+            "ylabel": {
+              "type": "string",
+              "description": "Y-axis label"
+            },
+            "zlabel": {
+              "type": "string",
+              "description": "Z-axis label"
+            },
+            "dpi": {
+              "type": "integer",
+              "description": "Image DPI",
+              "default": 100,
+              "minimum": 50
+            },
+            "width": {
+              "type": "number",
+              "description": "Figure width in inches",
+              "default": 8
+            },
+            "height": {
+              "type": "number",
+              "description": "Figure height in inches",
+              "default": 6
+            }
+          },
+          "required": [
+            "plot_type"
+          ]
+        },
+        "example_usage": [
+          "Plot the function y = x^2 from -5 to 5",
+          "Create a 3D surface plot of z = sin(x)*cos(y)",
+          "Generate a phase portrait for a dynamical system"
+        ],
+        "capabilities": [
+          "visualization",
+          "3d_visualization",
+          "animation",
+          "plot_function_2d",
+          "plot_parametric_2d",
+          "plot_field_2d",
+          "plot_phase_portrait",
+          "plot_surface_3d",
+          "plot_contour_2d",
+          "plot_volume_3d",
+          "plot_animation",
+          "plot_interactive"
+        ]
+      },
+      {
+        "name": "accel_caps",
+        "description": "Report device acceleration capabilities and mode (ACCEL_MODE/ACCEL_DEVICE)",
+        "category": "plot",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "example_usage": [
+          "Use accel_caps for report device acceleration capabilities and mode (accel_mode/accel_device)"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "quantum",
+        "description": "Quantum computing operations: operator utilities (commutators, matrix representations), quantum solver for standard problems or custom Hamiltonians, quantum state visualization (Bloch sphere, probability density) - scaffold",
+        "category": "quantum",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Quantum operation to perform",
+              "enum": [
+                "ops",
+                "solve",
+                "visualize"
+              ]
+            },
+            "operators": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Operator names/definitions"
+            },
+            "task": {
+              "type": "string",
+              "enum": [
+                "commutator",
+                "matrix_rep"
+              ],
+              "description": "Operation to perform"
+            },
+            "problem": {
+              "type": "string",
+              "enum": [
+                "sho",
+                "particle_in_box",
+                "custom"
+              ],
+              "description": "Preset or custom"
+            },
+            "hamiltonian": {
+              "type": "string",
+              "description": "Hamiltonian expression (for custom)"
+            },
+            "params": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Problem parameters"
+            },
+            "state": {
+              "type": "string",
+              "description": "State vector or density matrix in a simple string form"
+            },
+            "kind": {
+              "type": "string",
+              "enum": [
+                "bloch",
+                "prob_density"
+              ],
+              "description": "Visualization type"
+            }
+          },
+          "required": [
+            "action"
+          ]
+        },
+        "example_usage": [
+          "Solve the quantum harmonic oscillator",
+          "Visualize a quantum state on the Bloch sphere"
+        ],
+        "capabilities": [
+          "visualization",
+          "equation_solving",
+          "quantum_computing",
+          "action_ops",
+          "action_solve",
+          "action_visualize"
+        ]
+      },
+      {
+        "name": "data_fft",
+        "description": "GPU-accelerated Fast Fourier Transform with comprehensive diagnostic plots",
+        "category": "signal",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "signal_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Input signal data array"
+            },
+            "sample_rate": {
+              "type": "number",
+              "description": "Sample rate in Hz"
+            },
+            "window": {
+              "type": "string",
+              "enum": [
+                "hann",
+                "hamming",
+                "blackman",
+                "bartlett",
+                "none"
+              ],
+              "default": "hann",
+              "description": "Window function to apply before FFT"
+            },
+            "emit_plots": {
+              "type": "boolean",
+              "default": true,
+              "description": "Generate comprehensive FFT analysis plots"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": true,
+              "description": "Export frequency and spectrum data as CSV"
+            }
+          },
+          "required": [
+            "signal_data",
+            "sample_rate"
+          ],
+          "additionalProperties": false
+        },
+        "example_usage": [
+          "Generate visualization using data_fft"
+        ],
+        "capabilities": [
+          "visualization"
+        ]
+      },
+      {
+        "name": "data_filter",
+        "description": "GPU-accelerated digital filtering (IIR/FIR) with response analysis",
+        "category": "signal",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "signal_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Input signal data array"
+            },
+            "sample_rate": {
+              "type": "number",
+              "description": "Sample rate in Hz"
+            },
+            "filter_type": {
+              "type": "string",
+              "enum": [
+                "lowpass",
+                "highpass",
+                "bandpass",
+                "bandstop"
+              ],
+              "description": "Type of filter to apply"
+            },
+            "cutoff_freq": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              ],
+              "description": "Cutoff frequency (Hz) or [low, high] for bandpass/bandstop"
+            },
+            "filter_order": {
+              "type": "integer",
+              "default": 4,
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Filter order (higher = steeper rolloff)"
+            },
+            "emit_plots": {
+              "type": "boolean",
+              "default": true,
+              "description": "Generate filter response and comparison plots"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": true,
+              "description": "Export filtered signal data as CSV"
+            }
+          },
+          "required": [
+            "signal_data",
+            "sample_rate",
+            "filter_type",
+            "cutoff_freq"
+          ],
+          "additionalProperties": false
+        },
+        "example_usage": [
+          "Use data_filter for gpu-accelerated digital filtering (iir/fir) with response analysis"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "data_spectrogram",
+        "description": "Time-frequency analysis with Short-Time Fourier Transform",
+        "category": "signal",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "signal_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Input signal data array"
+            },
+            "sample_rate": {
+              "type": "number",
+              "description": "Sample rate in Hz"
+            },
+            "window_size": {
+              "type": "integer",
+              "default": 256,
+              "description": "Window size for STFT"
+            },
+            "overlap": {
+              "type": "number",
+              "default": 0.5,
+              "minimum": 0,
+              "maximum": 0.95,
+              "description": "Window overlap fraction"
+            },
+            "window_type": {
+              "type": "string",
+              "enum": [
+                "hann",
+                "hamming",
+                "blackman",
+                "bartlett"
+              ],
+              "default": "hann",
+              "description": "Window function for STFT"
+            },
+            "emit_plots": {
+              "type": "boolean",
+              "default": true,
+              "description": "Generate time-frequency spectrogram plot"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": true,
+              "description": "Export spectrogram data as CSV"
+            }
+          },
+          "required": [
+            "signal_data",
+            "sample_rate"
+          ],
+          "additionalProperties": false
+        },
+        "example_usage": [
+          "Use data_spectrogram for time-frequency analysis with short-time fourier transform"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "data_wavelet",
+        "description": "Continuous wavelet transform for time-scale analysis",
+        "category": "signal",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "signal_data": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Input signal data array"
+            },
+            "sample_rate": {
+              "type": "number",
+              "description": "Sample rate in Hz"
+            },
+            "wavelet": {
+              "type": "string",
+              "enum": [
+                "morlet",
+                "mexican_hat",
+                "daubechies",
+                "haar"
+              ],
+              "default": "morlet",
+              "description": "Wavelet function to use"
+            },
+            "scales": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Scale values for wavelet transform (optional, auto-generate if not provided)"
+            },
+            "emit_plots": {
+              "type": "boolean",
+              "default": true,
+              "description": "Generate wavelet scalogram plot"
+            },
+            "emit_csv": {
+              "type": "boolean",
+              "default": true,
+              "description": "Export wavelet coefficients as CSV"
+            }
+          },
+          "required": [
+            "signal_data",
+            "sample_rate"
+          ],
+          "additionalProperties": false
+        },
+        "example_usage": [
+          "Convert data using data_wavelet"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "tensor_algebra",
+        "description": "Compute Christoffel symbols, curvature tensors, and geodesics (scaffold)",
+        "category": "tensor",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "metric": {
+              "description": "Metric tensor components as nested array in chosen coordinates",
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            },
+            "coords": {
+              "description": "Coordinate names (e.g., ['t','r','theta','phi'])",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "compute": {
+              "description": "Quantities to compute",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "christoffel",
+                  "riemann",
+                  "ricci",
+                  "ricci_scalar",
+                  "geodesics"
+                ]
+              }
+            }
+          },
+          "required": [
+            "metric",
+            "coords",
+            "compute"
+          ]
+        },
+        "example_usage": [
+          "Use tensor_algebra for compute christoffel symbols, curvature tensors, and geodesics (scaffold)"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "report_generate",
+        "description": "Generate a session report (Markdown) summarizing tool events and artifacts.",
+        "category": "report",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "description": "Target session ID to summarize"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "markdown"
+              ],
+              "default": "markdown"
+            },
+            "title": {
+              "type": "string",
+              "description": "Report title"
+            },
+            "author": {
+              "type": "string",
+              "description": "Author name(s)"
+            },
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "cas",
+                  "plots",
+                  "constants",
+                  "units",
+                  "events",
+                  "artifacts"
+                ]
+              },
+              "description": "Sections to include in the report"
+            }
+          },
+          "required": [
+            "session_id"
+          ]
+        },
+        "example_usage": [
+          "Use report_generate for generate a session report (markdown) summarizing tool events and artifacts"
+        ],
+        "capabilities": []
+      },
+      {
+        "name": "units_convert",
+        "description": "Convert between different units using Pint unit registry. Supports SI, imperial, and specialized physics units.",
+        "category": "units",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "quantity": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "unit"
+              ],
+              "description": "Input quantity with value and unit"
+            },
+            "to": {
+              "type": "string",
+              "description": "Target unit for conversion"
+            }
+          },
+          "required": [
+            "quantity",
+            "to"
+          ]
+        },
+        "example_usage": [
+          "Convert 1 meter to feet",
+          "Convert 100 joules to calories"
+        ],
+        "capabilities": [
+          "differentiation",
+          "unit_conversion"
+        ]
+      },
+      {
+        "name": "statmech_partition",
+        "description": "Calculate partition function and thermodynamic quantities from energy levels",
+        "category": "statmech",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "energy_levels": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Energy levels in Joules"
+            },
+            "temperature": {
+              "type": "number",
+              "description": "Temperature in Kelvin",
+              "default": 300
+            },
+            "degeneracies": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "description": "Degeneracies for each energy level (optional, defaults to 1)"
+            }
+          },
+          "required": [
+            "energy_levels"
+          ]
+        },
+        "example_usage": [
+          "Use statmech_partition for calculate partition function and thermodynamic quantities from energy levels"
+        ],
+        "capabilities": []
+      }
+    ],
+    "tool_categories": {
+      "cas": [
+        "cas"
+      ],
+      "constants": [
+        "constants_get"
+      ],
+      "dataio": [
+        "data"
+      ],
+      "distributed": [
+        "distributed_collaboration"
+      ],
+      "export": [
+        "export_tool"
+      ],
+      "external": [
+        "api_tools"
+      ],
+      "graphingcalculator": [
+        "graphing_calculator"
+      ],
+      "ml": [
+        "ml_ai_augmentation"
+      ],
+      "nli": [
+        "nli_parse"
+      ],
+      "orchestrator": [
+        "experiment_orchestrator"
+      ],
+      "plot": [
+        "plot",
+        "accel_caps"
+      ],
+      "quantum": [
+        "quantum"
+      ],
+      "signal": [
+        "data_fft",
+        "data_filter",
+        "data_spectrogram",
+        "data_wavelet"
+      ],
+      "tensor": [
+        "tensor_algebra"
+      ],
+      "report": [
+        "report_generate"
+      ],
+      "units": [
+        "units_convert"
+      ],
+      "statmech": [
+        "statmech_partition"
+      ]
+    },
+    "use_case_workflows": {
+      "solve_physics_problem": [
+        "cas",
+        "plot",
+        "units_convert"
+      ],
+      "quantum_simulation": [
+        "quantum",
+        "plot",
+        "constants_get"
+      ],
+      "data_analysis": [
+        "graphing_calculator",
+        "plot",
+        "ml_ai_augmentation"
+      ],
+      "scientific_visualization": [
+        "plot",
+        "export_tool",
+        "data"
+      ],
+      "symbolic_math": [
+        "cas",
+        "graphing_calculator",
+        "constants_get"
+      ]
+    },
+    "integration_examples": {
+      "natural_language": [
+        "Calculate the derivative of x^2 + 3x + 1",
+        "Plot a sine wave from 0 to 2π",
+        "Convert 100 meters to feet",
+        "Solve the quantum harmonic oscillator",
+        "Generate a 3D surface plot of z = x^2 + y^2"
+      ]
+    }
+  }
+}
