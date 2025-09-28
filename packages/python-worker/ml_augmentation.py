@@ -484,8 +484,8 @@ def explain_derivation(self, params: Dict[str, Any]) -> Dict[str, Any]:
         }
     }
 
-        self._save_cache(cache_key, response)
-        return response
+    self._save_cache(cache_key, response)
+    return response
     
     def _load_regression_data(self, X_path: str, y_path: str) -> Tuple[np.ndarray, np.ndarray]:
         """Load regression data from various formats"""

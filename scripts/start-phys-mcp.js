@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Find the server file relative to this script
-const serverPath = join(__dirname, 'packages', 'server', 'dist', 'index.js');
+const serverPath = join(__dirname, '..', 'packages', 'server', 'dist', 'index.js');
 
 console.error(`🚀 Starting Phys-MCP server from: ${serverPath}`);
 

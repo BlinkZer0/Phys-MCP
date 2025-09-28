@@ -341,6 +341,19 @@ def parse_state_string(state_str: str) -> np.ndarray:
     except Exception as e:
         raise ValueError(f"Could not parse state string '{state_str}': {e}")
 
+def convert_complex_to_json_serializable(obj):
+    """Convert complex numbers to JSON-serializable format"""
+    if isinstance(obj, complex):
+        return {"real": obj.real, "imag": obj.imag, "type": "complex"}
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, list):
+        return [convert_complex_to_json_serializable(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_complex_to_json_serializable(value) for key, value in obj.items()}
+    else:
+        return obj
+
 def quantum_ops(operators: List[str], task: str) -> Dict[str, Any]:
     """Perform quantum operator operations"""
     try:
@@ -349,7 +362,7 @@ def quantum_ops(operators: List[str], task: str) -> Dict[str, Any]:
             for op_name in operators:
                 matrices[op_name] = get_operator_matrix(op_name).tolist()
             
-            return {
+            result = {
                 'task': 'matrix_representation',
                 'operators': operators,
                 'matrices': matrices,
@@ -362,6 +375,7 @@ def quantum_ops(operators: List[str], task: str) -> Dict[str, Any]:
                     for op in operators
                 }
             }
+            return convert_complex_to_json_serializable(result)
             
         elif task == "commutator":
             if len(operators) != 2:
@@ -372,7 +386,7 @@ def quantum_ops(operators: List[str], task: str) -> Dict[str, Any]:
             comm = commutator(A, B)
             anticomm = anticommutator(A, B)
             
-            return {
+            result = {
                 'task': 'commutator',
                 'operators': operators,
                 'commutator': comm.tolist(),
@@ -380,6 +394,7 @@ def quantum_ops(operators: List[str], task: str) -> Dict[str, Any]:
                 'commutator_norm': float(np.linalg.norm(comm)),
                 'commute': np.allclose(comm, 0)
             }
+            return convert_complex_to_json_serializable(result)
         else:
             raise ValueError(f"Unknown task: {task}")
             
