@@ -155,8 +155,23 @@ class MLAugmentation:
         start_time = time.time()
         
         try:
-            # Load data
-            X_data, y_data = self._load_regression_data(params['X'], params['y'])
+            # Load data - handle both parameter formats
+            X_param = params.get('X') or params.get('data_x')
+            y_param = params.get('y') or params.get('data_y')
+            
+            if X_param is None or y_param is None:
+                raise ValueError("Missing required parameters: X/data_x and y/data_y")
+            
+            # Handle direct array data vs file paths
+            if isinstance(X_param, (list, np.ndarray)) and isinstance(y_param, (list, np.ndarray)):
+                X_data = np.array(X_param)
+                y_data = np.array(y_param)
+                if X_data.ndim == 1:
+                    X_data = X_data.reshape(-1, 1)
+                if y_data.ndim > 1:
+                    y_data = y_data.flatten()
+            else:
+                X_data, y_data = self._load_regression_data(X_param, y_param)
             
             # Check cache
             cache_key = self._create_cache_key('symbolic_regression', params)
@@ -469,8 +484,9 @@ def explain_derivation(self, params: Dict[str, Any]) -> Dict[str, Any]:
         }
     }
 
-    self._save_cache(cache_key, response)
-    return response
+        self._save_cache(cache_key, response)
+        return response
+    
     def _load_regression_data(self, X_path: str, y_path: str) -> Tuple[np.ndarray, np.ndarray]:
         """Load regression data from various formats"""
         def load_data(path_or_b64: str) -> np.ndarray:

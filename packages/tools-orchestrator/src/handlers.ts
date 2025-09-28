@@ -4,60 +4,94 @@
  */
 
 import { 
-  ExperimentOrchestratorParams, 
-  ExperimentOrchestratorResponse,
-  DefineDAGParams,
-  ValidateDAGParams,
-  RunDAGParams,
-  PublishReportParams,
-  CollaborateShareParams
+  ExperimentOrchestratorParams,
+  ExperimentOrchestratorResponse
 } from './schema.js';
 
 import { getWorkerClient } from '../../tools-cas/dist/worker-client.js';
+
+const SUPPORTED_ORCHESTRATOR_METHODS = [
+  'define_dag',
+  'validate_dag',
+  'run_dag',
+  'publish_report',
+  'collaborate_share'
+] as const;
+
+type OrchestratorMethod = typeof SUPPORTED_ORCHESTRATOR_METHODS[number];
+
+const LEGACY_ORCHESTRATOR_TOOL: Partial<Record<string, OrchestratorMethod>> = {
+  define_dag: 'define_dag',
+  validate_dag: 'validate_dag',
+  run_dag: 'run_dag',
+  publish_report: 'publish_report',
+  collaborate_share: 'collaborate_share'
+};
+
+function normalizeOrchestratorCall(
+  toolName: string,
+  params: ExperimentOrchestratorParams
+): { method: OrchestratorMethod; actualParams: ExperimentOrchestratorParams } {
+  if (toolName !== 'experiment_orchestrator') {
+    const legacyMethod = LEGACY_ORCHESTRATOR_TOOL[toolName];
+    if (!legacyMethod) {
+      throw new Error(`Unknown experiment orchestrator tool: ${toolName}`);
+    }
+
+    const { method: _ignored, ...restParams } = params;
+    return {
+      method: legacyMethod,
+      actualParams: { ...restParams, method: legacyMethod } as ExperimentOrchestratorParams
+    };
+  }
+
+  const rawMethodValue = typeof params?.method === 'string' ? params.method.trim() : '';
+
+  if (!rawMethodValue) {
+    throw new Error(
+      `[experiment_orchestrator] Missing "method" parameter. Supported methods: ${SUPPORTED_ORCHESTRATOR_METHODS.join(', ')}`
+    );
+  }
+
+  // Handle both prefixed and non-prefixed method names
+  let normalizedMethod = rawMethodValue;
+  if (rawMethodValue.startsWith('orchestrator_')) {
+    normalizedMethod = rawMethodValue.slice('orchestrator_'.length);
+  }
+  
+  // Also handle undefined or malformed method names
+  if (normalizedMethod === 'undefined' || !normalizedMethod) {
+    throw new Error(
+      `[experiment_orchestrator] Invalid method "${rawMethodValue}". Supported methods: ${SUPPORTED_ORCHESTRATOR_METHODS.join(', ')}`
+    );
+  }
+
+  if (!SUPPORTED_ORCHESTRATOR_METHODS.includes(normalizedMethod as OrchestratorMethod)) {
+    throw new Error(
+      `[experiment_orchestrator] Unsupported method "${rawMethodValue}". Supported methods: ${SUPPORTED_ORCHESTRATOR_METHODS.join(', ')}`
+    );
+  }
+
+  return {
+    method: normalizedMethod as OrchestratorMethod,
+    actualParams: { ...params, method: normalizedMethod } as ExperimentOrchestratorParams
+  };
+}
 
 /**
  * Handle experiment orchestrator tool calls
  * Routes to appropriate Python worker method based on the method parameter
  */
 export async function handleExperimentOrchestratorTool(
-  toolName: string, 
+  toolName: string,
   params: ExperimentOrchestratorParams
 ): Promise<ExperimentOrchestratorResponse> {
-  
-  // Legacy support: convert individual tool names to method calls
-  let method = params.method;
-  let actualParams = params;
-
-  if (toolName !== 'experiment_orchestrator') {
-    // Handle legacy individual tool names
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { method: _originalMethod, ...restParams } = params;
-    if (toolName === 'define_dag') {
-      method = 'define_dag';
-      actualParams = { ...restParams, method: 'define_dag' } as DefineDAGParams;
-    } else if (toolName === 'validate_dag') {
-      method = 'validate_dag';
-      actualParams = { ...restParams, method: 'validate_dag' } as ValidateDAGParams;
-    } else if (toolName === 'run_dag') {
-      method = 'run_dag';
-      actualParams = { ...restParams, method: 'run_dag' } as RunDAGParams;
-    } else if (toolName === 'publish_report') {
-      method = 'publish_report';
-      actualParams = { ...restParams, method: 'publish_report' } as PublishReportParams;
-    } else if (toolName === 'collaborate_share') {
-      method = 'collaborate_share';
-      actualParams = { ...restParams, method: 'collaborate_share' } as CollaborateShareParams;
-    } else {
-      throw new Error(`Unknown experiment orchestrator tool: ${toolName}`);
-    }
-  }
+  const { method, actualParams } = normalizeOrchestratorCall(toolName, params);
 
   // Route to Python worker based on method
   const pythonMethod = `orchestrator_${method}`;
-  
+
   try {
-    // This will be handled by the Python worker
-    // The actual implementation will be in experiment_orchestrator.py
     const result = await callPythonWorker(pythonMethod, actualParams);
     return result as ExperimentOrchestratorResponse;
   } catch (error) {

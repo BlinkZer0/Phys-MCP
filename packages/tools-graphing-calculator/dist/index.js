@@ -1,3 +1,4 @@
+import { getWorkerClient } from "../../tools-cas/dist/worker-client.js";
 // Define the JSON schema for the graphing calculator
 const graphingCalculatorSchema = {
     type: "object",
@@ -148,6 +149,24 @@ const graphingCalculatorSchema = {
     },
     required: ["operation"]
 };
+const operationSchema = graphingCalculatorSchema.properties?.operation;
+const GRAPHING_CALCULATOR_OPERATIONS = Array.isArray(operationSchema?.enum)
+    ? operationSchema.enum
+    : [];
+const GRAPHING_CALCULATOR_OPERATION_SET = new Set(GRAPHING_CALCULATOR_OPERATIONS);
+function normalizeGraphingParams(toolName, rawParams) {
+    let operation = typeof rawParams?.operation === 'string' ? rawParams.operation.trim() : '';
+    if (!operation && toolName.startsWith('calculator_')) {
+        operation = toolName.slice('calculator_'.length);
+    }
+    if (!operation) {
+        throw new Error(`[graphing_calculator] Missing "operation" parameter. Supported operations: ${GRAPHING_CALCULATOR_OPERATIONS.join(', ')}`);
+    }
+    if (!GRAPHING_CALCULATOR_OPERATION_SET.has(operation)) {
+        throw new Error(`[graphing_calculator] Unsupported operation "${operation}". Supported operations: ${GRAPHING_CALCULATOR_OPERATIONS.join(', ')}`);
+    }
+    return { ...rawParams, operation };
+}
 /**
  * Comprehensive Graphing Calculator Tool
  *
@@ -205,14 +224,10 @@ export const graphingCalculatorTool = {
 /**
  * Handle graphing calculator operations
  */
-export async function handleGraphingCalculatorTool(params) {
-    // Route to Python worker for actual computation
-    return {
-        tool: 'graphing_calculator',
-        params,
-        // This will be handled by the Python worker
-        action: 'route_to_python'
-    };
+export async function handleGraphingCalculatorTool(toolName, params) {
+    const normalizedParams = normalizeGraphingParams(toolName, params ?? {});
+    const worker = getWorkerClient();
+    return worker.call('graphing_calculator', normalizedParams);
 }
 // Export only the main graphing calculator tool
 export const buildGraphingCalculatorTools = () => {

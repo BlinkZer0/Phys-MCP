@@ -4,14 +4,78 @@
  */
 
 import { getWorkerClient } from "../../tools-cas/dist/worker-client.js";
-import { 
-  MLAugmentationParams, 
+import {
+  MLAugmentationParams,
   MLAugmentationResponse,
   SymbolicRegressionParams,
   SurrogatePDEParams,
   PatternRecognitionParams,
   ExplainDerivationParams
 } from './schema.js';
+
+type MLAugmentationMethod = MLAugmentationParams['method'];
+
+const SUPPORTED_ML_METHODS: MLAugmentationMethod[] = [
+  'symbolic_regression_train',
+  'surrogate_pde_train',
+  'pattern_recognition_infer',
+  'explain_derivation'
+];
+
+const WORKER_METHOD_TO_CANONICAL: Record<string, MLAugmentationMethod> = {
+  ml_symbolic_regression: 'symbolic_regression_train',
+  ml_surrogate_pde: 'surrogate_pde_train',
+  ml_pattern_recognition: 'pattern_recognition_infer',
+  ml_explain_derivation: 'explain_derivation'
+};
+
+const LEGACY_TOOL_METHOD: Partial<Record<string, MLAugmentationMethod>> = {
+  symbolic_regression_train: 'symbolic_regression_train',
+  surrogate_pde_train: 'surrogate_pde_train',
+  pattern_recognition_infer: 'pattern_recognition_infer',
+  explain_derivation: 'explain_derivation'
+};
+
+function normalizeMLParams(
+  toolName: string,
+  rawArgs: Record<string, unknown>
+): MLAugmentationParams {
+  if (toolName !== 'ml_ai_augmentation') {
+    const legacyMethod = LEGACY_TOOL_METHOD[toolName];
+    if (!legacyMethod) {
+      throw new Error(`Unknown ML tool: ${toolName}`);
+    }
+
+    return { ...rawArgs, method: legacyMethod } as MLAugmentationParams;
+  }
+
+  const rawMethod = typeof rawArgs?.method === 'string' ? rawArgs.method.trim() : '';
+
+  if (!rawMethod) {
+    throw new Error(
+      `[ml_ai_augmentation] Missing "method" parameter. Supported methods: ${SUPPORTED_ML_METHODS.join(', ')}`
+    );
+  }
+
+  // Handle undefined or malformed method names
+  if (rawMethod === 'undefined' || rawMethod === 'null') {
+    throw new Error(
+      `[ml_ai_augmentation] Invalid method "${rawMethod}". Supported methods: ${SUPPORTED_ML_METHODS.join(', ')}`
+    );
+  }
+
+  const canonicalMethod =
+    (SUPPORTED_ML_METHODS.find((method) => method === rawMethod) ??
+      WORKER_METHOD_TO_CANONICAL[rawMethod]);
+
+  if (!canonicalMethod) {
+    throw new Error(
+      `[ml_ai_augmentation] Unsupported method "${rawMethod}". Supported methods: ${SUPPORTED_ML_METHODS.join(', ')}`
+    );
+  }
+
+  return { ...rawArgs, method: canonicalMethod } as MLAugmentationParams;
+}
 
 /**
  * Main handler for ML/AI augmentation tool
@@ -22,23 +86,7 @@ export async function handleMLAugmentationTool(
   args: any
 ): Promise<MLAugmentationResponse> {
   const worker = getWorkerClient();
-  
-  // Handle legacy individual tool names by converting to consolidated format
-  let params: MLAugmentationParams;
-  
-  if (toolName === 'symbolic_regression_train') {
-    params = { method: 'symbolic_regression_train', ...args };
-  } else if (toolName === 'surrogate_pde_train') {
-    params = { method: 'surrogate_pde_train', ...args };
-  } else if (toolName === 'pattern_recognition_infer') {
-    params = { method: 'pattern_recognition_infer', ...args };
-  } else if (toolName === 'explain_derivation') {
-    params = { method: 'explain_derivation', ...args };
-  } else if (toolName === 'ml_ai_augmentation') {
-    params = args as MLAugmentationParams;
-  } else {
-    throw new Error(`Unknown ML tool: ${toolName}`);
-  }
+  const params = normalizeMLParams(toolName, args ?? {});
   console.log(`[ML] Handling ${params.method} request`);
   
   try {

@@ -3,42 +3,60 @@
  * Routes method calls to Python worker for execution
  */
 import { getWorkerClient } from '../../tools-cas/dist/worker-client.js';
+const SUPPORTED_DISTRIBUTED_METHODS = [
+    'job_submit',
+    'session_share',
+    'lab_notebook',
+    'artifact_versioning'
+];
+const LEGACY_DISTRIBUTED_TOOL = {
+    job_submit: 'job_submit',
+    session_share: 'session_share',
+    lab_notebook: 'lab_notebook',
+    artifact_versioning: 'artifact_versioning'
+};
+function normalizeDistributedCall(toolName, params) {
+    if (toolName !== 'distributed_collaboration') {
+        const legacyMethod = LEGACY_DISTRIBUTED_TOOL[toolName];
+        if (!legacyMethod) {
+            throw new Error(`Unknown distributed collaboration tool: ${toolName}`);
+        }
+        const { method: _ignored, ...restParams } = params;
+        return {
+            method: legacyMethod,
+            actualParams: { ...restParams, method: legacyMethod }
+        };
+    }
+    const rawMethodValue = typeof params?.method === 'string' ? params.method.trim() : '';
+    if (!rawMethodValue) {
+        throw new Error(`[distributed_collaboration] Missing "method" parameter. Supported methods: ${SUPPORTED_DISTRIBUTED_METHODS.join(', ')}`);
+    }
+    // Handle both prefixed and non-prefixed method names
+    let normalizedMethod = rawMethodValue;
+    if (rawMethodValue.startsWith('distributed_')) {
+        normalizedMethod = rawMethodValue.slice('distributed_'.length);
+    }
+    // Also handle undefined or malformed method names
+    if (normalizedMethod === 'undefined' || !normalizedMethod) {
+        throw new Error(`[distributed_collaboration] Invalid method "${rawMethodValue}". Supported methods: ${SUPPORTED_DISTRIBUTED_METHODS.join(', ')}`);
+    }
+    if (!SUPPORTED_DISTRIBUTED_METHODS.includes(normalizedMethod)) {
+        throw new Error(`[distributed_collaboration] Unsupported method "${rawMethodValue}". Supported methods: ${SUPPORTED_DISTRIBUTED_METHODS.join(', ')}`);
+    }
+    return {
+        method: normalizedMethod,
+        actualParams: { ...params, method: normalizedMethod }
+    };
+}
 /**
  * Handle distributed collaboration tool calls
  * Routes to appropriate Python worker method based on the method parameter
  */
 export async function handleDistributedCollaborationTool(toolName, params) {
-    // Legacy support: convert individual tool names to method calls
-    let method = params.method;
-    let actualParams = params;
-    if (toolName !== 'distributed_collaboration') {
-        // Handle legacy individual tool names
-        const { method: _, ...restParams } = params;
-        if (toolName === 'job_submit') {
-            method = 'job_submit';
-            actualParams = { ...restParams, method: 'job_submit' };
-        }
-        else if (toolName === 'session_share') {
-            method = 'session_share';
-            actualParams = { ...restParams, method: 'session_share' };
-        }
-        else if (toolName === 'lab_notebook') {
-            method = 'lab_notebook';
-            actualParams = { ...restParams, method: 'lab_notebook' };
-        }
-        else if (toolName === 'artifact_versioning') {
-            method = 'artifact_versioning';
-            actualParams = { ...restParams, method: 'artifact_versioning' };
-        }
-        else {
-            throw new Error(`Unknown distributed collaboration tool: ${toolName}`);
-        }
-    }
+    const { method, actualParams } = normalizeDistributedCall(toolName, params);
     // Route to Python worker based on method
     const pythonMethod = `distributed_${method}`;
     try {
-        // This will be handled by the Python worker
-        // The actual implementation will be in distributed_collaboration.py
         const result = await callPythonWorker(pythonMethod, actualParams);
         return result;
     }

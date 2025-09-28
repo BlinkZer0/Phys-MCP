@@ -18,6 +18,6 @@ export declare const graphingCalculatorTool: Tool;
 /**
  * Handle graphing calculator operations
  */
-export declare function handleGraphingCalculatorTool(params: any): Promise<any>;
+export declare function handleGraphingCalculatorTool(toolName: string, params: Record<string, unknown>): Promise<any>;
 export declare const buildGraphingCalculatorTools: () => Tool[];
 export default graphingCalculatorTool;
