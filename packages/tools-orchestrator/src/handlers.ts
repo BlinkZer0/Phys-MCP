@@ -38,7 +38,9 @@ function normalizeOrchestratorCall(
       throw new Error(`Unknown experiment orchestrator tool: ${toolName}`);
     }
 
-    const { method: _ignored, ...restParams } = params;
+    const restParams = { ...params };
+    delete (restParams as Partial<ExperimentOrchestratorParams>).method;
+
     return {
       method: legacyMethod,
       actualParams: { ...restParams, method: legacyMethod } as ExperimentOrchestratorParams
@@ -102,7 +104,10 @@ export async function handleExperimentOrchestratorTool(
 /**
  * Communicate with the shared Python worker process.
  */
-async function callPythonWorker(method: string, params: any): Promise<any> {
+async function callPythonWorker(
+  method: string,
+  params: ExperimentOrchestratorParams
+): Promise<ExperimentOrchestratorResponse> {
   const worker = getWorkerClient();
-  return worker.call(method, params);
+  return worker.call(method, params) as Promise<ExperimentOrchestratorResponse>;
 }

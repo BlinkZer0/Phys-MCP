@@ -15,6 +15,10 @@ import {
 
 type MLAugmentationMethod = MLAugmentationParams['method'];
 
+type WorkerClient = {
+  call: (method: string, params: Record<string, unknown>) => Promise<unknown>;
+};
+
 const SUPPORTED_ML_METHODS: MLAugmentationMethod[] = [
   'symbolic_regression_train',
   'surrogate_pde_train',
@@ -83,28 +87,28 @@ function normalizeMLParams(
  */
 export async function handleMLAugmentationTool(
   toolName: string,
-  args: any
+  args: Record<string, unknown>
 ): Promise<MLAugmentationResponse> {
-  const worker = getWorkerClient();
+  const worker = getWorkerClient() as WorkerClient;
   const params = normalizeMLParams(toolName, args ?? {});
   console.log(`[ML] Handling ${params.method} request`);
-  
+
   try {
     switch (params.method) {
       case 'symbolic_regression_train':
         return await handleSymbolicRegression(params as SymbolicRegressionParams, worker);
-      
+
       case 'surrogate_pde_train':
         return await handleSurrogatePDE(params as SurrogatePDEParams, worker);
-      
+
       case 'pattern_recognition_infer':
         return await handlePatternRecognition(params as PatternRecognitionParams, worker);
-      
+
       case 'explain_derivation':
         return await handleExplainDerivation(params as ExplainDerivationParams, worker);
-      
+
       default:
-        throw new Error(`Unknown ML method: ${(params as any).method}`);
+        throw new Error('Unknown ML method');
     }
   } catch (error) {
     console.error(`[ML] Error in ${params.method}:`, error);
@@ -117,7 +121,7 @@ export async function handleMLAugmentationTool(
  */
 async function handleSymbolicRegression(
   params: SymbolicRegressionParams,
-  worker: any
+  worker: WorkerClient
 ): Promise<MLAugmentationResponse> {
   console.log('[ML] Starting symbolic regression...');
   
@@ -134,7 +138,7 @@ async function handleSymbolicRegression(
   };
   
   // Call Python worker
-  const result = await worker.call('ml_symbolic_regression', fullParams);
+  const result = await worker.call('ml_symbolic_regression', fullParams) as MLAugmentationResponse;
   
   console.log('[ML] Symbolic regression completed');
   return result;
@@ -145,7 +149,7 @@ async function handleSymbolicRegression(
  */
 async function handleSurrogatePDE(
   params: SurrogatePDEParams,
-  worker: any
+  worker: WorkerClient
 ): Promise<MLAugmentationResponse> {
   console.log('[ML] Starting surrogate PDE training...');
   
@@ -167,7 +171,7 @@ async function handleSurrogatePDE(
   }
   
   // Call Python worker
-  const result = await worker.call('ml_surrogate_pde', fullParams);
+  const result = await worker.call('ml_surrogate_pde', fullParams) as MLAugmentationResponse;
   
   console.log('[ML] Surrogate PDE training completed');
   return result;
@@ -178,7 +182,7 @@ async function handleSurrogatePDE(
  */
 async function handlePatternRecognition(
   params: PatternRecognitionParams,
-  worker: any
+  worker: WorkerClient
 ): Promise<MLAugmentationResponse> {
   console.log('[ML] Starting pattern recognition...');
   
@@ -199,7 +203,7 @@ async function handlePatternRecognition(
   }
   
   // Call Python worker
-  const result = await worker.call('ml_pattern_recognition', fullParams);
+  const result = await worker.call('ml_pattern_recognition', fullParams) as MLAugmentationResponse;
   
   console.log('[ML] Pattern recognition completed');
   return result;
@@ -210,7 +214,7 @@ async function handlePatternRecognition(
  */
 async function handleExplainDerivation(
   params: ExplainDerivationParams,
-  worker: any
+  worker: WorkerClient
 ): Promise<MLAugmentationResponse> {
   console.log('[ML] Starting derivation explanation...');
   
@@ -223,7 +227,7 @@ async function handleExplainDerivation(
   };
   
   // Call Python worker
-  const result = await worker.call('ml_explain_derivation', fullParams);
+  const result = await worker.call('ml_explain_derivation', fullParams) as MLAugmentationResponse;
   
   console.log('[ML] Derivation explanation completed');
   return result;
@@ -233,7 +237,7 @@ async function handleExplainDerivation(
  * Legacy support for individual method calls
  * Maintains backward compatibility if individual tools were used
  */
-export function createLegacyHandlers(pythonWorker: any) {
+export function createLegacyHandlers(pythonWorker: WorkerClient) {
   return {
     // Legacy symbolic regression handler
     async handleSymbolicRegressionTrain(params: Omit<SymbolicRegressionParams, 'method'>) {

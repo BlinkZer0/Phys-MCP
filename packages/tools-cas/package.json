@@ -8,14 +8,16 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@phys-mcp/mcp-types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "jest": "^29.0.0"
   },
   "files": [
     "dist"

@@ -16,6 +16,7 @@
     "@phys-mcp/mcp-types": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "jest": "^29.0.0"
   }
 }

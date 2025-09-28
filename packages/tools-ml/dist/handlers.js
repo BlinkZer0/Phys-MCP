@@ -63,7 +63,7 @@ export async function handleMLAugmentationTool(toolName, args) {
             case 'explain_derivation':
                 return await handleExplainDerivation(params, worker);
             default:
-                throw new Error(`Unknown ML method: ${params.method}`);
+                throw new Error('Unknown ML method');
         }
     }
     catch (error) {

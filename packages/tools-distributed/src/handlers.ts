@@ -36,7 +36,9 @@ function normalizeDistributedCall(
       throw new Error(`Unknown distributed collaboration tool: ${toolName}`);
     }
 
-    const { method: _ignored, ...restParams } = params;
+    const restParams = { ...params };
+    delete (restParams as Partial<DistributedCollaborationParams>).method;
+
     return {
       method: legacyMethod,
       actualParams: { ...restParams, method: legacyMethod } as DistributedCollaborationParams
@@ -100,7 +102,10 @@ export async function handleDistributedCollaborationTool(
 /**
  * Communicate with the shared Python worker process.
  */
-async function callPythonWorker(method: string, params: any): Promise<any> {
+async function callPythonWorker(
+  method: string,
+  params: DistributedCollaborationParams
+): Promise<DistributedCollaborationResponse> {
   const worker = getWorkerClient();
-  return worker.call(method, params);
+  return worker.call(method, params) as Promise<DistributedCollaborationResponse>;
 }

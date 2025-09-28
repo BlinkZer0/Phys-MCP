@@ -21,7 +21,8 @@ function normalizeDistributedCall(toolName, params) {
         if (!legacyMethod) {
             throw new Error(`Unknown distributed collaboration tool: ${toolName}`);
         }
-        const { method: _ignored, ...restParams } = params;
+        const restParams = { ...params };
+        delete restParams.method;
         return {
             method: legacyMethod,
             actualParams: { ...restParams, method: legacyMethod }
