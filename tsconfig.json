@@ -21,11 +21,25 @@
   },
   "references": [
     { "path": "./packages/mcp-types" },
+    { "path": "./packages/server" },
     { "path": "./packages/tools-cas" },
-    { "path": "./packages/tools-plot" },
-    { "path": "./packages/tools-nli" },
+    { "path": "./packages/tools-constants" },
+    { "path": "./packages/tools-data-io" },
+    { "path": "./packages/tools-distributed" },
+    { "path": "./packages/tools-export" },
+    { "path": "./packages/tools-external" },
     { "path": "./packages/tools-graphing-calculator" },
-    { "path": "./packages/server" }
+    { "path": "./packages/tools-ml" },
+    { "path": "./packages/tools-nli" },
+    { "path": "./packages/tools-orchestrator" },
+    { "path": "./packages/tools-plot" },
+    { "path": "./packages/tools-quantum" },
+    { "path": "./packages/tools-report" },
+    { "path": "./packages/tools-signal" },
+    { "path": "./packages/tools-statmech" },
+    { "path": "./packages/tools-tensor" },
+    { "path": "./packages/tools-units" },
+    { "path": "./packages/validation" }
   ],
   "files": [],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

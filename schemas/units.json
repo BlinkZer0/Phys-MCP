@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phys-MCP Units Registry",
+  "description": "Comprehensive registry of supported physical units and their behavior",
+  "version": "1.0.0",
+  "categories": {
+    "length": {
+      "description": "Units of length and distance",
+      "base_unit": "m",
+      "units": {
+        "m": { "name": "meter", "symbol": "m", "scale": 1.0, "system": "SI" },
+        "km": { "name": "kilometer", "symbol": "km", "scale": 1000.0, "system": "SI" },
+        "cm": { "name": "centimeter", "symbol": "cm", "scale": 0.01, "system": "SI" },
+        "mm": { "name": "millimeter", "symbol": "mm", "scale": 0.001, "system": "SI" },
+        "um": { "name": "micrometer", "symbol": "μm", "scale": 1e-6, "system": "SI" },
+        "nm": { "name": "nanometer", "symbol": "nm", "scale": 1e-9, "system": "SI" },
+        "in": { "name": "inch", "symbol": "in", "scale": 0.0254, "system": "Imperial" },
+        "ft": { "name": "foot", "symbol": "ft", "scale": 0.3048, "system": "Imperial" },
+        "yd": { "name": "yard", "symbol": "yd", "scale": 0.9144, "system": "Imperial" },
+        "mi": { "name": "mile", "symbol": "mi", "scale": 1609.344, "system": "Imperial" },
+        "au": { "name": "astronomical unit", "symbol": "AU", "scale": 1.495978707e11, "system": "Astronomical" },
+        "ly": { "name": "light year", "symbol": "ly", "scale": 9.4607304725808e15, "system": "Astronomical" },
+        "pc": { "name": "parsec", "symbol": "pc", "scale": 3.0856775814913673e16, "system": "Astronomical" }
+      }
+    },
+    "mass": {
+      "description": "Units of mass",
+      "base_unit": "kg",
+      "units": {
+        "kg": { "name": "kilogram", "symbol": "kg", "scale": 1.0, "system": "SI" },
+        "g": { "name": "gram", "symbol": "g", "scale": 0.001, "system": "SI" },
+        "mg": { "name": "milligram", "symbol": "mg", "scale": 1e-6, "system": "SI" },
+        "ug": { "name": "microgram", "symbol": "μg", "scale": 1e-9, "system": "SI" },
+        "lb": { "name": "pound", "symbol": "lb", "scale": 0.45359237, "system": "Imperial" },
+        "oz": { "name": "ounce", "symbol": "oz", "scale": 0.028349523125, "system": "Imperial" },
+        "ton": { "name": "metric ton", "symbol": "t", "scale": 1000.0, "system": "SI" },
+        "u": { "name": "atomic mass unit", "symbol": "u", "scale": 1.66053906660e-27, "system": "Atomic" },
+        "M_sun": { "name": "solar mass", "symbol": "M☉", "scale": 1.98847e30, "system": "Astronomical" },
+        "M_earth": { "name": "earth mass", "symbol": "M⊕", "scale": 5.9722e24, "system": "Astronomical" }
+      }
+    },
+    "time": {
+      "description": "Units of time",
+      "base_unit": "s",
+      "units": {
+        "s": { "name": "second", "symbol": "s", "scale": 1.0, "system": "SI" },
+        "ms": { "name": "millisecond", "symbol": "ms", "scale": 0.001, "system": "SI" },
+        "us": { "name": "microsecond", "symbol": "μs", "scale": 1e-6, "system": "SI" },
+        "ns": { "name": "nanosecond", "symbol": "ns", "scale": 1e-9, "system": "SI" },
+        "ps": { "name": "picosecond", "symbol": "ps", "scale": 1e-12, "system": "SI" },
+        "min": { "name": "minute", "symbol": "min", "scale": 60.0, "system": "Common" },
+        "h": { "name": "hour", "symbol": "h", "scale": 3600.0, "system": "Common" },
+        "day": { "name": "day", "symbol": "d", "scale": 86400.0, "system": "Common" },
+        "week": { "name": "week", "symbol": "wk", "scale": 604800.0, "system": "Common" },
+        "year": { "name": "year", "symbol": "yr", "scale": 31557600.0, "system": "Common" }
+      }
+    },
+    "temperature": {
+      "description": "Units of temperature",
+      "base_unit": "K",
+      "special_conversion": true,
+      "units": {
+        "K": { "name": "kelvin", "symbol": "K", "scale": 1.0, "offset": 0.0, "system": "SI" },
+        "C": { "name": "celsius", "symbol": "°C", "scale": 1.0, "offset": 273.15, "system": "Common" },
+        "F": { "name": "fahrenheit", "symbol": "°F", "scale": 0.5555555555555556, "offset": 459.67, "system": "Imperial" },
+        "R": { "name": "rankine", "symbol": "°R", "scale": 0.5555555555555556, "offset": 0.0, "system": "Imperial" }
+      }
+    },
+    "energy": {
+      "description": "Units of energy",
+      "base_unit": "J",
+      "units": {
+        "J": { "name": "joule", "symbol": "J", "scale": 1.0, "system": "SI" },
+        "kJ": { "name": "kilojoule", "symbol": "kJ", "scale": 1000.0, "system": "SI" },
+        "MJ": { "name": "megajoule", "symbol": "MJ", "scale": 1e6, "system": "SI" },
+        "eV": { "name": "electron volt", "symbol": "eV", "scale": 1.602176634e-19, "system": "Atomic" },
+        "keV": { "name": "kiloelectron volt", "symbol": "keV", "scale": 1.602176634e-16, "system": "Atomic" },
+        "MeV": { "name": "megaelectron volt", "symbol": "MeV", "scale": 1.602176634e-13, "system": "Atomic" },
+        "GeV": { "name": "gigaelectron volt", "symbol": "GeV", "scale": 1.602176634e-10, "system": "Atomic" },
+        "cal": { "name": "calorie", "symbol": "cal", "scale": 4.184, "system": "Common" },
+        "kcal": { "name": "kilocalorie", "symbol": "kcal", "scale": 4184.0, "system": "Common" },
+        "Wh": { "name": "watt hour", "symbol": "Wh", "scale": 3600.0, "system": "Common" },
+        "kWh": { "name": "kilowatt hour", "symbol": "kWh", "scale": 3.6e6, "system": "Common" }
+      }
+    },
+    "power": {
+      "description": "Units of power",
+      "base_unit": "W",
+      "units": {
+        "W": { "name": "watt", "symbol": "W", "scale": 1.0, "system": "SI" },
+        "kW": { "name": "kilowatt", "symbol": "kW", "scale": 1000.0, "system": "SI" },
+        "MW": { "name": "megawatt", "symbol": "MW", "scale": 1e6, "system": "SI" },
+        "GW": { "name": "gigawatt", "symbol": "GW", "scale": 1e9, "system": "SI" },
+        "hp": { "name": "horsepower", "symbol": "hp", "scale": 745.7, "system": "Imperial" }
+      }
+    },
+    "force": {
+      "description": "Units of force",
+      "base_unit": "N",
+      "units": {
+        "N": { "name": "newton", "symbol": "N", "scale": 1.0, "system": "SI" },
+        "kN": { "name": "kilonewton", "symbol": "kN", "scale": 1000.0, "system": "SI" },
+        "MN": { "name": "meganewton", "symbol": "MN", "scale": 1e6, "system": "SI" },
+        "lbf": { "name": "pound force", "symbol": "lbf", "scale": 4.4482216152605, "system": "Imperial" },
+        "dyn": { "name": "dyne", "symbol": "dyn", "scale": 1e-5, "system": "CGS" }
+      }
+    },
+    "pressure": {
+      "description": "Units of pressure",
+      "base_unit": "Pa",
+      "units": {
+        "Pa": { "name": "pascal", "symbol": "Pa", "scale": 1.0, "system": "SI" },
+        "kPa": { "name": "kilopascal", "symbol": "kPa", "scale": 1000.0, "system": "SI" },
+        "MPa": { "name": "megapascal", "symbol": "MPa", "scale": 1e6, "system": "SI" },
+        "GPa": { "name": "gigapascal", "symbol": "GPa", "scale": 1e9, "system": "SI" },
+        "bar": { "name": "bar", "symbol": "bar", "scale": 1e5, "system": "Common" },
+        "mbar": { "name": "millibar", "symbol": "mbar", "scale": 100.0, "system": "Common" },
+        "atm": { "name": "atmosphere", "symbol": "atm", "scale": 101325.0, "system": "Common" },
+        "psi": { "name": "pounds per square inch", "symbol": "psi", "scale": 6894.757293168, "system": "Imperial" },
+        "torr": { "name": "torr", "symbol": "Torr", "scale": 133.322387415, "system": "Common" },
+        "mmHg": { "name": "millimeter of mercury", "symbol": "mmHg", "scale": 133.322387415, "system": "Common" }
+      }
+    }
+  },
+  "compound_units": {
+    "velocity": ["m/s", "km/h", "mph", "ft/s", "knot"],
+    "acceleration": ["m/s2", "ft/s2", "g"],
+    "frequency": ["Hz", "kHz", "MHz", "GHz", "rpm"],
+    "angular_velocity": ["rad/s", "deg/s", "rpm"],
+    "density": ["kg/m3", "g/cm3", "lb/ft3"],
+    "specific_energy": ["J/kg", "cal/g", "Wh/kg"],
+    "heat_capacity": ["J/(kg*K)", "cal/(g*K)"],
+    "thermal_conductivity": ["W/(m*K)"],
+    "electric_field": ["V/m", "N/C"],
+    "magnetic_flux": ["Wb", "T*m2"],
+    "inductance": ["H", "Wb/A"],
+    "luminance": ["cd/m2", "nit"]
+  },
+  "constants": {
+    "description": "Physical constants that can be substituted in expressions",
+    "values": {
+      "c": { "name": "speed of light", "value": 299792458, "unit": "m/s", "uncertainty": 0 },
+      "h": { "name": "Planck constant", "value": 6.62607015e-34, "unit": "J*s", "uncertainty": 0 },
+      "hbar": { "name": "reduced Planck constant", "value": 1.054571817e-34, "unit": "J*s", "uncertainty": 0 },
+      "e": { "name": "elementary charge", "value": 1.602176634e-19, "unit": "C", "uncertainty": 0 },
+      "m_e": { "name": "electron mass", "value": 9.1093837015e-31, "unit": "kg", "uncertainty": 2.8e-40 },
+      "m_p": { "name": "proton mass", "value": 1.67262192369e-27, "unit": "kg", "uncertainty": 5.1e-37 },
+      "m_n": { "name": "neutron mass", "value": 1.67492749804e-27, "unit": "kg", "uncertainty": 9.5e-37 },
+      "k_B": { "name": "Boltzmann constant", "value": 1.380649e-23, "unit": "J/K", "uncertainty": 0 },
+      "N_A": { "name": "Avogadro constant", "value": 6.02214076e23, "unit": "1/mol", "uncertainty": 0 },
+      "R": { "name": "gas constant", "value": 8.314462618, "unit": "J/(mol*K)", "uncertainty": 0 },
+      "epsilon_0": { "name": "vacuum permittivity", "value": 8.8541878128e-12, "unit": "F/m", "uncertainty": 1.3e-21 },
+      "mu_0": { "name": "vacuum permeability", "value": 1.25663706212e-6, "unit": "H/m", "uncertainty": 1.9e-16 },
+      "G": { "name": "gravitational constant", "value": 6.67430e-11, "unit": "m3/(kg*s2)", "uncertainty": 1.5e-15 },
+      "g": { "name": "standard gravity", "value": 9.80665, "unit": "m/s2", "uncertainty": 0 },
+      "sigma": { "name": "Stefan-Boltzmann constant", "value": 5.670374419e-8, "unit": "W/(m2*K4)", "uncertainty": 0 },
+      "alpha": { "name": "fine structure constant", "value": 7.2973525693e-3, "unit": "1", "uncertainty": 1.1e-12 },
+      "a_0": { "name": "Bohr radius", "value": 5.29177210903e-11, "unit": "m", "uncertainty": 8.0e-21 }
+    }
+  },
+  "validation_rules": {
+    "dimensionality": {
+      "description": "Rules for dimensional analysis",
+      "compatible_operations": {
+        "addition": "same_dimension",
+        "subtraction": "same_dimension",
+        "multiplication": "any",
+        "division": "any",
+        "power": "dimensionless_exponent"
+      }
+    },
+    "precision": {
+      "default_significant_figures": 6,
+      "max_relative_error": 1e-9,
+      "round_trip_tolerance": 1e-12
+    },
+    "forbidden_conversions": [
+      {"from": "temperature", "to": "energy", "reason": "Requires additional context (e.g., k_B)"},
+      {"from": "mass", "to": "energy", "reason": "Requires c^2 factor"},
+      {"from": "frequency", "to": "energy", "reason": "Requires h factor"}
+    ]
+  }
+}

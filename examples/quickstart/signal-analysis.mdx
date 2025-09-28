@@ -1,0 +1,140 @@
+# Signal Analysis with FFT
+
+Demonstrate signal processing capabilities using the consolidated `data` tool.
+
+## Problem
+
+Analyze a composite signal containing multiple frequency components and noise.
+
+## Signal Generation
+
+First, let's create a test signal with known frequency components:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "cas",
+  "params": {
+    "action": "evaluate", 
+    "expr": "sin(2*pi*50*t) + 0.5*sin(2*pi*120*t) + 0.1*random()",
+    "vars": {
+      "t": {"value": [0, 0.001, 0.002, "..."], "unit": "s"},
+      "pi": 3.14159265359
+    }
+  }
+}
+```
+
+## FFT Analysis
+
+Perform Fast Fourier Transform to identify frequency components:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "2",
+  "method": "data",
+  "params": {
+    "action": "fft",
+    "signal_data": [0.1, 0.8, 0.9, 0.1, -0.7, -0.9, 0.0, 0.7],
+    "sample_rate": 1000,
+    "emit_plots": true,
+    "emit_csv": true
+  }
+}
+```
+
+**Expected Output:**
+- Frequency spectrum plot
+- Peak detection at 50 Hz and 120 Hz
+- CSV data export for further analysis
+
+## Spectrogram Analysis
+
+Analyze time-frequency content:
+
+```json
+{
+  "jsonrpc": "2.0", 
+  "id": "3",
+  "method": "data",
+  "params": {
+    "action": "spectrogram",
+    "signal_data": [/* time series data */],
+    "sample_rate": 1000,
+    "window_size": 256,
+    "overlap": 0.5,
+    "window_type": "hann"
+  }
+}
+```
+
+## Filtering
+
+Apply a bandpass filter to isolate the 50 Hz component:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "4", 
+  "method": "data",
+  "params": {
+    "action": "filter",
+    "signal_data": [/* original signal */],
+    "sample_rate": 1000,
+    "filter_type": "bandpass",
+    "cutoff_freq": [45, 55],
+    "filter_order": 4
+  }
+}
+```
+
+## Wavelet Analysis
+
+Perform time-frequency analysis with wavelets:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "5",
+  "method": "data", 
+  "params": {
+    "action": "wavelet",
+    "signal_data": [/* signal data */],
+    "sample_rate": 1000,
+    "wavelet": "morlet",
+    "scales": [1, 2, 4, 8, 16, 32]
+  }
+}
+```
+
+## Key Features Demonstrated
+
+- **Consolidated Interface**: Single `data` tool for all signal processing
+- **GPU Acceleration**: Automatic GPU usage for large datasets with CPU fallback
+- **Multiple Outputs**: Plots, CSV data, and analysis results
+- **Professional Visualization**: High-quality spectrograms and frequency plots
+- **Chunked Processing**: Handles large signals efficiently
+
+## Expected Results
+
+1. **FFT Plot**: Clear peaks at 50 Hz and 120 Hz
+2. **Spectrogram**: Time-frequency representation showing signal evolution
+3. **Filtered Signal**: Clean 50 Hz sinusoid after bandpass filtering
+4. **Wavelet Coefficients**: Multi-resolution time-frequency analysis
+
+## Performance Notes
+
+- GPU acceleration provides 10-100x speedup for large signals
+- Chunked processing prevents memory overflow
+- Caching optimizes repeated operations with same parameters
+
+## Extensions
+
+Try these variations:
+- Chirp signals (frequency sweeps)
+- Non-stationary signals
+- Real-world audio or sensor data
+- Custom window functions
+- Advanced filtering (Butterworth, Chebyshev, elliptic)

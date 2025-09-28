@@ -6,6 +6,7 @@ Handles symbolic computation, numerical analysis, and plotting operations
 via JSON-RPC over stdin/stdout.
 """
 
+from __future__ import annotations
 import sys
 import json
 import math
@@ -18,6 +19,16 @@ import base64
 import time
 import os
 from pathlib import Path
+
+# Import error handling and performance modules
+from src.error_handling import (
+    PhysicsError, ValidationError, ComputationError, UnitsError, ResourceError,
+    wrap_tool_execution, create_error_response, generate_request_id, logger
+)
+from src.performance import (
+    with_cache, gpu_fallback, chunked_processor, optimize_fft, optimize_plot_generation,
+    get_performance_report, perf_monitor
+)
 
 # Core computation libraries
 import sympy as sp
@@ -246,6 +257,8 @@ def quantity_to_dict(q: Union[float, pint.Quantity]) -> Dict[str, Any]:
     return {"value": float(q), "unit": ""}
 
 
+@wrap_tool_execution
+@with_cache(ttl_hours=2)
 def handle_cas_evaluate(params: Dict[str, Any]) -> Dict[str, Any]:
     """Evaluate a symbolic/numeric expression."""
     expr_str = params["expr"]
@@ -1168,6 +1181,37 @@ def handle_constants_get(params: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError(f"Unknown constant '{name}'. Similar: {similar}. Available: {available}")
 
 
+def handle_units_smart_eval(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Smart evaluation of expressions with units and constants."""
+    from src.units_smart import evaluate_with_units
+    
+    expr = params["expr"]
+    constants = params.get("constants", {})
+    
+    try:
+        result = evaluate_with_units(expr, constants)
+        return result
+    except Exception as e:
+        raise ValueError(f"Smart units evaluation failed: {e}")
+
+
+def handle_units_round_trip_test(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Test round-trip unit conversion accuracy."""
+    from src.units_smart import round_trip_test
+    
+    value = params["value"]
+    from_unit = params["from_unit"]
+    to_unit = params["to_unit"]
+    tolerance = params.get("tolerance", 1e-9)
+    
+    try:
+        result = round_trip_test(value, from_unit, to_unit, tolerance)
+        return result
+    except Exception as e:
+        raise ValueError(f"Round-trip test failed: {e}")
+
+
+@wrap_tool_execution
 def handle_plot_function_2d(params: Dict[str, Any]) -> Dict[str, Any]:
     """Plot a 2D function."""
     f_str = params["f"]
@@ -1602,76 +1646,91 @@ def handle_plot_contour_2d(params: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+@wrap_tool_execution
+@with_cache(ttl_hours=4)
 def handle_tensor_algebra(params: Dict[str, Any]) -> Dict[str, Any]:
-    """Compute Christoffel symbols, curvature tensors, and geodesics."""
-    metric = params["metric"]  # nested array
-    coords = params["coords"]  # coordinate names
-    compute = params["compute"]  # list of quantities to compute
+    """Advanced tensor algebra operations."""
+    from src.tensor_algebra import (
+        tensor_algebra_compute, schwarzschild_metric, kerr_metric,
+        TensorField, christoffel_symbols
+    )
+    
+    metric = params.get("metric", [])
+    coords = params.get("coords", [])
+    compute = params.get("compute", [])
     
     try:
-        # Convert metric to sympy Matrix
-        coord_symbols = [sp.Symbol(c) for c in coords]
-        n = len(coord_symbols)
+        # Handle special metrics
+        if isinstance(metric, str):
+            if metric.lower() == "schwarzschild":
+                schwarzschild_result = schwarzschild_metric()
+                return {
+                    "metric_type": "schwarzschild",
+                    "metric": schwarzschild_result["metric"],
+                    "coordinates": schwarzschild_result["coordinates"],
+                    "physical_properties": {
+                        "schwarzschild_radius": schwarzschild_result["schwarzschild_radius"],
+                        "singularities": schwarzschild_result["singularities"],
+                        "applications": schwarzschild_result["applications"]
+                    }
+                }
+            elif metric.lower() == "kerr":
+                kerr_result = kerr_metric()
+                return {
+                    "metric_type": "kerr",
+                    "metric": kerr_result["metric"],
+                    "coordinates": kerr_result["coordinates"],
+                    "physical_properties": {
+                        "angular_momentum": kerr_result["angular_momentum"],
+                        "ergosphere": kerr_result["ergosphere"],
+                        "event_horizon": kerr_result["event_horizon"],
+                        "applications": kerr_result["applications"]
+                    }
+                }
         
-        # Parse metric components
-        g = sp.Matrix(n, n, lambda i, j: safe_sympify(str(metric[i][j])))
+        # Validate inputs
+        if not metric or not coords or not compute:
+            raise ValueError("metric, coords, and compute parameters are required")
         
-        results = {}
+        if len(metric) != len(coords) or len(metric[0]) != len(coords):
+            raise ValueError("Metric dimensions must match coordinate dimensions")
         
-        if "christoffel" in compute:
-            # Christoffel symbols Γ^k_{ij} = (1/2) g^{kl} (∂g_{il}/∂x^j + ∂g_{jl}/∂x^i - ∂g_{ij}/∂x^l)
-            christoffel = sp.MutableDenseNDimArray.zeros(n, n, n)
-            g_inv = g.inv()
-            
-            for i in range(n):
-                for j in range(n):
-                    for k in range(n):
-                        gamma = 0
-                        for l in range(n):
-                            term1 = sp.diff(g[i, l], coord_symbols[j])
-                            term2 = sp.diff(g[j, l], coord_symbols[i])
-                            term3 = sp.diff(g[i, j], coord_symbols[l])
-                            gamma += g_inv[k, l] * (term1 + term2 - term3) / 2
-                        christoffel[k, i, j] = sp.simplify(gamma)
-            
-            results["christoffel"] = {
-                "components": [[[str(christoffel[k, i, j]) for j in range(n)] for i in range(n)] for k in range(n)],
-                "latex": [[[sp.latex(christoffel[k, i, j]) for j in range(n)] for i in range(n)] for k in range(n)]
-            }
+        # Perform tensor algebra computations
+        result = tensor_algebra_compute(metric, coords, compute)
         
-        if "riemann" in compute:
-            # Simplified Riemann tensor computation (basic implementation)
-            results["riemann"] = {
-                "status": "partial_implementation",
-                "message": "Full Riemann tensor computation requires extensive symbolic manipulation. Use sympy.diffgeom for complete implementation."
-            }
+        # Convert sympy expressions to strings for JSON serialization
+        def serialize_sympy(obj):
+            if hasattr(obj, '__iter__') and not isinstance(obj, str):
+                if hasattr(obj, 'shape'):  # numpy/sympy array
+                    return [[str(obj[i, j]) for j in range(obj.shape[1])] 
+                           for i in range(obj.shape[0])]
+                else:
+                    return [serialize_sympy(item) for item in obj]
+            else:
+                return str(obj)
         
-        if "ricci" in compute:
-            # Ricci tensor R_{ij} (simplified)
-            results["ricci"] = {
-                "status": "partial_implementation", 
-                "message": "Ricci tensor computation from Christoffel symbols requires contraction. Use sympy.diffgeom for complete implementation."
-            }
-        
-        if "ricci_scalar" in compute:
-            results["ricci_scalar"] = {
-                "status": "partial_implementation",
-                "message": "Ricci scalar R = g^{ij} R_{ij}. Use sympy.diffgeom for complete implementation."
-            }
-        
-        if "geodesics" in compute:
-            # Geodesic equation: d²x^μ/dτ² + Γ^μ_{αβ} (dx^α/dτ)(dx^β/dτ) = 0
-            results["geodesics"] = {
-                "equation_form": "d²x^μ/dτ² + Γ^μ_{αβ} (dx^α/dτ)(dx^β/dτ) = 0",
-                "latex": r"\frac{d^2x^\mu}{d\tau^2} + \Gamma^\mu_{\alpha\beta} \frac{dx^\alpha}{d\tau}\frac{dx^\beta}{d\tau} = 0",
-                "message": "Use computed Christoffel symbols with specific initial conditions to solve geodesics numerically."
-            }
+        # Serialize results
+        serialized_result = {}
+        for key, value in result.items():
+            if key in ['christoffel_symbols', 'riemann_tensor', 'ricci_tensor', 'ricci_scalar', 'geodesics']:
+                serialized_result[key] = serialize_sympy(value)
+            else:
+                serialized_result[key] = value
         
         return {
-            "metric_determinant": str(sp.simplify(g.det())),
-            "coordinates": coords,
-            "computed": compute,
-            "results": results
+            "status": "success",
+            "computation": "advanced_tensor_algebra",
+            "results": serialized_result,
+            "capabilities": [
+                "christoffel_symbols",
+                "riemann_curvature",
+                "ricci_tensor",
+                "ricci_scalar",
+                "einstein_tensor",
+                "geodesic_equations",
+                "schwarzschild_metric",
+                "kerr_metric"
+            ]
         }
         
     except Exception as e:
@@ -1870,6 +1929,143 @@ def handle_quantum_visualize(params: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError(f"Quantum visualization failed: {e}")
 
 
+def handle_quantum_ops(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Handle quantum operator operations."""
+    from src.quantum import quantum_ops
+    
+    operators = params.get("operators", [])
+    task = params.get("task", "matrix_rep")
+    
+    try:
+        result = quantum_ops(operators, task)
+        return result
+    except Exception as e:
+        raise ValueError(f"Quantum ops failed: {e}")
+
+
+def handle_quantum_solve(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Handle quantum problem solving."""
+    from src.quantum import quantum_solve
+    
+    problem = params.get("problem", "sho")
+    hamiltonian = params.get("hamiltonian")
+    problem_params = params.get("params", {})
+    
+    try:
+        result = quantum_solve(problem, hamiltonian, problem_params)
+        return result
+    except Exception as e:
+        raise ValueError(f"Quantum solve failed: {e}")
+
+
+def handle_quantum_visualize(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Handle quantum state visualization."""
+    from src.quantum import quantum_visualize
+    
+    state = params.get("state", "1,0")
+    kind = params.get("kind", "bloch")
+    
+    try:
+        result = quantum_visualize(state, kind)
+        
+        # Save image as artifact if present
+        if 'image' in result:
+            artifacts_dir = Path("artifacts")
+            artifacts_dir.mkdir(exist_ok=True)
+            
+            timestamp = int(time.time() * 1000)
+            filename = f"quantum_{kind}_{timestamp}.png"
+            filepath = artifacts_dir / filename
+            
+            # Decode base64 and save
+            import base64
+            image_data = base64.b64decode(result['image'])
+            with open(filepath, 'wb') as f:
+                f.write(image_data)
+            
+            # Add artifact info
+            result['artifacts'] = [{
+                'type': 'image',
+                'path': str(filepath),
+                'description': f'Quantum {kind} visualization'
+            }]
+        
+        return result
+    except Exception as e:
+        raise ValueError(f"Quantum visualization failed: {e}")
+
+
+def handle_report_generate(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate session report with Markdown output."""
+    from src.reporting import generate_session_report
+    
+    session_id = params.get("session_id", "default")
+    title = params.get("title")
+    author = params.get("author")
+    include_sections = params.get("include", ["summary", "tools", "artifacts", "reproduce"])
+    format_type = params.get("format", "markdown")
+    
+    try:
+        result = generate_session_report(
+            session_id=session_id,
+            title=title,
+            author=author,
+            include_sections=include_sections,
+            format_type=format_type
+        )
+        return result
+    except Exception as e:
+        raise ValueError(f"Report generation failed: {e}")
+
+
+def handle_job_submit(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Submit job for distributed execution."""
+    from src.reporting import submit_job
+    
+    job_type = params.get("job_type", "computation")
+    job_params = params.get("parameters", {})
+    executor = params.get("executor", "local")
+    priority = params.get("priority", "normal")
+    
+    try:
+        result = submit_job(
+            job_type=job_type,
+            parameters=job_params,
+            executor=executor,
+            priority=priority
+        )
+        return result
+    except Exception as e:
+        raise ValueError(f"Job submission failed: {e}")
+
+
+def handle_job_status(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Get status of submitted job."""
+    from src.reporting import get_job_status
+    
+    job_id = params.get("job_id")
+    if not job_id:
+        raise ValueError("job_id parameter is required")
+    
+    try:
+        result = get_job_status(job_id)
+        return result
+    except Exception as e:
+        raise ValueError(f"Failed to get job status: {e}")
+
+
+def handle_performance_report(params: Dict[str, Any]) -> Dict[str, Any]:
+    """Get comprehensive performance report."""
+    try:
+        report = get_performance_report()
+        return {
+            'success': True,
+            'report': report
+        }
+    except Exception as e:
+        raise ValueError(f"Failed to generate performance report: {e}")
+
+
 def handle_statmech_partition(params: Dict[str, Any]) -> Dict[str, Any]:
     """Statistical mechanics partition function and thermodynamic quantities."""
     energy_levels = params.get("energy_levels", [])
@@ -1967,6 +2163,10 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
     # Units and Constants methods
     elif method == "units_convert":
         return handle_units_convert(params)
+    elif method == "units_smart_eval":
+        return handle_units_smart_eval(params)
+    elif method == "units_round_trip_test":
+        return handle_units_round_trip_test(params)
     elif method == "constants_get":
         return handle_constants_get(params)
     
@@ -1996,15 +2196,17 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
     elif method == "plot_vr_export":
         return handle_plot_vr_export(params)
     
-    # Phase 3 methods
-    elif method == "tensor_algebra":
-        return handle_tensor_algebra(params)
+    # Phase 3 methods (Quantum MVP)
     elif method == "quantum_ops":
         return handle_quantum_ops(params)
     elif method == "quantum_solve":
         return handle_quantum_solve(params)
     elif method == "quantum_visualize":
         return handle_quantum_visualize(params)
+    
+    # Phase 3 methods (other)
+    elif method == "tensor_algebra":
+        return handle_tensor_algebra(params)
     elif method == "statmech_partition":
         return handle_statmech_partition(params)
     
@@ -2047,6 +2249,16 @@ def handle_request(msg: Dict[str, Any]) -> Dict[str, Any]:
         return export_utils.export_zenodo(**params)
     elif method == "export_jupyter":
         return export_utils.export_jupyter(**params)
+    
+    # Reporting and orchestration methods
+    elif method == "report_generate":
+        return handle_report_generate(params)
+    elif method == "job_submit":
+        return handle_job_submit(params)
+    elif method == "job_status":
+        return handle_job_status(params)
+    elif method == "performance_report":
+        return handle_performance_report(params)
     
     # Phase 6 methods - ML/AI Augmentation
     elif method == "ml_symbolic_regression":

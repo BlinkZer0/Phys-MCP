@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-"use strict";
 /**
  * Physics MCP Server
  *
  * Main server that orchestrates CAS, Plot, and NLI tools for physics computations.
  * Communicates via JSON-RPC over stdio with MCP clients.
  */
+import 'dotenv/config';
 let Server;
 let StdioServerTransport;
 let CallToolRequestSchema;
@@ -359,6 +359,22 @@ class PhysicsMCPServer {
                 else if (name === "cas" && handleCASTool) {
                     result = await handleCASTool(name, args);
                 }
+                else if (name === "units_convert" && handleUnitsTool) {
+                    result = await handleUnitsTool(name, args);
+                }
+                else if (name === "constants_get" && handleConstantsTool) {
+                    result = await handleConstantsTool(name, args);
+                }
+                else if (name === "nli_parse" && handleNLITool) {
+                    result = await handleNLITool(name, args);
+                }
+                else if (name === "accel_caps") {
+                    // Handle acceleration capabilities directly
+                    result = { device: "cpu", capabilities: ["basic_compute"] };
+                }
+                else if (name === "statmech_partition" && handleStatmechTool) {
+                    result = await handleStatmechTool(name, args);
+                }
                 else if (name === "plot" && handlePlotTool) {
                     result = await handlePlotTool(name, args);
                 }
@@ -373,6 +389,9 @@ class PhysicsMCPServer {
                 }
                 else if (name === "quantum" && handleQuantumTool) {
                     result = await handleQuantumTool(name, args);
+                }
+                else if (name === "tensor_algebra" && handleTensorTool) {
+                    result = await handleTensorTool(name, args);
                 }
                 else if (name === "ml_ai_augmentation" && handleMLAugmentationTool) {
                     result = await handleMLAugmentationTool(name, args);

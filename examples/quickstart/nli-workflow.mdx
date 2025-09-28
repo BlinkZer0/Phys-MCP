@@ -1,0 +1,219 @@
+# Natural Language Interface Workflow
+
+Demonstrate end-to-end natural language to tool call conversion using the NLI system.
+
+## Overview
+
+The Natural Language Interface (NLI) converts plain English physics requests into structured MCP tool calls, making complex calculations accessible through conversational interaction.
+
+## Setup
+
+Ensure you have a local LM server running (e.g., LM Studio) for optimal performance:
+
+```bash
+# Set environment variables
+export LM_BASE_URL="http://localhost:1234/v1"
+export DEFAULT_MODEL="llama-3.2-3b-instruct"
+# LM_API_KEY is optional for local servers
+```
+
+## Example Workflow
+
+### 1. Simple Calculation
+
+**Natural Language Input:**
+> "Calculate the derivative of x squared plus 3x plus 1"
+
+**NLI Processing:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "nli_parse",
+  "params": {
+    "text": "Calculate the derivative of x squared plus 3x plus 1"
+  }
+}
+```
+
+**Expected NLI Output:**
+```json
+{
+  "tool_call": {
+    "method": "cas",
+    "params": {
+      "action": "diff",
+      "expr": "x^2 + 3*x + 1",
+      "symbol": "x"
+    }
+  },
+  "confidence": 0.95,
+  "reasoning": "User requests differentiation of polynomial expression"
+}
+```
+
+**Automatic Execution:**
+The parsed tool call is automatically executed, returning: `2*x + 3`
+
+### 2. Physics Problem
+
+**Natural Language Input:**
+> "Plot the electric field of a point charge at the origin from -5 to 5 meters"
+
+**NLI Processing:**
+```json
+{
+  "jsonrpc": "2.0", 
+  "id": "2",
+  "method": "nli_parse",
+  "params": {
+    "text": "Plot the electric field of a point charge at the origin from -5 to 5 meters"
+  }
+}
+```
+
+**Expected Tool Call:**
+```json
+{
+  "method": "plot",
+  "params": {
+    "plot_type": "function_2d",
+    "f": "k*q/x^2",
+    "x_range": [-5, 5],
+    "title": "Electric Field vs Distance",
+    "xlabel": "Distance (m)",
+    "ylabel": "Electric Field (N/C)"
+  }
+}
+```
+
+### 3. Unit Conversion
+
+**Natural Language Input:**
+> "Convert 100 miles per hour to meters per second"
+
+**NLI Processing:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "3", 
+  "method": "nli_parse",
+  "params": {
+    "text": "Convert 100 miles per hour to meters per second"
+  }
+}
+```
+
+**Expected Tool Call:**
+```json
+{
+  "method": "units_convert",
+  "params": {
+    "quantity": {"value": 100, "unit": "mph"},
+    "to": "m/s"
+  }
+}
+```
+
+### 4. Complex Multi-Step Problem
+
+**Natural Language Input:**
+> "Solve the differential equation y double prime plus y equals zero with initial conditions y(0)=0 and y'(0)=1, then plot the solution"
+
+**NLI Processing:**
+This complex request gets parsed into multiple tool calls:
+
+1. **Solve ODE:**
+```json
+{
+  "method": "cas",
+  "params": {
+    "action": "solve_ode",
+    "ode": "y'' + y = 0",
+    "symbol": "x",
+    "func": "y", 
+    "ics": {"y(0)": 0, "y'(0)": 1}
+  }
+}
+```
+
+2. **Plot Solution:**
+```json
+{
+  "method": "plot",
+  "params": {
+    "plot_type": "function_2d",
+    "f": "sin(x)",
+    "x_range": [0, 10],
+    "title": "Solution to y'' + y = 0",
+    "xlabel": "x",
+    "ylabel": "y(x)"
+  }
+}
+```
+
+## NLI Features
+
+### Intent Recognition
+- **Mathematical Operations**: differentiate, integrate, solve, evaluate
+- **Plotting Requests**: plot, graph, visualize, show
+- **Unit Conversions**: convert, transform, change units
+- **Physical Constants**: get, find, lookup constants
+- **Data Analysis**: analyze, process, filter signals
+
+### Context Awareness
+- **Variable Extraction**: Identifies mathematical expressions and variables
+- **Unit Detection**: Recognizes physical units in natural language
+- **Parameter Inference**: Fills in reasonable defaults for missing parameters
+- **Ambiguity Resolution**: Asks for clarification when needed
+
+### Error Handling
+- **Graceful Degradation**: Falls back to simpler parsing if complex NLI fails
+- **Suggestion System**: Provides alternative interpretations
+- **Learning**: Improves over time with usage patterns
+
+## Performance Optimization
+
+### Local LM Benefits
+- **Low Latency**: ~100-500ms vs 1-3s for cloud APIs
+- **Privacy**: All processing stays local
+- **Cost**: No per-token charges
+- **Availability**: Works offline
+
+### Caching
+- **Intent Patterns**: Common requests cached for instant response
+- **Tool Mappings**: Frequent NL→tool mappings stored
+- **Context Memory**: Recent conversation context maintained
+
+## Advanced Usage
+
+### Chained Operations
+> "Find the roots of x^3 - 2x^2 + x - 2 = 0, then plot the function and mark the roots"
+
+### Physics Workflows  
+> "Calculate the trajectory of a projectile with initial velocity 50 m/s at 30 degrees, including air resistance"
+
+### Data Analysis
+> "Load the signal data from experiment.csv, apply a low-pass filter at 100 Hz, then generate a spectrogram"
+
+## Troubleshooting
+
+### Common Issues
+1. **LM Server Not Running**: NLI falls back to rule-based parsing
+2. **Ambiguous Requests**: System asks for clarification
+3. **Unsupported Operations**: Suggests alternative approaches
+
+### Best Practices
+- Be specific about units and ranges
+- Use standard mathematical notation
+- Provide context for complex problems
+- Check results for reasonableness
+
+## Extensions
+
+The NLI system can be extended with:
+- Domain-specific vocabularies
+- Custom physics problem templates  
+- Integration with experimental data formats
+- Multi-language support
+- Voice input processing

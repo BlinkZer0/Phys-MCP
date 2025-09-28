@@ -7,6 +7,8 @@
  * Communicates via JSON-RPC over stdio with MCP clients.
  */
 
+import 'dotenv/config';
+
 let Server: any;
 let StdioServerTransport: any;
 let CallToolRequestSchema: any;
@@ -376,6 +378,17 @@ class PhysicsMCPServer {
         // Route to appropriate tool handler - consolidated tools
         else if (name === "cas" && handleCASTool) {
           result = await handleCASTool(name, args);
+        } else if (name === "units_convert" && handleUnitsTool) {
+          result = await handleUnitsTool(name, args);
+        } else if (name === "constants_get" && handleConstantsTool) {
+          result = await handleConstantsTool(name, args);
+        } else if (name === "nli_parse" && handleNLITool) {
+          result = await handleNLITool(name, args);
+        } else if (name === "accel_caps") {
+          // Handle acceleration capabilities directly
+          result = { device: "cpu", capabilities: ["basic_compute"] };
+        } else if (name === "statmech_partition" && handleStatmechTool) {
+          result = await handleStatmechTool(name, args);
         } else if (name === "plot" && handlePlotTool) {
           result = await handlePlotTool(name, args);
         } else if (name === "data" && handleDataIOTool) {
@@ -386,6 +399,8 @@ class PhysicsMCPServer {
           result = await handleExportTool(name, args);
         } else if (name === "quantum" && handleQuantumTool) {
           result = await handleQuantumTool(name, args);
+        } else if (name === "tensor_algebra" && handleTensorTool) {
+          result = await handleTensorTool(name, args);
         } else if (name === "ml_ai_augmentation" && handleMLAugmentationTool) {
           result = await handleMLAugmentationTool(name, args);
         } else if (name === "graphing_calculator" && handleGraphingCalculatorTool) {
@@ -594,12 +609,16 @@ async function handleReportGenerate(args: any, pm: any, sessionId?: string): Pro
       const inputObj = JSON.parse(ev.input_json);
       md += "  - Input:\n\n";
       md += "```json\n" + JSON.stringify(inputObj, null, 2) + "\n```\n";
-    } catch {}
+    } catch {
+      // Ignore JSON parsing errors for input
+    }
     try {
       const outputObj = JSON.parse(ev.output_json);
       md += "  - Output:\n\n";
       md += "```json\n" + JSON.stringify(outputObj, null, 2) + "\n```\n";
-    } catch {}
+    } catch {
+      // Ignore JSON parsing errors for output
+    }
   }
 
   md += `\n## Artifacts\n`;

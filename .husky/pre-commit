@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# TypeScript linting and type checking
+echo "📝 Linting TypeScript..."
+pnpm lint
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript linting failed"
+  exit 1
+fi
+
+echo "🔍 Type checking TypeScript..."
+pnpm typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript type checking failed"
+  exit 1
+fi
+
+# Python linting and type checking
+echo "🐍 Checking Python code..."
+cd packages/python-worker
+
+if [ -f "requirements.txt" ]; then
+  # Check if ruff is available
+  if command -v ruff >/dev/null 2>&1; then
+    echo "📝 Linting Python with ruff..."
+    ruff check src/
+    if [ $? -ne 0 ]; then
+      echo "❌ Python linting failed"
+      exit 1
+    fi
+  fi
+
+  # Check if mypy is available
+  if command -v mypy >/dev/null 2>&1; then
+    echo "🔍 Type checking Python with mypy..."
+    mypy src/ --ignore-missing-imports
+    if [ $? -ne 0 ]; then
+      echo "❌ Python type checking failed"
+      exit 1
+    fi
+  fi
+fi
+
+cd ../..
+
+echo "✅ All pre-commit checks passed!"

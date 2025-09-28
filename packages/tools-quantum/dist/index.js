@@ -28,15 +28,27 @@ export function buildQuantumTools() {
     ];
 }
 export async function handleQuantumTool(name, args) {
+    const { getWorkerClient } = await import("../../tools-cas/dist/worker-client.js");
+    const worker = getWorkerClient();
     if (name === 'quantum') {
         const action = args.action;
         switch (action) {
             case 'ops':
-                return { status: "not_implemented", message: "quantum ops will be implemented in Phase 3", input_echo: args };
+                return await worker.call("quantum_ops", {
+                    operators: args.operators,
+                    task: args.task
+                });
             case 'solve':
-                return { status: "not_implemented", message: "quantum solve will be implemented in Phase 3", input_echo: args };
+                return await worker.call("quantum_solve", {
+                    problem: args.problem,
+                    hamiltonian: args.hamiltonian,
+                    params: args.params
+                });
             case 'visualize':
-                return { status: "not_implemented", message: "quantum visualize will be implemented in Phase 3", input_echo: args };
+                return await worker.call("quantum_visualize", {
+                    state: args.state,
+                    kind: args.kind
+                });
             default:
                 throw new Error(`Unknown quantum action: ${action}`);
         }

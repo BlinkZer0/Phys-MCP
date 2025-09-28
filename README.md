@@ -57,31 +57,50 @@ Optional (recommended for faster NLI):
 
 ### Installation
 
-Run these commands from the repository root directory (`phys-mcp/`).
-
+**One-Command Setup** (Recommended):
 ```bash
-# Install Node.js dependencies from the repo root
+# Clone repository
+git clone <repository-url>
+cd phys-mcp
+
+# Single command setup: builds TypeScript, installs Python deps, runs healthcheck, starts server
+pnpm dev:all
+```
+
+**Manual Setup**:
+```bash
+# Install Node.js dependencies
 pnpm install
 
-# Install Python dependencies (from packages/python-worker/)
+# Install Python dependencies
 cd packages/python-worker
 pip install -r requirements.txt
 cd ../..
 
-# Build all packages from the repo root
+# Build all packages
 pnpm build
 
-# Start the development server from phys-mcp/
+# Run healthcheck to verify installation
+pnpm healthcheck
+
+# Start development server
 pnpm dev
 ```
 
 ### Configuration
 
-- Environment variables used by NLI: `LM_BASE_URL`, `LM_API_KEY` (optional), `DEFAULT_MODEL`
-- See `config/mcp_config.json` for a working example of server + env configuration
-- Add the server to your MCP client configuration
+Copy `.env.example` to `.env` and customize:
+```bash
+cp .env.example .env
+```
 
-See docs/Configuration for details.
+Key environment variables:
+- `LM_BASE_URL`: Local LM server URL (e.g., `http://localhost:1234/v1`)
+- `DEFAULT_MODEL`: Model name for NLI parsing
+- `DEBUG_VERBOSE`: Set to `1` for detailed logging
+- `ACCEL_MODE`: GPU acceleration mode (`auto`, `cuda`, `cpu`)
+
+See [Configuration Guide](docs/Configuration.md) for details.
 
 ### Optional: Faster NLI with LM Studio
 
@@ -103,77 +122,123 @@ How to enable
 
 ### Example Usage
 
+**Consolidated Tool Format** (Recommended):
 ```json
-// Differentiate an expression
+// Computer Algebra System
 {
   "jsonrpc": "2.0",
   "id": "1",
-  "method": "cas_diff",
-  "params": { "expr": "sin(x**2)", "symbol": "x" }
-}
-
-// Evaluate with units
-{
-  "jsonrpc": "2.0",
-  "id": "2",
-  "method": "cas_evaluate",
-  "params": {
-    "expr": "(1/2)*m*v**2",
-    "vars": { "m": {"value": 1.0, "unit": "kg"}, "v": {"value": 3.0, "unit": "m/s"} }
+  "method": "cas",
+  "params": { 
+    "action": "diff", 
+    "expr": "sin(x**2)", 
+    "symbol": "x" 
   }
 }
 
-// Plot a function
+// Smart Units Evaluation
+{
+  "jsonrpc": "2.0",
+  "id": "2", 
+  "method": "units_smart_eval",
+  "params": {
+    "expr": "c * 1 ns",
+    "constants": {"c": true}
+  }
+}
+
+// Quantum Computing
 {
   "jsonrpc": "2.0",
   "id": "3",
-  "method": "plot_function_2d",
-  "params": { "f": "sin(x)", "x_min": 0, "x_max": 6.28318, "dpi": 160 }
+  "method": "quantum",
+  "params": {
+    "action": "visualize",
+    "state": "0.707,0.707",
+    "kind": "bloch"
+  }
 }
 
-// Natural language parsing
+// Advanced Plotting
 {
   "jsonrpc": "2.0",
   "id": "4",
-  "method": "nli_parse",
-  "params": { "text": "Solve y'' + y = 0 with y(0)=0 and y'(0)=1" }
+  "method": "plot",
+  "params": {
+    "plot_type": "function_2d",
+    "f": "sin(x)",
+    "x_range": [0, 6.28318],
+    "dpi": 160,
+    "emit_csv": true
+  }
+}
+```
+
+**Legacy Format** (Still Supported):
+```json
+// Individual tool names work for backward compatibility
+{
+  "jsonrpc": "2.0",
+  "id": "5",
+  "method": "cas_diff",
+  "params": { "expr": "sin(x**2)", "symbol": "x" }
 }
 ```
 
 ## Development
 
-### Building
+### Quick Commands
 ```bash
-pnpm build
+pnpm dev:all        # Build, setup, healthcheck, start server
+pnpm build          # Build all TypeScript packages  
+pnpm test           # Run all tests
+pnpm healthcheck    # Verify system functionality
+pnpm lint           # Check code style
+pnpm typecheck      # TypeScript type checking
+pnpm precommit      # Run pre-commit checks
 ```
 
-### Linting & Formatting
+### Advanced Development
 ```bash
-pnpm lint
-pnpm format
-```
+# Generate documentation
+pnpm docs:generate
 
-### Testing
-```bash
-pnpm test
-pnpm run test:install
+# Run with coverage
+pnpm test:coverage
+
+# Python worker testing
+cd packages/python-worker
+python -m pytest tests/ -v
+
+# Type checking
+pnpm -r typecheck
 ```
 
 ## Documentation
 
-- Docs index: `docs/README.md`
-- Tool catalog: `docs/Tools/AllTools.md`
-- Architecture: `docs/Architecture.md`
-- Configuration: `docs/Configuration.md`
-- Tools:
-  - CAS: `docs/Tools/CAS.md`
-  - Plot: `docs/Tools/Plot.md`
-  - NLI: `docs/Tools/NLI.md`
-  - Report: `docs/Tools/Report.md`
-  - Tensor: `docs/Tools/Tensor.md`
-  - Quantum: `docs/Tools/Quantum.md`
-  - StatMech: `docs/Tools/StatMech.md`
-- Examples: `examples/requests/`
+### Core Documentation
+- **[Tool Index](docs/tools/index.md)**: Complete tool reference with examples
+- **[Architecture](docs/Architecture.md)**: System design and components
+- **[Configuration](docs/Configuration.md)**: Setup and environment variables
+- **[Improvements Summary](IMPROVEMENTS_SUMMARY.md)**: Recent enhancements and features
+
+### Tool Documentation (Auto-generated)
+- **[CAS](docs/tools/cas.md)**: Computer Algebra System operations
+- **[Plot](docs/tools/plot.md)**: Plotting and visualization
+- **[Quantum](docs/tools/quantum.md)**: Quantum computing operations
+- **[Units Convert](docs/tools/units_convert.md)**: Unit conversions and smart evaluation
+- **[Constants](docs/tools/constants_get.md)**: Physical constants lookup
+- **[Data](docs/tools/data.md)**: Data I/O and signal processing
+
+### Quickstart Guides
+- **[Projectile Motion](examples/quickstart/projectile-motion.mdx)**: Physics with units
+- **[Signal Analysis](examples/quickstart/signal-analysis.mdx)**: FFT and spectrograms  
+- **[Partition Functions](examples/quickstart/partition-function.mdx)**: Statistical mechanics
+- **[NLI Workflow](examples/quickstart/nli-workflow.mdx)**: Natural language interface
+
+### Schemas & Validation
+- **[Units Registry](schemas/units.json)**: Comprehensive unit definitions
+- **API Schemas**: Auto-generated from Zod validation schemas
 
 Side note: We conserve clarity and momentum—any dispersion is purely numerical.
 

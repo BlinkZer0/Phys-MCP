@@ -2,7 +2,7 @@
  * Quantum tools (scaffold)
  */
 import { Tool } from "../../mcp-types/dist/types.js";
-import { QuantumOpsSchema, QuantumSolveSchema, QuantumVisualizeSchema } from "./schema.js";
+// Individual schemas available in schema.js but using consolidated schema inline
 
 export function buildQuantumTools(): Tool[] {
   return [
@@ -37,18 +37,31 @@ export function buildQuantumTools(): Tool[] {
 }
 
 export async function handleQuantumTool(name: string, args: any): Promise<any> {
+  const { getWorkerClient } = await import("../../tools-cas/dist/worker-client.js");
+  const worker = getWorkerClient();
+  
   if (name === 'quantum') {
     const action = args.action;
     
     switch (action) {
       case 'ops':
-        return { status: "not_implemented", message: "quantum ops will be implemented in Phase 3", input_echo: args };
+        return await worker.call("quantum_ops", {
+          operators: args.operators,
+          task: args.task
+        });
         
       case 'solve':
-        return { status: "not_implemented", message: "quantum solve will be implemented in Phase 3", input_echo: args };
+        return await worker.call("quantum_solve", {
+          problem: args.problem,
+          hamiltonian: args.hamiltonian,
+          params: args.params
+        });
         
       case 'visualize':
-        return { status: "not_implemented", message: "quantum visualize will be implemented in Phase 3", input_echo: args };
+        return await worker.call("quantum_visualize", {
+          state: args.state,
+          kind: args.kind
+        });
         
       default:
         throw new Error(`Unknown quantum action: ${action}`);

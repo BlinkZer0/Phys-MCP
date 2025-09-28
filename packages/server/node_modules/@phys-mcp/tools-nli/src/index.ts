@@ -188,6 +188,71 @@ function parseWithRules(text: string): NLIResult {
     };
   }
   
+  // Unit conversions
+  if (lowerText.includes("convert") && (lowerText.includes("to") || lowerText.includes("into"))) {
+    const convertMatch = text.match(/convert\s+(\d+(?:\.\d+)?)\s*([a-zA-Z]+)\s+(?:to|into)\s+([a-zA-Z]+)/i);
+    if (convertMatch) {
+      return {
+        intent: "units_convert",
+        args: {
+          quantity: { value: parseFloat(convertMatch[1]), unit: convertMatch[2] },
+          to: convertMatch[3]
+        }
+      };
+    }
+  }
+  
+  // Physical constants
+  if (lowerText.includes("speed of light") || lowerText.includes("planck")) {
+    let constantName = "c";
+    if (lowerText.includes("planck")) constantName = "h";
+    if (lowerText.includes("boltzmann")) constantName = "k_B";
+    if (lowerText.includes("gravitational")) constantName = "G";
+    
+    return {
+      intent: "constants_get",
+      args: { name: constantName }
+    };
+  }
+  
+  // Quantum computing
+  if (lowerText.includes("quantum") || lowerText.includes("bell state") || lowerText.includes("grover")) {
+    let problem = "sho";
+    if (lowerText.includes("bell")) problem = "bell_state";
+    if (lowerText.includes("grover")) problem = "grover";
+    if (lowerText.includes("vqe")) problem = "vqe";
+    if (lowerText.includes("qaoa")) problem = "qaoa";
+    
+    return {
+      intent: "quantum",
+      args: {
+        action: "solve",
+        problem: problem
+      }
+    };
+  }
+  
+  // Tensor algebra / General relativity
+  if (lowerText.includes("christoffel") || lowerText.includes("schwarzschild") || lowerText.includes("tensor")) {
+    if (lowerText.includes("schwarzschild")) {
+      return {
+        intent: "tensor_algebra",
+        args: {
+          metric: "schwarzschild",
+          compute: ["christoffel", "riemann"]
+        }
+      };
+    }
+    return {
+      intent: "tensor_algebra",
+      args: {
+        metric: [[1, 0], [0, -1]],
+        coords: ["t", "r"],
+        compute: ["christoffel"]
+      }
+    };
+  }
+  
   // Default fallback
   return {
     intent: "unknown",

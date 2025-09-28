@@ -1,0 +1,161 @@
+# Statistical Mechanics: Partition Function
+
+Calculate thermodynamic properties from energy levels using statistical mechanics.
+
+## Problem
+
+Calculate the partition function and derived thermodynamic quantities for a simple quantum harmonic oscillator.
+
+## Energy Levels
+
+For a quantum harmonic oscillator: E_n = ℏω(n + 1/2)
+
+### 1. Define energy levels
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "cas",
+  "params": {
+    "action": "evaluate",
+    "expr": "hbar * omega * (n + 0.5)",
+    "vars": {
+      "hbar": {"value": 1.054571817e-34, "unit": "J*s"},
+      "omega": {"value": 1e14, "unit": "rad/s"},
+      "n": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    }
+  }
+}
+```
+
+### 2. Calculate partition function
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "2",
+  "method": "statmech_partition",
+  "params": {
+    "energy_levels": [
+      5.27e-21, 1.58e-20, 2.64e-20, 3.69e-20, 4.75e-20,
+      5.80e-20, 6.86e-20, 7.91e-20, 8.97e-20, 1.00e-19
+    ],
+    "degeneracies": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    "temperature": 300
+  }
+}
+```
+
+**Expected Output:**
+- Partition function Z
+- Average energy ⟨E⟩
+- Heat capacity C_V
+- Entropy S
+- Free energy F
+
+### 3. Temperature dependence
+
+Plot thermodynamic quantities vs temperature:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "3",
+  "method": "plot",
+  "params": {
+    "plot_type": "function_2d",
+    "f": "average_energy_vs_T",
+    "x_range": [10, 1000],
+    "xlabel": "Temperature (K)",
+    "ylabel": "Average Energy (J)",
+    "title": "Quantum Harmonic Oscillator: ⟨E⟩ vs T"
+  }
+}
+```
+
+## Classical Limit
+
+Compare with classical equipartition result: ⟨E⟩ = k_B T
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "4",
+  "method": "constants_get",
+  "params": {
+    "name": "k_B"
+  }
+}
+```
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "5",
+  "method": "cas",
+  "params": {
+    "action": "evaluate",
+    "expr": "k_B * T",
+    "vars": {
+      "k_B": {"value": 1.380649e-23, "unit": "J/K"},
+      "T": {"value": 300, "unit": "K"}
+    }
+  }
+}
+```
+
+## Heat Capacity Analysis
+
+### Low Temperature (Quantum Regime)
+
+At low T: C_V ∝ exp(-ℏω/k_B T)
+
+### High Temperature (Classical Regime)  
+
+At high T: C_V → k_B (equipartition)
+
+### Crossover Temperature
+
+T_crossover ≈ ℏω/k_B
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "6",
+  "method": "cas",
+  "params": {
+    "action": "evaluate",
+    "expr": "hbar * omega / k_B",
+    "vars": {
+      "hbar": {"value": 1.054571817e-34, "unit": "J*s"},
+      "omega": {"value": 1e14, "unit": "rad/s"},
+      "k_B": {"value": 1.380649e-23, "unit": "J/K"}
+    }
+  }
+}
+```
+
+## Key Physics Concepts
+
+- **Quantum Statistics**: Discrete energy levels lead to quantum effects
+- **Temperature Dependence**: Smooth transition from quantum to classical behavior
+- **Equipartition Theorem**: Classical limit recovers k_B T per degree of freedom
+- **Zero-Point Energy**: Ground state energy ℏω/2 even at T=0
+
+## Expected Results
+
+1. **Low T**: Exponential suppression of excited states
+2. **High T**: Linear increase in average energy (classical limit)
+3. **Crossover**: Smooth transition around T ≈ ℏω/k_B ≈ 764 K
+4. **Heat Capacity**: Schottky anomaly shape
+
+## Extensions
+
+Try these variations:
+- Different oscillator frequencies
+- Anharmonic potentials
+- Multi-dimensional oscillators
+- Comparison with experimental data
+- Debye model for solids
+- Einstein model comparison

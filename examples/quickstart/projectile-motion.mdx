@@ -1,0 +1,86 @@
+# Projectile Motion with Units
+
+This example demonstrates physics calculations with proper unit handling using Phys-MCP tools.
+
+## Problem
+
+Calculate the trajectory of a projectile launched at 45° with initial velocity of 20 m/s.
+
+## Solution Steps
+
+### 1. Define the trajectory equations
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "method": "cas",
+  "params": {
+    "action": "evaluate",
+    "expr": "v0 * cos(theta) * t",
+    "vars": {
+      "v0": {"value": 20, "unit": "m/s"},
+      "theta": {"value": 0.785398, "unit": "rad"},
+      "t": {"value": 2, "unit": "s"}
+    }
+  }
+}
+```
+
+**Expected Result:** Horizontal position at t=2s
+
+### 2. Calculate maximum height
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "2", 
+  "method": "cas",
+  "params": {
+    "action": "solve_equation",
+    "equation": "v0*sin(theta) - g*t = 0",
+    "symbol": "t"
+  }
+}
+```
+
+### 3. Plot the trajectory
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "3",
+  "method": "plot",
+  "params": {
+    "plot_type": "parametric_2d",
+    "x_t": "v0*cos(theta)*t",
+    "y_t": "v0*sin(theta)*t - 0.5*g*t^2",
+    "t_range": [0, 2.86],
+    "title": "Projectile Motion",
+    "xlabel": "Horizontal Distance (m)",
+    "ylabel": "Height (m)"
+  }
+}
+```
+
+## Key Features Demonstrated
+
+- **Unit-aware calculations**: Variables with units are properly handled
+- **Symbolic math**: Equations solved symbolically before numerical evaluation  
+- **Visualization**: Professional plots with proper axis labels
+- **Physics constants**: Gravitational acceleration `g` automatically available
+
+## Expected Output
+
+- Horizontal range: ~40.8 m
+- Maximum height: ~10.2 m  
+- Flight time: ~2.86 s
+- High-resolution trajectory plot
+
+## Extensions
+
+Try modifying:
+- Launch angle (30°, 60°, etc.)
+- Initial velocity
+- Include air resistance: `F_drag = -0.5*rho*C_d*A*v^2`
+- 3D trajectory with wind effects

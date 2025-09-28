@@ -12,17 +12,24 @@
     "build:workspace": "npm run build --workspaces",
     "build:pnpm": "pnpm -r build",
     "dev": "scripts\\dev.bat",
+    "dev:all": "node scripts/dev-all.js",
     "format": "bash scripts/format.sh",
-    "lint": "eslint packages/*/src --ext .ts",
-    "lint:fix": "eslint packages/*/src --ext .ts --fix",
+    "lint": "eslint \"packages/*/src/**/*.ts\"",
+    "lint:fix": "eslint \"packages/*/src/**/*.ts\" --fix",
+    "typecheck": "pnpm -r typecheck",
     "clean": "npm run clean --workspaces && rm -rf node_modules",
     "clean:pnpm": "pnpm -r clean && rm -rf node_modules",
     "test": "npm run test --workspaces",
     "test:install": "node scripts/test-installation.js",
+    "test:coverage": "pnpm -r test:coverage",
     "install:python": "cd packages/python-worker && pip install -r requirements.txt",
+    "healthcheck": "node scripts/healthcheck.js",
+    "precommit": "pnpm lint && pnpm typecheck",
+    "prepare": "husky install",
     "svg:optimize": "node scripts/svg-optimize.mjs",
     "docs:links": "node scripts/docs-link-check.mjs",
-    "docs:mermaid:smoke": "node scripts/docs-mermaid-smoke.mjs"
+    "docs:mermaid:smoke": "node scripts/docs-mermaid-smoke.mjs",
+    "docs:generate": "node scripts/generate-docs.js"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.6.1",
@@ -34,7 +41,10 @@
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
     "svgo": "^3.3.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^1.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "husky": "^8.0.0"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -42,6 +52,8 @@
   },
   "packageManager": "pnpm@8.15.0",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.18.2"
+    "@modelcontextprotocol/sdk": "1.18.2",
+    "zod": "^3.22.0",
+    "dotenv": "^16.3.0"
   }
 }
