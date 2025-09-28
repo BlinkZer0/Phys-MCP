@@ -13,7 +13,8 @@ export async function handleExperimentOrchestratorTool(toolName, params) {
     let actualParams = params;
     if (toolName !== 'experiment_orchestrator') {
         // Handle legacy individual tool names
-        const { method: _, ...restParams } = params;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { method: _originalMethod, ...restParams } = params;
         if (toolName === 'define_dag') {
             method = 'define_dag';
             actualParams = { ...restParams, method: 'define_dag' };

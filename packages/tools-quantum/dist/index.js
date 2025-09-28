@@ -1,3 +1,4 @@
+// Individual schemas available in schema.js but using consolidated schema inline
 export function buildQuantumTools() {
     return [
         {

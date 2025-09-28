@@ -596,13 +596,17 @@ async function handleReportGenerate(args, pm, sessionId) {
             md += "  - Input:\n\n";
             md += "```json\n" + JSON.stringify(inputObj, null, 2) + "\n```\n";
         }
-        catch { }
+        catch {
+            // Ignore JSON parsing errors for input
+        }
         try {
             const outputObj = JSON.parse(ev.output_json);
             md += "  - Output:\n\n";
             md += "```json\n" + JSON.stringify(outputObj, null, 2) + "\n```\n";
         }
-        catch { }
+        catch {
+            // Ignore JSON parsing errors for output
+        }
     }
     md += `\n## Artifacts\n`;
     for (const a of artifacts) {

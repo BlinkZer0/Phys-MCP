@@ -9,53 +9,95 @@
 
 import 'dotenv/config';
 
-let Server: any;
-let StdioServerTransport: any;
-let CallToolRequestSchema: any;
-let ListToolsRequestSchema: any;
-let InitializeRequestSchema: any;
-let getPersistenceManagerFn: any;
+// Type definitions for MCP SDK
+interface MCPTool {
+  name: string;
+  description: string;
+  inputSchema: Record<string, unknown>;
+}
+
+interface MCPRequest {
+  params: {
+    name: string;
+    arguments: Record<string, unknown>;
+  };
+}
+
+// Tool handler function types
+type ToolBuilder = () => MCPTool[];
+type ToolHandler = (name: string, args: Record<string, unknown>) => Promise<Record<string, unknown>>;
+
+// Persistence Manager interface
+interface SessionEvent {
+  tool_name: string;
+  ts: number;
+  input_json: string;
+  output_json: string;
+}
+
+interface SessionArtifact {
+  kind: string;
+  path: string;
+}
+
+interface PersistenceManager {
+  ensureSession(sessionId?: string): string;
+  getSessionEvents(sessionId: string): SessionEvent[];
+  getSessionArtifacts(sessionId: string): SessionArtifact[];
+  getArtifactPath(sessionId: string, filename: string): string;
+  recordArtifact(sessionId: string, kind: string, path: string, metadata: Record<string, unknown>): void;
+  recordEvent(sessionId: string, toolName: string, input: Record<string, unknown>, output: Record<string, unknown>): void;
+}
+
+// MCP SDK components - will be set during initialization
+// These are kept as 'any' because the MCP SDK doesn't provide proper TypeScript types yet
+let Server: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+let StdioServerTransport: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+let CallToolRequestSchema: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+let ListToolsRequestSchema: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+let InitializeRequestSchema: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+let getPersistenceManagerFn: (() => PersistenceManager) | undefined;
 
 // Tool handlers - these will be set during initialization
-let buildCASTools: any;
-let handleCASTool: any;
-let buildPlotTools: any;
-let handlePlotTool: any;
-let buildNLITools: any;
-let handleNLITool: any;
-let buildUnitsTools: any;
-let handleUnitsTool: any;
-let buildConstantsTools: any;
-let handleConstantsTool: any;
-let buildReportTools: any;
-let buildTensorTools: any;
-let handleTensorTool: any;
-let buildQuantumTools: any;
-let handleQuantumTool: any;
-let buildStatmechTools: any;
-let handleStatmechTool: any;
+let buildCASTools: ToolBuilder | undefined;
+let handleCASTool: ToolHandler | undefined;
+let buildPlotTools: ToolBuilder | undefined;
+let handlePlotTool: ToolHandler | undefined;
+let buildNLITools: ToolBuilder | undefined;
+let handleNLITool: ToolHandler | undefined;
+let buildUnitsTools: ToolBuilder | undefined;
+let handleUnitsTool: ToolHandler | undefined;
+let buildConstantsTools: ToolBuilder | undefined;
+let handleConstantsTool: ToolHandler | undefined;
+let buildReportTools: ToolBuilder | undefined;
+let buildTensorTools: ToolBuilder | undefined;
+let handleTensorTool: ToolHandler | undefined;
+let buildQuantumTools: ToolBuilder | undefined;
+let handleQuantumTool: ToolHandler | undefined;
+let buildStatmechTools: ToolBuilder | undefined;
+let handleStatmechTool: ToolHandler | undefined;
 
 // Phase 4 tool handlers
-let buildDataIOTools: any;
-let handleDataIOTool: any;
-let buildExternalTools: any;
-let handleExternalTool: any;
-let buildExportTools: any;
-let handleExportTool: any;
+let buildDataIOTools: ToolBuilder | undefined;
+let handleDataIOTool: ToolHandler | undefined;
+let buildExternalTools: ToolBuilder | undefined;
+let handleExternalTool: ToolHandler | undefined;
+let buildExportTools: ToolBuilder | undefined;
+let handleExportTool: ToolHandler | undefined;
 
 // Phase 6 ML tool handlers
-let buildMLTools: any;
-let handleMLAugmentationTool: any;
+let buildMLTools: ToolBuilder | undefined;
+let handleMLAugmentationTool: ToolHandler | undefined;
 
 // Graphing Calculator tool handlers
-let buildGraphingCalculatorTools: any;
-let handleGraphingCalculatorTool: any;
+let buildGraphingCalculatorTools: ToolBuilder | undefined;
+let handleGraphingCalculatorTool: ToolHandler | undefined;
 
 // Phase 7 & 8 tool handlers
-let buildDistributedTools: any;
-let handleDistributedCollaborationTool: any;
-let buildOrchestratorTools: any;
-let handleExperimentOrchestratorTool: any;
+let buildDistributedTools: ToolBuilder | undefined;
+let handleDistributedCollaborationTool: ToolHandler | undefined;
+let buildOrchestratorTools: ToolBuilder | undefined;
+let handleExperimentOrchestratorTool: ToolHandler | undefined;
 
 async function initializeDependencies() {
   try {
@@ -231,7 +273,7 @@ async function initializeDependencies() {
 
 class PhysicsMCPServer {
   private server: any;
-  private tools: any[] = [];
+  private tools: MCPTool[] = [];
 
   constructor() {
     console.log("🔧 Creating MCP Server instance...");
@@ -339,7 +381,7 @@ class PhysicsMCPServer {
 
   private setupHandlers(): void {
     // Handle MCP initialization
-    this.server.setRequestHandler(InitializeRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(InitializeRequestSchema, async (request: MCPRequest) => {
       return {
         protocolVersion: "2024-11-05",
         capabilities: {
@@ -360,7 +402,7 @@ class PhysicsMCPServer {
     });
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async (request: MCPRequest) => {
       const { name, arguments: args } = request.params;
 
       // Prepare persistence
@@ -369,10 +411,13 @@ class PhysicsMCPServer {
       const sessionId = pm ? pm.ensureSession(sessionIdArg) : sessionIdArg;
 
       try {
-        let result: any;
+        let result: Record<string, unknown>;
 
         // Local handler for report generation
         if (name === "report_generate") {
+          if (!pm) {
+            throw new Error("Persistence layer not available; cannot generate reports");
+          }
           result = await handleReportGenerate(args, pm, sessionId);
         }
         // Route to appropriate tool handler - consolidated tools
@@ -570,21 +615,21 @@ if (isMainModule) {
 
 // --- Helpers ---
 
-async function handleReportGenerate(args: any, pm: any, sessionId?: string): Promise<any> {
+async function handleReportGenerate(args: Record<string, unknown>, pm: PersistenceManager, sessionId?: string): Promise<Record<string, unknown>> {
   if (!pm) {
     throw new Error("Persistence layer not available; cannot generate reports");
   }
   const { randomUUID } = await import('node:crypto');
   const fs = await import('node:fs');
 
-  const sid = sessionId || (args && args.session_id);
+  const sid = sessionId || (args && typeof args.session_id === 'string' ? args.session_id : undefined);
   if (!sid) {
     throw new Error("report_generate requires 'session_id'");
   }
 
-  const format = (args && args.format) || 'markdown';
-  const title = (args && args.title) || 'Physics MCP Session Report';
-  const author = (args && args.author) || '';
+  const format = (args && typeof args.format === 'string' ? args.format : undefined) || 'markdown';
+  const title = (args && typeof args.title === 'string' ? args.title : undefined) || 'Physics MCP Session Report';
+  const author = (args && typeof args.author === 'string' ? args.author : undefined) || '';
   const include = (args && args.include) || ["cas", "plots", "constants", "units"]; // advisory only for now
 
   // Gather session data
@@ -639,20 +684,20 @@ async function handleReportGenerate(args: any, pm: any, sessionId?: string): Pro
     format: 'markdown',
     bytes: stats.size,
     session_id: sid,
-    title,
-    author
+    title: title,
+    author: author
   };
 }
 
-async function persistArtifactsIfAny(name: string, result: any, pm: any, sessionId: string): Promise<any> {
+async function persistArtifactsIfAny(name: string, result: Record<string, unknown>, pm: PersistenceManager, sessionId: string): Promise<Record<string, unknown>> {
   if (!result || typeof result !== 'object') return result;
   const fs = await import('node:fs');
   const { randomUUID } = await import('node:crypto');
 
-  const artifactsMeta: any[] = [];
+  const artifactsMeta: Array<{kind: string; path: string}> = [];
 
   // Save PNG image if present
-  if (result.image_png_b64) {
+  if (result.image_png_b64 && typeof result.image_png_b64 === 'string') {
     try {
       const imgBuffer = Buffer.from(result.image_png_b64, 'base64');
       const pngName = `${name}-${randomUUID()}.png`;
@@ -667,7 +712,7 @@ async function persistArtifactsIfAny(name: string, result: any, pm: any, session
   }
 
   // Save CSV if present
-  if (result.csv_data) {
+  if (result.csv_data && typeof result.csv_data === 'string') {
     try {
       const csvName = `${name}-${randomUUID()}.csv`;
       const csvPath = pm.getArtifactPath(sessionId, csvName);
@@ -680,7 +725,7 @@ async function persistArtifactsIfAny(name: string, result: any, pm: any, session
   }
 
   // Save SVG if present
-  if (result.image_svg) {
+  if (result.image_svg && typeof result.image_svg === 'string') {
     try {
       const svgName = `${name}-${randomUUID()}.svg`;
       const svgPath = pm.getArtifactPath(sessionId, svgName);

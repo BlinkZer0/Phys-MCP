@@ -41,6 +41,12 @@ class PersistenceManager {
     this.dbPath = dbPath || path.join(process.cwd(), 'data', 'phys-mcp.db');
     this.artifactsDir = path.join(process.cwd(), 'artifacts');
     
+    // Ensure data directory exists for database
+    const dataDir = path.dirname(this.dbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    
     // Ensure artifacts directory exists
     if (!fs.existsSync(this.artifactsDir)) {
       fs.mkdirSync(this.artifactsDir, { recursive: true });
@@ -52,7 +58,11 @@ class PersistenceManager {
    */
   initialize(): void {
     try {
+      console.log(`📊 Initializing database at: ${this.dbPath}`);
       this.db = new Database(this.dbPath);
+      
+      // Enable foreign keys
+      this.db.pragma('foreign_keys = ON');
       
       // Create tables
       this.db.exec(`
@@ -85,10 +95,14 @@ class PersistenceManager {
         CREATE INDEX IF NOT EXISTS idx_artifacts_session_ts ON artifacts(session_id, ts);
       `);
       
-      console.error('📊 Database initialized successfully');
+      console.log('📊 Database initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize database:', error);
-      throw error;
+      console.error('❌ Failed to initialize database:', error);
+      console.error('Database path:', this.dbPath);
+      console.error('Data directory exists:', fs.existsSync(path.dirname(this.dbPath)));
+      // Don't throw the error - allow server to continue without persistence
+      console.warn('⚠️ Server will continue without persistence layer');
+      this.db = null;
     }
   }
 
@@ -96,11 +110,13 @@ class PersistenceManager {
    * Ensure a session exists, create if it doesn't
    */
   ensureSession(sessionId?: string): string {
+    const id = sessionId || randomUUID();
+    
     if (!this.db) {
-      throw new Error('Database not initialized');
+      console.warn('⚠️ Database not available, returning session ID without persistence');
+      return id;
     }
 
-    const id = sessionId || randomUUID();
     const now = Date.now();
 
     try {
@@ -113,7 +129,8 @@ class PersistenceManager {
       return id;
     } catch (error) {
       console.error('Failed to ensure session:', error);
-      throw error;
+      console.warn('⚠️ Continuing without session persistence');
+      return id;
     }
   }
 
